@@ -1,0 +1,12 @@
+/*
+ * MPU6050.h
+ *
+ *  Created on: Feb 2, 2025
+ *      Author: lenovo
+ */
+
+class MPU6050 {
+public:
+	MPU6050();
+	virtual ~MPU6050();
+};

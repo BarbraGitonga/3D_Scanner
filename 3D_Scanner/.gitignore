@@ -1,7 +1,6 @@
 /.metadata/
 
 # STM32CubeIDE generated files
-*.ioc
 *.launch
 *.jtag
 *.scpd

@@ -1,0 +1,4 @@
+1738530042511	Delete resource '3D_Scanner/Custom_drivers/MPU6050/MPU6050.c'
+1738531248724	Delete resource '3D_Scanner/Core/Src/mpu6050.c'
+1738531812829	Delete resource '3D_Scanner/Core/Src/MPU6050/stm32f7xx_hal_conf.h'
+1738531817164	Delete resource '3D_Scanner/Core/Src/MPU6050/stm32f7xx_it.h'
