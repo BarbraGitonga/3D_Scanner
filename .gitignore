@@ -1,0 +1,52 @@
+/.metadata/
+
+# STM32CubeIDE generated files
+*.ioc
+*.launch
+*.jtag
+*.scpd
+*.sdf
+
+# Build and output files
+build/
+Debug/
+Release/
+*.o
+*.elf
+*.bin
+*.hex
+*.map
+*.list
+*.d
+
+# Object files and dependencies
+*.dep
+*.d
+*.a
+*.so
+*.swp
+
+# CubeMX auto-generated files
+Core/Inc/*
+Core/Src/*
+Drivers/*
+
+# CubeIDE settings
+.vscode/
+.settings/
+*.sublime-project
+*.sublime-workspace
+
+# Logs and temp files
+*.log
+*.bak
+*.tmp
+
+# Ignore STM32CubeProgrammer files
+*.stp
+*.stc
+*.db
+
+# Ignore Python virtual environments if used
+venv/
+.env/
