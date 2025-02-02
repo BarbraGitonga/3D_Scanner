@@ -1,0 +1,17 @@
+data='[ \
+	{ \
+		"image": "news/Visual-1_eclipse2023-12.png", \
+		"link": "", \
+		"caption": "" \
+	}, \
+	{ \
+		"image": "news/Visual-2_GCC12.png", \
+		"link": "", \
+		"caption": "" \
+	}, \
+	{ \
+		"image": "news/Visual-3_Q-Format.png", \
+		"link": "", \
+		"caption": "" \
+	} \
+]';
