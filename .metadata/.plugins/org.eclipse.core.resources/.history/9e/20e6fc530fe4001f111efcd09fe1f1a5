@@ -1,0 +1,22 @@
+/*
+ * MPU6050.cpp
+ *
+ *  Created on: Feb 3, 2025
+ *      Author: lenovo
+ */
+
+#include "MPU6050.h"
+
+MPU6050::MPU6050() {
+	// TODO Auto-generated constructor stub
+
+
+}
+
+MPU6050::~MPU6050() {
+	// TODO Auto-generated destructor stub
+}
+
+HAL_StatusTypedef MPU6050::readRegister(uint8_t regAddress){
+	return HAL_I2C_
+}

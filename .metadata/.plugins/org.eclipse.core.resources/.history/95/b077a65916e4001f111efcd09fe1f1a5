@@ -1,0 +1,9 @@
+/*
+ * MPU6050_test.cpp
+ *
+ *  Created on: Feb 6, 2025
+ *      Author: lenovo
+ */
+
+#include "MPU6050.h"
+
