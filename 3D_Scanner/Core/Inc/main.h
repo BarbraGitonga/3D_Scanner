@@ -61,11 +61,20 @@ void Error_Handler(void);
 #define SCL_GPIO_Port GPIOB
 #define SDA_Pin GPIO_PIN_9
 #define SDA_GPIO_Port GPIOB
-#define Green_LED_Pin GPIO_PIN_1
-#define Green_LED_GPIO_Port GPIOI
+#define Flag_Pin GPIO_PIN_1
+#define Flag_GPIO_Port GPIOI
 
 /* USER CODE BEGIN Private defines */
+#ifdef __cplusplus
+extern "C" {
+#endif
 
+void SystemClock_Config(void);
+void Error_Handler(void);
+
+#ifdef __cplusplus
+}
+#endif
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus
