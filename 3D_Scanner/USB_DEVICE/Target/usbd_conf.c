@@ -23,7 +23,7 @@
 #include "stm32f7xx_hal.h"
 #include "usbd_def.h"
 #include "usbd_core.h"
-#include "main.h"
+
 /* USER CODE BEGIN Includes */
 
 /* USER CODE END Includes */

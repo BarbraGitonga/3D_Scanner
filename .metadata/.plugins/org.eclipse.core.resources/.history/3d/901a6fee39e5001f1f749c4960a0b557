@@ -1,9 +1,0 @@
-/*
- * MPU6050_test.cpp
- *
- *  Created on: Feb 6, 2025
- *      Author: Barbra Gitonga (barbragitonga@gmail.com)
- */
-
-#include "MPU6050.h"
-
