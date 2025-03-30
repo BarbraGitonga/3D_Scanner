@@ -1,17 +1,10 @@
-00:03:05 **** Incremental Build of configuration Debug for project 3D_Scanner ****
+15:37:54 **** Incremental Build of configuration Debug for project 3D_Scanner ****
 make -j16 all 
-arm-none-eabi-g++ "../Core/Src/main.cpp" -mcpu=cortex-m7 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F746xx -c -I../Core/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
-arm-none-eabi-g++ -o "3D_Scanner.elf" @"objects.list"   -mcpu=cortex-m7 -T"C:\Users\lenovo\Desktop\3D_Scanner\3D_Scanner\STM32F746NGHX_FLASH.ld" -Wl,-Map="3D_Scanner.map" -Wl,--gc-sections -static -lstdc++ -lsupc++ -u _printf_float --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
-Finished building target: 3D_Scanner.elf
- 
 arm-none-eabi-size  3D_Scanner.elf 
-arm-none-eabi-objdump -h -S 3D_Scanner.elf  > "3D_Scanner.list"
    text	   data	    bss	    dec	    hex	filename
-  51420	    724	   8620	  60764	   ed5c	3D_Scanner.elf
+  51476	    724	   8620	  60820	   ed94	3D_Scanner.elf
 Finished building: default.size.stdout
  
-Finished building: 3D_Scanner.list
- 
 
-00:03:07 Build Finished. 0 errors, 0 warnings. (took 1s.993ms)
+15:37:55 Build Finished. 0 errors, 0 warnings. (took 403ms)
 

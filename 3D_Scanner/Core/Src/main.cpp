@@ -48,7 +48,7 @@
 
 /* USER CODE BEGIN PV */
 MPU6050_data mpu_data;
-uint8_t data_ready;
+uint8_t data_ready = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
