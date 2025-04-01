@@ -19,7 +19,6 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "string.h"
-#include "cmsis_os.h"
 #include "fatfs.h"
 #include "usb_host.h"
 
@@ -39,6 +38,8 @@
 /* USER CODE BEGIN PD */
 #define SAMPLE_TIME_LOG_MS 100
 #define SAMPLE_TIME_LED_MS 500
+uint32_t currentTime = HAL_GetTick();
+uint32_t previousTime = 0;
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -106,11 +107,12 @@ UART_HandleTypeDef huart6;
 
 SDRAM_HandleTypeDef hsdram1;
 
-osThreadId defaultTaskHandle;
 /* USER CODE BEGIN PV */
 
 MPU6050_data mpu_data;
 uint8_t data_ready;
+uint32_t timerLog = HAL_GetTick();
+uint32_t timerLED = HAL_GetTick();
 
 /* USER CODE END PV */
 
@@ -141,7 +143,7 @@ static void MX_TIM8_Init(void);
 static void MX_TIM12_Init(void);
 static void MX_USART1_UART_Init(void);
 static void MX_USART6_UART_Init(void);
-void StartDefaultTask(void const * argument);
+void MX_USB_HOST_Process(void);
 
 /* USER CODE BEGIN PFP */
 
@@ -151,32 +153,10 @@ void StartDefaultTask(void const * argument);
 /* USER CODE BEGIN 0 */
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
     if (GPIO_Pin == MPU_INT_Pin) {
-        uint8_t int_status;
-        char buffer[50];
-
-        // Read INT_STATUS
-        HAL_I2C_Mem_Read(&hi2c1, MPU6050_ID, INT_STATUS, I2C_MEMADD_SIZE_8BIT, &int_status, 1, HAL_MAX_DELAY);
-
-        // Format output properly
-        int len = snprintf(buffer, sizeof(buffer), "INT_STATUS: 0x%02X\n", int_status);
-        HAL_UART_Transmit(&huart1, (uint8_t *)buffer, len, HAL_MAX_DELAY);
-
-        // Clear INT_STATUS by reading again
-        HAL_I2C_Mem_Read(&hi2c1, MPU6050_ID, INT_STATUS, I2C_MEMADD_SIZE_8BIT, &int_status, 1, HAL_MAX_DELAY);
-
-        // Format output properly again
-        len = snprintf(buffer, sizeof(buffer), "INT_STATUS After Clearing: 0x%02X\n", int_status);
-        HAL_UART_Transmit(&huart1, (uint8_t *)buffer, len, HAL_MAX_DELAY);
-
-        data_ready = 1;
-        HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
-
-        // Send proper string message
-        const char *msg = "MPU6050 Data Ready Interrupt Triggered!\n";
-        HAL_UART_Transmit(&huart1, (uint8_t *)msg, strlen(msg), HAL_MAX_DELAY);
-
+    	data_ready = 1;
     }
 }
+
 
 
 /* USER CODE END 0 */
@@ -236,88 +216,51 @@ int main(void)
   MX_USART1_UART_Init();
   MX_USART6_UART_Init();
   MX_FATFS_Init();
+  MX_USB_HOST_Init();
   /* USER CODE BEGIN 2 */
-//  HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
 
   MPU6050 mpu_sensor;
   mpu_sensor.initialize(&mpu_data, &hi2c1);
   HAL_UART_Transmit(&huart1, (uint8_t *)"MPU6050 Initialized\n", 20, HAL_MAX_DELAY);
 
-//  HAL_NVIC_EnableIRQ(EXTI3_IRQn);
-//  NVIC_SetPendingIRQ(EXTI3_IRQn);
-
   /* USER CODE END 2 */
-
-  /* USER CODE BEGIN RTOS_MUTEX */
-  /* add mutexes, ... */
-  /* USER CODE END RTOS_MUTEX */
-
-  /* USER CODE BEGIN RTOS_SEMAPHORES */
-  /* add semaphores, ... */
-  /* USER CODE END RTOS_SEMAPHORES */
-
-  /* USER CODE BEGIN RTOS_TIMERS */
-  /* start timers, add new ones, ... */
-  /* USER CODE END RTOS_TIMERS */
-
-  /* USER CODE BEGIN RTOS_QUEUES */
-  /* add queues, ... */
-  /* USER CODE END RTOS_QUEUES */
-
-  /* Create the thread(s) */
-  /* definition and creation of defaultTask */
-  osThreadDef(defaultTask, StartDefaultTask, osPriorityNormal, 0, 4096);
-  defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
-
-  /* USER CODE BEGIN RTOS_THREADS */
-  /* add threads, ... */
-  /* USER CODE END RTOS_THREADS */
-
-  /* Start scheduler */
-  osKernelStart();
-
-  /* We should never get here as control is now taken by the scheduler */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	 uint32_t timerLog = HAL_GetTick();
-	 uint32_t timerLED = HAL_GetTick();
 	 char usbBuf[64];
-	 HAL_Delay(2000);
+	 HAL_GPIO_TogglePin(GREEN_LED_GPIO_Port, GREEN_LED_Pin);
+
 	 if (data_ready) {
 		 mpu_sensor.accelerometer(&mpu_data);
 		 mpu_sensor.gyroscope(&mpu_data);
 		 mpu_sensor.temperature(&mpu_data);
-		 HAL_UART_Transmit(&huart1, (uint8_t *)"sensor data fetched!\n", 20, HAL_MAX_DELAY);
-
-		 uint8_t int_status;
-		 mpu_sensor.readRegister(&mpu_data, INT_STATUS, &int_status);
-		 HAL_UART_Transmit(&huart1, (uint8_t *)int_status, 20, HAL_MAX_DELAY);
 
 		 data_ready = 0;
 	  }
 
-	  if ((HAL_GetTick() - timerLog) >= SAMPLE_TIME_LOG_MS) {
-		uint8_t usbBufLen = snprintf(usbBuf, 64, "%.2f ax, %.2f ay, %.2f az, %.2f gx, %.2f gy, %.2f gz, %.2f temp",
-			mpu_data.acc_mps2[0], mpu_data.acc_mps2[1], mpu_data.acc_mps2[2],
-			mpu_data.gyro_rad[0], mpu_data.gyro_rad[1],
-			mpu_data.gyro_rad[2], mpu_data.temp_C);
+	 if ((HAL_GetTick() - timerLog) >= SAMPLE_TIME_LOG_MS) {
+	     uint8_t usbBufLen = snprintf(usbBuf, 64,
+	         "%.2f ax, %.2f ay, %.2f az, %.2f gx, %.2f gy, %.2f gz, %.2f temp\r\n",
+	         mpu_data.acc_mps2[0], mpu_data.acc_mps2[1], mpu_data.acc_mps2[2],
+	         mpu_data.gyro_rad[0], mpu_data.gyro_rad[1], mpu_data.gyro_rad[2], mpu_data.temp_C);
 
-		HAL_UART_Transmit(&huart1, (uint8_t *)usbBuf, usbBufLen, 100);
+	     HAL_UART_Transmit(&huart1, (uint8_t *)usbBuf, usbBufLen, 100);
 
-		timerLog += SAMPLE_TIME_LOG_MS;
-	  }
+	     timerLog += SAMPLE_TIME_LOG_MS;
+	 }
+
 
 	  if ((HAL_GetTick() - timerLED) >= SAMPLE_TIME_LED_MS) {
-		HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
+		HAL_GPIO_TogglePin(GREEN_LED_GPIO_Port, GREEN_LED_Pin);
 
 		timerLED += SAMPLE_TIME_LED_MS;
 
 	  }
   }
     /* USER CODE END WHILE */
+    MX_USB_HOST_Process();
 
     /* USER CODE BEGIN 3 */
   /* USER CODE END 3 */
@@ -1584,7 +1527,7 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(DCMI_PWR_EN_GPIO_Port, DCMI_PWR_EN_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOG, ARDUINO_D4_Pin|ARDUINO_D2_Pin|EXT_RST_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOG, GREEN_LED_Pin|ARDUINO_D2_Pin|EXT_RST_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin : OTG_HS_OverCurrent_Pin */
   GPIO_InitStruct.Pin = OTG_HS_OverCurrent_Pin;
@@ -1592,9 +1535,9 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(OTG_HS_OverCurrent_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : ULPI_D7_Pin ULPI_D6_Pin ULPI_D5_Pin ULPI_D3_Pin
+  /*Configure GPIO pins : ULPI_D7_Pin ULPI_D6_Pin ULPI_D5_Pin PB10
                            ULPI_D2_Pin ULPI_D1_Pin ULPI_D4_Pin */
-  GPIO_InitStruct.Pin = ULPI_D7_Pin|ULPI_D6_Pin|ULPI_D5_Pin|ULPI_D3_Pin
+  GPIO_InitStruct.Pin = ULPI_D7_Pin|ULPI_D6_Pin|ULPI_D5_Pin|GPIO_PIN_10
                           |ULPI_D2_Pin|ULPI_D1_Pin|ULPI_D4_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
@@ -1623,7 +1566,7 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pin : MPU_INT_Pin */
   GPIO_InitStruct.Pin = MPU_INT_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
   GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(MPU_INT_GPIO_Port, &GPIO_InitStruct);
 
@@ -1680,8 +1623,8 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Alternate = GPIO_AF10_OTG_HS;
   HAL_GPIO_Init(ULPI_NXT_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : ARDUINO_D4_Pin ARDUINO_D2_Pin EXT_RST_Pin */
-  GPIO_InitStruct.Pin = ARDUINO_D4_Pin|ARDUINO_D2_Pin|EXT_RST_Pin;
+  /*Configure GPIO pins : GREEN_LED_Pin ARDUINO_D2_Pin EXT_RST_Pin */
+  GPIO_InitStruct.Pin = GREEN_LED_Pin|ARDUINO_D2_Pin|EXT_RST_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -1720,26 +1663,6 @@ static void MX_GPIO_Init(void)
 /* USER CODE BEGIN 4 */
 
 /* USER CODE END 4 */
-
-/* USER CODE BEGIN Header_StartDefaultTask */
-/**
-  * @brief  Function implementing the defaultTask thread.
-  * @param  argument: Not used
-  * @retval None
-  */
-/* USER CODE END Header_StartDefaultTask */
-void StartDefaultTask(void const * argument)
-{
-  /* init code for USB_HOST */
-  MX_USB_HOST_Init();
-  /* USER CODE BEGIN 5 */
-  /* Infinite loop */
-  for(;;)
-  {
-    osDelay(1);
-  }
-  /* USER CODE END 5 */
-}
 
 /**
   * @brief  Period elapsed callback in non blocking mode

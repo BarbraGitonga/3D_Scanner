@@ -240,8 +240,8 @@ void Error_Handler(void);
 #define LCD_G0_GPIO_Port GPIOJ
 #define LCD_G2_Pin GPIO_PIN_9
 #define LCD_G2_GPIO_Port GPIOJ
-#define ARDUINO_D4_Pin GPIO_PIN_7
-#define ARDUINO_D4_GPIO_Port GPIOG
+#define GREEN_LED_Pin GPIO_PIN_7
+#define GREEN_LED_GPIO_Port GPIOG
 #define ARDUINO_D2_Pin GPIO_PIN_6
 #define ARDUINO_D2_GPIO_Port GPIOG
 #define ARDUINO_A4_Pin GPIO_PIN_7
@@ -348,8 +348,6 @@ void Error_Handler(void);
 #define FMC_D8_GPIO_Port GPIOE
 #define FMC_D11_Pin GPIO_PIN_14
 #define FMC_D11_GPIO_Port GPIOE
-#define ULPI_D3_Pin GPIO_PIN_10
-#define ULPI_D3_GPIO_Port GPIOB
 #define ARDUINO_PWM_D6_Pin GPIO_PIN_6
 #define ARDUINO_PWM_D6_GPIO_Port GPIOH
 #define LCD_SDA_Pin GPIO_PIN_8

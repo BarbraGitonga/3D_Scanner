@@ -49,18 +49,34 @@ HAL_StatusTypeDef MPU6050::initialize(MPU6050_data *dev, I2C_HandleTypeDef *hi2c
 
 	if (regData == 0x68){
 		// Setting clock speed and enabling sensors
-		uint8_t reset = 0x00;
+		uint8_t reset = 0x80;
+		status = writeRegister(dev, PWR_MGMT_1, &reset);
+		errNum += (status != HAL_OK);
+		HAL_Delay(100);
+
+		reset = 0x00;
 		status = writeRegister(dev, PWR_MGMT_1, &reset);
 		errNum += (status != HAL_OK);
 
 		reset = 0x00;
 		status = writeRegister(dev, PWR_MGMT_2, &reset);
 		errNum += (status != HAL_OK);
-		HAL_Delay(1000);
+		HAL_Delay(100);
 
-		uint8_t intPinConfig = 0x30;  // Keep default: Active LOW
+		uint8_t rate = 39;
+		status = writeRegister(dev, SMPLRT_DIV, &rate);
+		errNum += (status != HAL_OK);
+		HAL_Delay(50);
+
+		reset = 0x00;
+		status = writeRegister(dev, CONFIG, &reset);
+		errNum += (status != HAL_OK);
+		HAL_Delay(50);
+
+		uint8_t intPinConfig = 0x00;  // Active HIGH
 		status = writeRegister(dev, INT_PIN_CFG, &intPinConfig);
 		errNum += (status != HAL_OK);
+		HAL_Delay(100);
 
 		uint8_t data = 0x01;  // Enable data ready interrupt
 		status = writeRegister(dev, INT_ENABLE, &data);
@@ -68,10 +84,6 @@ HAL_StatusTypeDef MPU6050::initialize(MPU6050_data *dev, I2C_HandleTypeDef *hi2c
 
 		uint8_t int_status;
 		status = readRegister(dev, INT_STATUS, &int_status);
-		errNum += (status != HAL_OK);
-
-		uint8_t rate = 0x07;
-		status = writeRegister(dev, SMPLRT_DIV, &rate);
 		errNum += (status != HAL_OK);
 
 		reset = 0x00;
@@ -82,7 +94,7 @@ HAL_StatusTypeDef MPU6050::initialize(MPU6050_data *dev, I2C_HandleTypeDef *hi2c
 		status = writeRegister(dev, ACCEL_CONFIG, &reset); //full scale range of 2g
 		errNum += (status != HAL_OK);
 
-		printf("Initialzation is complete!");
+		printf("Initialization is complete!");
 		HAL_Delay(100);
 		return (errNum == 0) ? HAL_OK : HAL_ERROR;
 	}
