@@ -26,6 +26,7 @@
 /* USER CODE BEGIN Includes */
 #include "stm32f7xx_hal.h"
 #include "MPU6050_driver/MPU6050.h"
+#include "Ext_Kalman_filter/Extkalmanfilter.h"
 #include <cstdio>
 /* USER CODE END Includes */
 
@@ -79,6 +80,8 @@ ETH_HandleTypeDef heth;
 
 I2C_HandleTypeDef hi2c1;
 I2C_HandleTypeDef hi2c3;
+DMA_HandleTypeDef hdma_i2c1_rx;
+DMA_HandleTypeDef hdma_i2c1_tx;
 
 LTDC_HandleTypeDef hltdc;
 
@@ -113,6 +116,8 @@ MPU6050_data mpu_data;
 uint8_t data_ready;
 uint32_t timerLog = HAL_GetTick();
 uint32_t timerLED = HAL_GetTick();
+float roll = 0.0;
+float pitch = 0.0;
 
 /* USER CODE END PV */
 
@@ -120,7 +125,7 @@ uint32_t timerLED = HAL_GetTick();
 void SystemClock_Config(void);
 void PeriphCommonClock_Config(void);
 static void MX_GPIO_Init(void);
-static void MX_ADC3_Init(void);
+static void MX_DMA_Init(void);
 static void MX_CRC_Init(void);
 static void MX_DCMI_Init(void);
 static void MX_DMA2D_Init(void);
@@ -143,6 +148,7 @@ static void MX_TIM8_Init(void);
 static void MX_TIM12_Init(void);
 static void MX_USART1_UART_Init(void);
 static void MX_USART6_UART_Init(void);
+static void MX_ADC3_Init(void);
 void MX_USB_HOST_Process(void);
 
 /* USER CODE BEGIN PFP */
@@ -192,7 +198,7 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_ADC3_Init();
+  MX_DMA_Init();
   MX_CRC_Init();
   MX_DCMI_Init();
   MX_DMA2D_Init();
@@ -216,12 +222,18 @@ int main(void)
   MX_USART1_UART_Init();
   MX_USART6_UART_Init();
   MX_FATFS_Init();
+  MX_ADC3_Init();
   MX_USB_HOST_Init();
   /* USER CODE BEGIN 2 */
 
+  // Initializing mpu6050
   MPU6050 mpu_sensor;
   mpu_sensor.initialize(&mpu_data, &hi2c1);
   HAL_UART_Transmit(&huart1, (uint8_t *)"MPU6050 Initialized\n", 20, HAL_MAX_DELAY);
+
+  // Initializing Kalman filter
+  ExtKalmanFilter kalmanroll;
+  ExtKalmanFilter kalmanpitch;
 
   /* USER CODE END 2 */
 
@@ -240,13 +252,16 @@ int main(void)
 		 data_ready = 0;
 	  }
 
-	 if ((HAL_GetTick() - timerLog) >= SAMPLE_TIME_LOG_MS) {
-	     uint8_t usbBufLen = snprintf(usbBuf, 64,
-	         "%.2f ax, %.2f ay, %.2f az, %.2f gx, %.2f gy, %.2f gz, %.2f temp\r\n",
-	         mpu_data.acc_mps2[0], mpu_data.acc_mps2[1], mpu_data.acc_mps2[2],
-	         mpu_data.gyro_rad[0], mpu_data.gyro_rad[1], mpu_data.gyro_rad[2], mpu_data.temp_C);
+	 roll = kalmanroll.update(mpu_data.acc_mps2[0], mpu_data.gyro_rad[0], SAMPLE_TIME_LOG_MS/1000.0f);
+	 pitch = kalmanpitch.update(mpu_data.acc_mps2[1], mpu_data.gyro_rad[1], SAMPLE_TIME_LOG_MS/1000.0f);
 
-	     HAL_UART_Transmit(&huart1, (uint8_t *)usbBuf, usbBufLen, 100);
+	 if ((HAL_GetTick() - timerLog) >= SAMPLE_TIME_LOG_MS) {
+	    uint8_t usbBufLen = snprintf(usbBuf, 64,
+	         "%.2f ax, %.2f gx, %.2f roll, %.2f ay, %.2f gy, %.2f pitch \r\n",
+	         mpu_data.acc_mps2[0], mpu_data.gyro_rad[0], roll,
+	         mpu_data.acc_mps2[1], mpu_data.gyro_rad[1], pitch);
+
+	    HAL_UART_Transmit(&huart1, (uint8_t *)usbBuf, usbBufLen, 100);
 
 	     timerLog += SAMPLE_TIME_LOG_MS;
 	 }
@@ -254,6 +269,7 @@ int main(void)
 
 	  if ((HAL_GetTick() - timerLED) >= SAMPLE_TIME_LED_MS) {
 		HAL_GPIO_TogglePin(GREEN_LED_GPIO_Port, GREEN_LED_Pin);
+
 
 		timerLED += SAMPLE_TIME_LED_MS;
 
@@ -1437,6 +1453,25 @@ static void MX_USART6_UART_Init(void)
   /* USER CODE BEGIN USART6_Init 2 */
 
   /* USER CODE END USART6_Init 2 */
+
+}
+
+/**
+  * Enable DMA controller clock
+  */
+static void MX_DMA_Init(void)
+{
+
+  /* DMA controller clock enable */
+  __HAL_RCC_DMA1_CLK_ENABLE();
+
+  /* DMA interrupt init */
+  /* DMA1_Stream0_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA1_Stream0_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(DMA1_Stream0_IRQn);
+  /* DMA1_Stream6_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA1_Stream6_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(DMA1_Stream6_IRQn);
 
 }
 

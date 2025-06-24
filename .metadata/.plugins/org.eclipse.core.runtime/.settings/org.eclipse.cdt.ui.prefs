@@ -1,6 +1,7 @@
 eclipse.preferences.version=1
+markOccurrences=false
 spelling_locale_initialized=true
-spelling_user_dictionary=C\:\\Users\\lenovo\\Desktop\\3D_Scanner\\3D_Scanner\\.dictionary
+spelling_user_dictionary=C\:\\Users\\lenovo\\Desktop\\3D_Scanner\\3D_Scanner_cpp\\DISCO\\3D-scanner\\vocab
 spelling_user_dictionary_encoding=Cp1252
 useAnnotationsPrefPage=true
 useQuickDiffPrefPage=true
