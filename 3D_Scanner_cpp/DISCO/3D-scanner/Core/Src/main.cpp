@@ -37,8 +37,14 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-#define SAMPLE_TIME_LOG_MS 100
+#define SAMPLE_TIME_LOG_MS 250
 #define SAMPLE_TIME_LED_MS 500
+
+#define LPF_GYR_ALPHA 0.01f
+#define LPF_ACC_ALPHA 0.10f
+#define KALMAN_PREDICT_PERIOD_MS 10
+#define KALMAN_UPDATE_PERIOD_MS  100
+
 uint32_t currentTime = HAL_GetTick();
 uint32_t previousTime = 0;
 /* USER CODE END PD */
@@ -116,8 +122,9 @@ MPU6050_data mpu_data;
 uint8_t data_ready;
 uint32_t timerLog = HAL_GetTick();
 uint32_t timerLED = HAL_GetTick();
-float roll = 0.0;
-float pitch = 0.0;
+uint32_t timerPredict = HAL_GetTick();
+uint32_t timerUpdate = HAL_GetTick();
+MPU6050Data data; // to be passed to the EKF
 
 /* USER CODE END PV */
 
@@ -162,8 +169,6 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
     	data_ready = 1;
     }
 }
-
-
 
 /* USER CODE END 0 */
 
@@ -232,8 +237,14 @@ int main(void)
   HAL_UART_Transmit(&huart1, (uint8_t *)"MPU6050 Initialized\n", 20, HAL_MAX_DELAY);
 
   // Initializing Kalman filter
-  ExtKalmanFilter kalmanroll;
-  ExtKalmanFilter kalmanpitch;
+  float q = 0.001f;
+  float r = 0.011f;
+  float Pinit = 0.1f;
+  ExtKalmanFilter EKF(Pinit, q, r);
+
+  // filter data holders
+  float gyrPrev[3] = {0.0f, 0.0f, 0.0f};
+  float accPrev[3] = {0.0f, 0.0f, 0.0f};
 
   /* USER CODE END 2 */
 
@@ -249,17 +260,55 @@ int main(void)
 		 mpu_sensor.gyroscope(&mpu_data);
 		 mpu_sensor.temperature(&mpu_data);
 
+		 mpu_data.gyro_rad[0] = LPF_GYR_ALPHA * gyrPrev[0] + ( 1.0f - LPF_GYR_ALPHA) * mpu_data.gyro_rad[0];
+		 mpu_data.gyro_rad[1] = LPF_GYR_ALPHA * gyrPrev[1] + ( 1.0f - LPF_GYR_ALPHA) * mpu_data.gyro_rad[1];
+		 mpu_data.gyro_rad[2] = LPF_GYR_ALPHA * gyrPrev[2] + ( 1.0f - LPF_GYR_ALPHA) * mpu_data.gyro_rad[2];
+
+		 mpu_data.acc_mps2[0] = LPF_ACC_ALPHA * accPrev[0] + ( 1.0f - LPF_ACC_ALPHA * mpu_data.acc_mps2[0]);
+		 mpu_data.acc_mps2[1] = LPF_ACC_ALPHA * accPrev[1] + ( 1.0f - LPF_ACC_ALPHA * mpu_data.acc_mps2[1]);
+		 mpu_data.acc_mps2[2] = LPF_ACC_ALPHA * accPrev[2] + ( 1.0f - LPF_ACC_ALPHA * mpu_data.acc_mps2[2]);
+
+		 gyrPrev[0] = mpu_data.gyro_rad[0];
+		 gyrPrev[1] = mpu_data.gyro_rad[1];
+		 gyrPrev[2] = mpu_data.gyro_rad[2];
+		 accPrev[0] = mpu_data.acc_mps2[0];
+		 accPrev[1] = mpu_data.acc_mps2[1];
+		 accPrev[2] = mpu_data.acc_mps2[2];
+
+		 data.setFrom(mpu_data);
+
 		 data_ready = 0;
 	  }
 
-	 roll = kalmanroll.update(mpu_data.acc_mps2[0], mpu_data.gyro_rad[0], SAMPLE_TIME_LOG_MS/1000.0f);
-	 pitch = kalmanpitch.update(mpu_data.acc_mps2[1], mpu_data.gyro_rad[1], SAMPLE_TIME_LOG_MS/1000.0f);
+	 if ((HAL_GetTick() - timerPredict) >= KALMAN_PREDICT_PERIOD_MS) {
+	 		EKF.predict(data, 0.001f * KALMAN_PREDICT_PERIOD_MS);
+
+	 		timerPredict += KALMAN_PREDICT_PERIOD_MS;
+	 }
+
+	 if ((HAL_GetTick() - timerUpdate) >= KALMAN_UPDATE_PERIOD_MS) {
+	 		EKF.update(data);
+
+	 		timerUpdate += KALMAN_UPDATE_PERIOD_MS;
+	 }
+
 
 	 if ((HAL_GetTick() - timerLog) >= SAMPLE_TIME_LOG_MS) {
-	    uint8_t usbBufLen = snprintf(usbBuf, 64,
-	         "%.2f ax, %.2f gx, %.2f roll, %.2f ay, %.2f gy, %.2f pitch \r\n",
-	         mpu_data.acc_mps2[0], mpu_data.gyro_rad[0], roll,
-	         mpu_data.acc_mps2[1], mpu_data.gyro_rad[1], pitch);
+		AngleEstimate angle = EKF.getAngle();
+
+//	    uint8_t usbBufLen = snprintf(usbBuf, 64,
+//	         "%.2f ax, %.2f ay, %.2f az, %.2f gx, %.2f gy, %.2f gz \r\n",
+//	         mpu_data.acc_mps2[0], mpu_data.acc_mps2[1], mpu_data.acc_mps2[2],
+//	         mpu_data.gyro_rad[0], mpu_data.gyro_rad[1], mpu_data.gyro_rad[2]);
+
+//		if (std::isnan(angle.roll) || std::isnan(angle.pitch)) {
+//			HAL_UART_Transmit(&huart1, (uint8_t *)"NaN detected: detG", 20, HAL_MAX_DELAY);
+//		}
+
+
+		uint8_t usbBufLen = snprintf(usbBuf, 64,
+			         " %.2f roll, %.2f pitch \r\n",
+			         angle.roll, angle.pitch);
 
 	    HAL_UART_Transmit(&huart1, (uint8_t *)usbBuf, usbBufLen, 100);
 

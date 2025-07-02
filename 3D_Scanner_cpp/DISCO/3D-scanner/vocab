@@ -2,3 +2,7 @@ covariance
 residual
 kalman
 dt
+theta
+phi
+gyro
+jacobian

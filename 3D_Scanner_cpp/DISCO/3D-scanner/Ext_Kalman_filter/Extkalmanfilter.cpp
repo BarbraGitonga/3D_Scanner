@@ -7,70 +7,178 @@
  */
 
 #include <Ext_Kalman_filter/Extkalmanfilter.h>
+#include <math.h>
 
-ExtKalmanFilter::ExtKalmanFilter() {
-    // Constructor
-	Q_angle = 0.001f;
-	Q_bias = 0.003f;
-	R_measure = 0.03f;
+ExtKalmanFilter::ExtKalmanFilter(float Pinit ,float Q, float R) {
+    // state estimates
+	state.phi_rad = state.theta_rad = 0.0f; // value of phi and theta
 
-	angle = 0.0f;
-	bias = 0.0f;
+	// a priori covariance matrix
+	state.P[0] = Pinit;
+	state.P[1] = 0.0f;
+	state.P[2] = 0.0f;
+	state.P[3] = Pinit;
 
-	P[0][0] = 1.0f; P[0][1] = 0.0f;
-	P[1][0] = 0.0f; P[1][1] = 1.0f;
+	// process noise covariance matrix
+	state.Q[0] = Q;
+	state.Q[1] = Q;
+	//covariance measurement
+	state.R[0] = R;
+	state.R[1] = R;
+	state.R[2] = R;
 }
 
-void ExtKalmanFilter::setAngle(float newAngle) {
-    angle = newAngle;
+void ExtKalmanFilter::predict(const MPU6050Data& gyro, float dt) {
+	float p = gyro.gyroX;
+	float q = gyro.gyroY;
+	float r = gyro.gyroZ;
+
+	float sp = sin(state.phi_rad);
+	float cp = cos(state.phi_rad);
+	float tt = tan(state.theta_rad);
+
+	// state transition x = x + T * f(x,u)
+	state.phi_rad = state.phi_rad + dt * (p + tt * (q * sp + r * cp));
+	state.theta_rad = state.theta_rad + dt * (q * cp - r * sp);
+
+	// Jacobian of f(x,u)
+	sp = sin(state.phi_rad);
+	cp = cos(state.phi_rad);
+	float st = sin(state.theta_rad);
+	float ct = cos(state.theta_rad);
+	if (fabs(ct) < 1e-6f) ct = 1e-6f;
+	tt = st / ct;
+
+	float A[4] = {
+			tt * (q * cp - r * sp),
+			(r * cp + q * sp) * ( tt * tt + 1.0f),
+			-(r * cp + q * sp),
+			0.0f
+	};
+
+	// Predict covariance ( T * (A*P + P*' + Q)
+	float Ptemp[4] = {
+	    dt * (state.Q[0] + 2.0f * A[0] * state.P[0] + A[1] * state.P[1] + A[1] + A[1] * state.P[2]),
+	    dt * (A[0] * state.P[1] + A[2] * state.P[0] + A[1] * state.P[3] + state.P[0] * A[1]),
+	    dt * (A[0] * state.P[2] + A[2] * state.P[0] + A[1] * state.P[3] + A[3] * state.P[2]),
+	    dt * (state.Q[1] + A[2] * state.P[1] + A[2] * state.P[2] + 2.0f * A[3] * state.P[3])
+	};
+
+	state.P[0] += Ptemp[0];
+	state.P[1] += Ptemp[1];
+	state.P[2] += Ptemp[2];
+	state.P[3] += Ptemp[3];
 }
 
-float ExtKalmanFilter::getAngle() {
-    return angle;
+void ExtKalmanFilter::update(const MPU6050Data& accel) {
+	float ax = accel.accX;
+	float ay = accel.accY;
+	float az = accel.accZ;
+
+//	float acc_norm = sqrt(ax*ax + ay*ay + az*az);
+//	if (acc_norm < 1e-6f) return; // Skip update if no acceleration data
+//
+//	ax /= acc_norm;
+//	ay /= acc_norm;
+//	az /= acc_norm;
+
+	float sp = sin(state.phi_rad);
+	float cp = cos(state.phi_rad);
+	float st = sin(state.theta_rad);
+	float ct = cos(state.theta_rad);
+
+	// sensor model
+	float h[3] = {
+			g * st,
+			-g * ct * sp,
+			-g * ct * cp
+	};
+
+	// jacobian of h(x,u)
+	float C[6] = {
+			0.0f,
+			g * ct,
+			-g * cp * ct,
+			g * sp * st,
+			g * sp * ct,
+			g  * cp * st
+	};
+
+	float G[9]; // G = (C*P*C' + R)
+
+	G[0] = state.P[3] * C[1] * C[1] + state.R[0];  // G00
+	G[1] = state.P[2] * C[1] * C[3] + state.P[3] * C[1] * C[2]; // G01
+	G[2] = state.P[2] * C[1] * C[4] + state.P[3] * C[1] * C[3]; // G02
+
+	G[3] = state.R[1] + (state.P[1] * C[2] + state.P[3] * C[3]) * C[1];  // G10
+	G[4] = (state.P[0] * C[2] + state.P[2] * C[3]) * C[2] + (state.P[1] * C[2] + state.P[3] * C[3]) * C[3];  // G11
+	G[5] = (state.P[0] * C[2] + state.P[2] * C[3] * C[4] + (state.P[1] * C[2] + state.P[3] * C[3])) * C[3];  // G12
+
+	G[6] = state.R[2] + (state.P[1] * C[2] + state.P[3] * C[3]) * C[1];  // G20
+	G[7] = (state.P[0] * C[3] + state.P[2] * C[5]) * C[2] + (state.P[1] * C[4]) * C[3];  // G21
+	G[8] = (state.P[0] * C[4] + state.P[2] * C[5]) * C[4] + (state.P[1] * C[4] + state.P[3] * C[5] + state.P[3] * C[5]) * C[5];  // G22
+
+
+	float detG =
+	    G[0]*(G[4]*G[8] - G[5]*G[7]) -
+	    G[1]*(G[3]*G[8] + G[5]*G[6]) +
+	    G[2]*(G[3]*G[7] - G[4]*G[6]);
+
+	if (fabs(detG) < 1e-6f) return;  // skip update if unstable
+
+	float invDet = 1.0f / detG;
+
+	if (fabs(invDet) < 1e-6f) return;  // skip update if unstable
+
+	float Ginv[9];  // Inverse of G G^-1 = invDet * adjoint(G)
+	Ginv[0] =  invDet * (G[4]*G[8] - G[5]*G[7]);
+	Ginv[1] = -invDet * (G[1]*G[8] - G[2]*G[7]);
+	Ginv[2] =  invDet * (G[1]*G[5] - G[2]*G[4]);
+
+	Ginv[3] = -invDet * (G[3]*G[8] - G[5]*G[6]);
+	Ginv[4] =  invDet * (G[0]*G[8] - G[2]*G[6]);
+	Ginv[5] = -invDet * (G[0]*G[5] - G[2]*G[3]);
+
+	Ginv[6] =  invDet * (G[3]*G[7] - G[4]*G[6]);
+	Ginv[7] = -invDet * (G[0]*G[7] - G[1]*G[6]);
+	Ginv[8] =  invDet * (G[0]*G[4] - G[1]*G[3]);
+
+	// Computing Kalman gain
+	float K[6]; // Kalman Gain K = P*C'*Ginv
+
+	K[0] = Ginv[0]*(C[0]*state.P[0] + C[1]*state.P[1]) + Ginv[3]*(C[2]*state.P[0] + C[3]*state.P[1]) + Ginv[6]*(C[4]*state.P[0] + C[5]*state.P[1]);
+	K[1] = Ginv[1]*(C[0]*state.P[0] + C[1]*state.P[1]) + Ginv[4]*(C[2]*state.P[0] + C[3]*state.P[1]) + Ginv[7]*(C[4]*state.P[0] + C[5]*state.P[1]);
+	K[2] = Ginv[2]*(C[0]*state.P[0] + C[1]*state.P[1]) + Ginv[5]*(C[2]*state.P[0] + C[3]*state.P[1]) + Ginv[8]*(C[4]*state.P[0] + C[5]*state.P[1]);
+
+	K[3] = Ginv[0]*(C[0]*state.P[2] + C[1]*state.P[3]) + Ginv[3]*(C[2]*state.P[2] + C[3]*state.P[3]) + Ginv[6]*(C[4]*state.P[2] + C[5]*state.P[3]);
+	K[4] = Ginv[1]*(C[0]*state.P[2] + C[1]*state.P[3]) + Ginv[4]*(C[2]*state.P[2] + C[3]*state.P[3]) + Ginv[7]*(C[4]*state.P[2] + C[5]*state.P[3]);
+	K[5] = Ginv[2]*(C[0]*state.P[2] + C[1]*state.P[3]) + Ginv[5]*(C[2]*state.P[2] + C[3]*state.P[3]) + Ginv[8]*(C[4]*state.P[2] + C[5]*state.P[3]);
+
+
+	// Applying correction to state matrix x = x + K*(y - h(x,u))
+	float y0 = ax - h[0];
+	float y1 = ay - h[1];
+	float y2 = az - h[2];
+
+	state.theta_rad += K[0]*y0 + K[1]*y1 + K[2]*y2;
+	state.phi_rad += K[3]*y0 + K[4]*y1 + K[5]*y2;
+
+	float Ptemp[4];
+	// Updating covariance matrix P = ( I - K*C) * P
+	Ptemp[0] = - state.P[0]*(C[2]*K[1] + C[4]*K[2] - 1.0f) - state.P[2]*(C[1]*K[0] + C[3]*K[1] + C[5]*K[2]);
+	Ptemp[1] = - state.P[1]*(C[2]*K[1] + C[4]*K[2] - 1.0f) - state.P[3]*(C[1]*K[0] + C[3]*K[1] + C[5]*K[2]);
+	Ptemp[2] = - state.P[0]*(C[2]*K[4] + C[4]*K[5]) - state.P[2]*(C[1]*K[3] + C[3]*K[4] + C[5]*K[5] - 1.0f);
+	Ptemp[3] = - state.P[1]*(C[2]*K[4] + C[4]*K[5]) - state.P[3]*(C[1]*K[3] + C[3]*K[4] + C[5]*K[5] - 1.0f);
+
+	state.P[0]+= Ptemp[0];
+	state.P[1]+= Ptemp[1];
+	state.P[2]+= Ptemp[2];
+	state.P[3]+= Ptemp[3];
 }
 
-void ExtKalmanFilter::changeR(float NewR_measure) {
-    R_measure =  NewR_measure;
-}
-
-float ExtKalmanFilter::getBias() {
-    return bias;
-}
-
-float ExtKalmanFilter::update(float raw_accel, float raw_gyro, float dt) {
-    // Step 1: Predict the angle
-    float rate = raw_gyro - bias;
-    angle += dt * rate;
-
-    // Step 2: Update estimation error covariance
-    P[0][0] += dt * (dt * P[1][1] - P[0][1] - P[1][0] + Q_angle);
-    P[0][1] -= dt * P[1][1];
-    P[1][0] -= dt * P[1][1];
-    P[1][1] += Q_bias * dt;
-
-    // Step 3: Innovation (measurement residual)
-    float y = raw_accel - angle;
-
-    // Step 4: Innovation covariance
-    float S = P[0][0] + R_measure;
-
-    // Step 5: Kalman Gain
-    float K[2];
-    K[0] = P[0][0] / S;
-    K[1] = P[1][0] / S;
-
-    // Step 6: Update state estimate
-    angle += K[0] * y;
-    bias  += K[1] * y;
-
-    // Step 7: Update error covariance matrix
-    float P00_temp = P[0][0];
-    float P01_temp = P[0][1];
-
-    P[0][0] -= K[0] * P00_temp;
-    P[0][1] -= K[0] * P01_temp;
-    P[1][0] -= K[1] * P00_temp;
-    P[1][1] -= K[1] * P01_temp;
-
+AngleEstimate ExtKalmanFilter::getAngle() const {
+    AngleEstimate angle;
+    angle.roll = state.phi_rad * RAD_TO_DEG;   // or x[0] * RAD_TO_DEG
+    angle.pitch = state.theta_rad * RAD_TO_DEG; // or x[1] * RAD_TO_DEG
     return angle;
 }

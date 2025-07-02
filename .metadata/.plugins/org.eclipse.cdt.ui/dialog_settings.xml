@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
 	<item key="LastUsedSourceTemplate" value="Default C++ source template"/>
-	<item key="org.eclipse.cdt.utils.ui.controls.FileListControl" value="${workspace_loc:/${ProjName}/Ext_Kalman_filter}"/>
+	<item key="org.eclipse.cdt.utils.ui.controls.FileListControl" value="-lm"/>
 	<section name="completion_proposal_size">
 	</section>
 	<section name="org.eclipse.cdt.ui.text.hover.CMacroExpansionExploration">
@@ -11,7 +11,7 @@
 	</section>
 	<section name="NewClassWizardPage">
 		<item key="namespaceSelected" value="false"/>
-		<item key="testFileSelected" value="true"/>
+		<item key="testFileSelected" value="false"/>
 		<item key="finalSelected" value="false"/>
 		<item key="stubImpl0" value="DEFINITION"/>
 		<item key="stubSelected0" value="true"/>

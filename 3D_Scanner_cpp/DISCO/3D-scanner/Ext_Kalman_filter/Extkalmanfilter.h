@@ -2,33 +2,62 @@
  * Extkalmanfilter.h
  *
  *  Created on: Jun 20, 2025
- *      Author: lenovo
+ *      Author: Barbra Gitonga (barbragitonga@gmail.com)
  */
 
 #ifndef EXT_KALMAN_FILTER_H
 #define EXT_KALMAN_FILTER_H
 
+#include <cmath>
+#include "MPU6050_driver/MPU6050.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+#define RAD_TO_DEG 57.2957795f
+#define DEG_TO_RAD 0.0174533f
+#define g ((float) 9.81f)
+
+struct MPU6050Data {
+	float accX, accY, accZ;
+	float gyroX, gyroY, gyroZ;
+
+	void setFrom(MPU6050_data& mpu_data) {
+		accX  = mpu_data.acc_mps2[1];
+		accY  = mpu_data.acc_mps2[0];
+		accZ  = mpu_data.acc_mps2[2];
+		gyroX = mpu_data.gyro_rad[1];
+		gyroY = mpu_data.gyro_rad[0];
+		gyroZ = mpu_data.gyro_rad[2];
+	}
+};
+
+
+// In header file
+struct AngleEstimate {
+    float roll;
+    float pitch;
+};
+
+typedef struct {
+    float phi_rad; // roll(x[0])
+    float theta_rad; // pitch(x[1])
+    float Q[2];  // Process noise covariance
+	float R[3];  // Measurement noise covariance
+	float P[4];  // Estimate covariance
+} kal;
+
 class ExtKalmanFilter {
 public:
-    ExtKalmanFilter();
-    float update(float raw_accel, float raw_gyro, float dt); // dt in seconds
-    void setAngle(float angle);
-    void changeR(float NewR_measure);
-    float getAngle();
-    float getBias();
+    ExtKalmanFilter(float Pinit ,float Q, float R);
+
+    void predict(const MPU6050Data& gyro, float dt);
+    void update (const MPU6050Data& accel);
+    AngleEstimate getAngle() const;
 
 private:
-    float angle = 0.0f;
-    float bias = 0.0f;
+    kal state;
 
-    float P[2][2] = {{1.0, 0.0}, {0.0, 1.0}};
-    float Q_angle = 0.001f;
-    float Q_bias = 0.003f;
-    float R_measure = 0.03f;
 };
 
 #ifdef __cplusplus

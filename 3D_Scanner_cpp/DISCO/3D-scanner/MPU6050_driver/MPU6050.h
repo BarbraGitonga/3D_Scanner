@@ -75,6 +75,7 @@ typedef struct {
 
 	/* Temperature data in degrees */
 	float temp_C;
+
 } MPU6050_data;
 
 class MPU6050 {

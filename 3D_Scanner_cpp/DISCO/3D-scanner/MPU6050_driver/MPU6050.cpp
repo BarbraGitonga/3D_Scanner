@@ -115,10 +115,10 @@ HAL_StatusTypeDef MPU6050::accelerometer(MPU6050_data *dev) {
     int16_t accel_y_out = (int16_t)((buffer[2] << 8) | buffer[3]);
     int16_t accel_z_out = (int16_t)((buffer[4] << 8) | buffer[5]);
 
-    float scale = 2.0f / 32768.0f; // convert raw data to g's
+    float scale = 2.0f / 32768.0f; // convert raw data to m/s^2
     dev->acc_mps2[0] = accel_x_out * scale;
-    dev->acc_mps2[1] = accel_y_out * scale;  // Fixed: was using x value
-    dev->acc_mps2[2] = accel_z_out * scale;  // Fixed: was using x value
+    dev->acc_mps2[1] = accel_y_out * scale;
+    dev->acc_mps2[2] = accel_z_out * scale;
 
     return (errNum == 0) ? HAL_OK : HAL_ERROR;
 }
