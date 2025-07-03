@@ -43,7 +43,7 @@
 #define LPF_GYR_ALPHA 0.01f
 #define LPF_ACC_ALPHA 0.10f
 #define KALMAN_PREDICT_PERIOD_MS 10
-#define KALMAN_UPDATE_PERIOD_MS  100
+#define KALMAN_UPDATE_PERIOD_MS  25
 
 uint32_t currentTime = HAL_GetTick();
 uint32_t previousTime = 0;
@@ -120,10 +120,10 @@ SDRAM_HandleTypeDef hsdram1;
 
 MPU6050_data mpu_data;
 uint8_t data_ready;
-uint32_t timerLog = HAL_GetTick();
-uint32_t timerLED = HAL_GetTick();
-uint32_t timerPredict = HAL_GetTick();
-uint32_t timerUpdate = HAL_GetTick();
+uint32_t timerLog = 0;
+uint32_t timerLED = 0;
+uint32_t timerPredict = 0;
+uint32_t timerUpdate = 0;
 MPU6050Data data; // to be passed to the EKF
 
 /* USER CODE END PV */
@@ -237,10 +237,12 @@ int main(void)
   HAL_UART_Transmit(&huart1, (uint8_t *)"MPU6050 Initialized\n", 20, HAL_MAX_DELAY);
 
   // Initializing Kalman filter
-  float q = 0.001f;
-  float r = 0.011f;
+  float Q[2] = {0.0052360f, 0.0034907f};
+  float R[3] = {0.0099270f, 0.0099270f, 0.011788f};
+
   float Pinit = 0.1f;
-  ExtKalmanFilter EKF(Pinit, q, r);
+
+  ExtKalmanFilter EKF(Pinit, Q, R);
 
   // filter data holders
   float gyrPrev[3] = {0.0f, 0.0f, 0.0f};
@@ -260,20 +262,21 @@ int main(void)
 		 mpu_sensor.gyroscope(&mpu_data);
 		 mpu_sensor.temperature(&mpu_data);
 
-		 mpu_data.gyro_rad[0] = LPF_GYR_ALPHA * gyrPrev[0] + ( 1.0f - LPF_GYR_ALPHA) * mpu_data.gyro_rad[0];
-		 mpu_data.gyro_rad[1] = LPF_GYR_ALPHA * gyrPrev[1] + ( 1.0f - LPF_GYR_ALPHA) * mpu_data.gyro_rad[1];
-		 mpu_data.gyro_rad[2] = LPF_GYR_ALPHA * gyrPrev[2] + ( 1.0f - LPF_GYR_ALPHA) * mpu_data.gyro_rad[2];
-
-		 mpu_data.acc_mps2[0] = LPF_ACC_ALPHA * accPrev[0] + ( 1.0f - LPF_ACC_ALPHA * mpu_data.acc_mps2[0]);
-		 mpu_data.acc_mps2[1] = LPF_ACC_ALPHA * accPrev[1] + ( 1.0f - LPF_ACC_ALPHA * mpu_data.acc_mps2[1]);
-		 mpu_data.acc_mps2[2] = LPF_ACC_ALPHA * accPrev[2] + ( 1.0f - LPF_ACC_ALPHA * mpu_data.acc_mps2[2]);
-
-		 gyrPrev[0] = mpu_data.gyro_rad[0];
-		 gyrPrev[1] = mpu_data.gyro_rad[1];
-		 gyrPrev[2] = mpu_data.gyro_rad[2];
-		 accPrev[0] = mpu_data.acc_mps2[0];
-		 accPrev[1] = mpu_data.acc_mps2[1];
-		 accPrev[2] = mpu_data.acc_mps2[2];
+//		 mpu_data.gyro_rad[0] = LPF_GYR_ALPHA * gyrPrev[0] + ( 1.0f - LPF_GYR_ALPHA) * mpu_data.gyro_rad[0];
+//		 mpu_data.gyro_rad[1] = LPF_GYR_ALPHA * gyrPrev[1] + ( 1.0f - LPF_GYR_ALPHA) * mpu_data.gyro_rad[1];
+//		 mpu_data.gyro_rad[2] = LPF_GYR_ALPHA * gyrPrev[2] + ( 1.0f - LPF_GYR_ALPHA) * mpu_data.gyro_rad[2];
+//
+//
+//		 mpu_data.acc_mps2[0] = LPF_ACC_ALPHA * accPrev[0] + ( 1.0f - LPF_ACC_ALPHA) * mpu_data.acc_mps2[0];
+//		 mpu_data.acc_mps2[1] = LPF_ACC_ALPHA * accPrev[1] + ( 1.0f - LPF_ACC_ALPHA) * mpu_data.acc_mps2[1];
+//		 mpu_data.acc_mps2[2] = LPF_ACC_ALPHA * accPrev[2] + ( 1.0f - LPF_ACC_ALPHA) * mpu_data.acc_mps2[2];
+//
+//		 gyrPrev[0] = mpu_data.gyro_rad[0];
+//		 gyrPrev[1] = mpu_data.gyro_rad[1];
+//		 gyrPrev[2] = mpu_data.gyro_rad[2];
+//		 accPrev[0] = mpu_data.acc_mps2[0];
+//		 accPrev[1] = mpu_data.acc_mps2[1];
+//		 accPrev[2] = mpu_data.acc_mps2[2];
 
 		 data.setFrom(mpu_data);
 
@@ -307,8 +310,8 @@ int main(void)
 
 
 		uint8_t usbBufLen = snprintf(usbBuf, 64,
-			         " %.2f roll, %.2f pitch \r\n",
-			         angle.roll, angle.pitch);
+			         " %.2f roll, %.2f gx, %.2f pitch \r\n",
+			         angle.roll, mpu_data.gyro_rad[0], angle.pitch);
 
 	    HAL_UART_Transmit(&huart1, (uint8_t *)usbBuf, usbBufLen, 100);
 

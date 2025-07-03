@@ -8,7 +8,7 @@
 #ifndef EXT_KALMAN_FILTER_H
 #define EXT_KALMAN_FILTER_H
 
-#include <cmath>
+#include <math.h>
 #include "MPU6050_driver/MPU6050.h"
 #ifdef __cplusplus
 extern "C" {
@@ -42,6 +42,8 @@ struct AngleEstimate {
 typedef struct {
     float phi_rad; // roll(x[0])
     float theta_rad; // pitch(x[1])
+//    float bias_phi; // roll bias
+//    float bias_theta; // pitch bias
     float Q[2];  // Process noise covariance
 	float R[3];  // Measurement noise covariance
 	float P[4];  // Estimate covariance
@@ -49,10 +51,10 @@ typedef struct {
 
 class ExtKalmanFilter {
 public:
-    ExtKalmanFilter(float Pinit ,float Q, float R);
+    ExtKalmanFilter(float Pinit ,float* Q_var, float* R_var);
 
     void predict(const MPU6050Data& gyro, float dt);
-    void update (const MPU6050Data& accel);
+    void update (const MPU6050Data& data);
     AngleEstimate getAngle() const;
 
 private:
