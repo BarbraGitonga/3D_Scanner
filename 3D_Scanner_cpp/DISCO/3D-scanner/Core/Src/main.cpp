@@ -237,12 +237,15 @@ int main(void)
   HAL_UART_Transmit(&huart1, (uint8_t *)"MPU6050 Initialized\n", 20, HAL_MAX_DELAY);
 
   // Initializing Kalman filter
+
+  float Pinit = 0.01f;
+  float phi_bias = -0.03f;
+  float theta_bias = -0.02f;
+
   float Q[2] = {0.0052360f, 0.0034907f};
   float R[3] = {0.0099270f, 0.0099270f, 0.011788f};
 
-  float Pinit = 0.1f;
-
-  ExtKalmanFilter EKF(Pinit, Q, R);
+  ExtKalmanFilter EKF(Pinit, Q, R, phi_bias, theta_bias);
 
   // filter data holders
   float gyrPrev[3] = {0.0f, 0.0f, 0.0f};
@@ -262,21 +265,21 @@ int main(void)
 		 mpu_sensor.gyroscope(&mpu_data);
 		 mpu_sensor.temperature(&mpu_data);
 
-//		 mpu_data.gyro_rad[0] = LPF_GYR_ALPHA * gyrPrev[0] + ( 1.0f - LPF_GYR_ALPHA) * mpu_data.gyro_rad[0];
-//		 mpu_data.gyro_rad[1] = LPF_GYR_ALPHA * gyrPrev[1] + ( 1.0f - LPF_GYR_ALPHA) * mpu_data.gyro_rad[1];
-//		 mpu_data.gyro_rad[2] = LPF_GYR_ALPHA * gyrPrev[2] + ( 1.0f - LPF_GYR_ALPHA) * mpu_data.gyro_rad[2];
-//
-//
-//		 mpu_data.acc_mps2[0] = LPF_ACC_ALPHA * accPrev[0] + ( 1.0f - LPF_ACC_ALPHA) * mpu_data.acc_mps2[0];
-//		 mpu_data.acc_mps2[1] = LPF_ACC_ALPHA * accPrev[1] + ( 1.0f - LPF_ACC_ALPHA) * mpu_data.acc_mps2[1];
-//		 mpu_data.acc_mps2[2] = LPF_ACC_ALPHA * accPrev[2] + ( 1.0f - LPF_ACC_ALPHA) * mpu_data.acc_mps2[2];
-//
-//		 gyrPrev[0] = mpu_data.gyro_rad[0];
-//		 gyrPrev[1] = mpu_data.gyro_rad[1];
-//		 gyrPrev[2] = mpu_data.gyro_rad[2];
-//		 accPrev[0] = mpu_data.acc_mps2[0];
-//		 accPrev[1] = mpu_data.acc_mps2[1];
-//		 accPrev[2] = mpu_data.acc_mps2[2];
+		 mpu_data.gyro_rad[0] = LPF_GYR_ALPHA * gyrPrev[0] + ( 1.0f - LPF_GYR_ALPHA) * mpu_data.gyro_rad[0];
+		 mpu_data.gyro_rad[1] = LPF_GYR_ALPHA * gyrPrev[1] + ( 1.0f - LPF_GYR_ALPHA) * mpu_data.gyro_rad[1];
+		 mpu_data.gyro_rad[2] = LPF_GYR_ALPHA * gyrPrev[2] + ( 1.0f - LPF_GYR_ALPHA) * mpu_data.gyro_rad[2];
+
+
+		 mpu_data.acc_mps2[0] = LPF_ACC_ALPHA * accPrev[0] + ( 1.0f - LPF_ACC_ALPHA) * mpu_data.acc_mps2[0];
+		 mpu_data.acc_mps2[1] = LPF_ACC_ALPHA * accPrev[1] + ( 1.0f - LPF_ACC_ALPHA) * mpu_data.acc_mps2[1];
+		 mpu_data.acc_mps2[2] = LPF_ACC_ALPHA * accPrev[2] + ( 1.0f - LPF_ACC_ALPHA) * mpu_data.acc_mps2[2];
+
+		 gyrPrev[0] = mpu_data.gyro_rad[0];
+		 gyrPrev[1] = mpu_data.gyro_rad[1];
+		 gyrPrev[2] = mpu_data.gyro_rad[2];
+		 accPrev[0] = mpu_data.acc_mps2[0];
+		 accPrev[1] = mpu_data.acc_mps2[1];
+		 accPrev[2] = mpu_data.acc_mps2[2];
 
 		 data.setFrom(mpu_data);
 
@@ -308,10 +311,10 @@ int main(void)
 //			HAL_UART_Transmit(&huart1, (uint8_t *)"NaN detected: detG", 20, HAL_MAX_DELAY);
 //		}
 
-
+//
 		uint8_t usbBufLen = snprintf(usbBuf, 64,
-			         " %.2f roll, %.2f gx, %.2f pitch \r\n",
-			         angle.roll, mpu_data.gyro_rad[0], angle.pitch);
+			         " %.2f roll, %.2f pitch \r\n",
+			         angle.roll, angle.pitch);
 
 	    HAL_UART_Transmit(&huart1, (uint8_t *)usbBuf, usbBufLen, 100);
 
