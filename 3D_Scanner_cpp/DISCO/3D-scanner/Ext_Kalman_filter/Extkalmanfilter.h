@@ -42,19 +42,19 @@ struct AngleEstimate {
 typedef struct {
     float phi_rad; // roll(x[0])
     float theta_rad; // pitch(x[1])
-//    float bias_phi; // roll bias
-//    float bias_theta; // pitch bias
-    float Q[2];  // Process noise covariance
+    float bias_phi; // roll bias
+    float bias_theta; // pitch bias
+    float Q[4];  // Process noise covariance
 	float R[3];  // Measurement noise covariance
-	float P[4];  // Estimate covariance
+	float P[16];  // Estimate covariance
 } kal;
 
 class ExtKalmanFilter {
 public:
-    ExtKalmanFilter(float Pinit ,float* Q_var, float* R_var);
+    ExtKalmanFilter(float Pinit ,float* Q_var, float* R_var, float phi_bias, float theta_bias);
 
     void predict(const MPU6050Data& gyro, float dt);
-    void update (const MPU6050Data& data);
+    void update (const MPU6050Data& accel);
     AngleEstimate getAngle() const;
 
 private:
