@@ -7,6 +7,9 @@
 
 #include <MPU6050_driver/MPU6050.h>
 #include <cstdio>
+#define RAD_TO_DEG 57.2957795f
+#define DEG_TO_RAD 0.0174533f
+
 /* LOW-LEVEL FUNCTIONS */
 HAL_StatusTypeDef MPU6050::readRegister(MPU6050_data *dev, uint8_t reg, uint8_t *data) {
     return HAL_I2C_Mem_Read(dev->i2cHandle, MPU6050_ID, reg, I2C_MEMADD_SIZE_8BIT, data, 1, HAL_MAX_DELAY);
@@ -136,9 +139,9 @@ HAL_StatusTypeDef MPU6050::gyroscope(MPU6050_data *dev){
 	int16_t gyro_z_out = (int16_t)((buffer[4] << 8) | buffer[5]);
 
 	float scale = 250.0 / 32768.0; // convert raw values to degrees per second
-	dev->gyro_rad[0] = gyro_x_out * scale;
-	dev->gyro_rad[1] = gyro_y_out * scale;
-	dev->gyro_rad[2] = gyro_z_out * scale;
+	dev->gyro_rad[0] = gyro_x_out * scale * DEG_TO_RAD;
+	dev->gyro_rad[1] = gyro_y_out * scale * DEG_TO_RAD;
+	dev->gyro_rad[2] = gyro_z_out * scale * DEG_TO_RAD;
 	return (errNum == 0) ? HAL_OK : HAL_ERROR;
 }
 
