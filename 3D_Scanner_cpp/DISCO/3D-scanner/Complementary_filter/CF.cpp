@@ -2,7 +2,7 @@
  * CF.cpp
  *
  *  Created on: Jul 8, 2025
- *      Author: lenovo
+ *      Author: barbra gitonga (barbragitonga@gmail.com)
  */
 
 #include "Complementary_filter/CF.h"
@@ -24,7 +24,7 @@ void CF::filter(const MPU6050Data& data, float alpha, float T_ms) {
     		sinf(state.phi_hat_rad) * data.gyroY + cosf(state.phi_hat_rad) * data.gyroZ);
     float theta_dot = (cosf(state.phi_hat_rad)) * data.gyroY - (sinf(state.phi_hat_rad) * data.gyroZ);
 
-    // Combine accelerometer with intergral of  gyro readings
+    // Combine accelerometer with integral of  gyro readings
     state.phi_hat_rad = (1.0f - alpha) * (state.phi_hat_rad + dt * phi_dot) + alpha * phi_acc;
     state.theta_hat_rad = (1.0f - alpha) * (state.theta_hat_rad + dt * theta_dot) + alpha * theta_acc;
 }
