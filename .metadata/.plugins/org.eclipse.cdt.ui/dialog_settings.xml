@@ -43,4 +43,8 @@
 			<item value="HAL_TIM_IC_Start_IT"/>
 		</list>
 	</section>
+	<section name="org.eclipse.cdt.ui.text.hover.CMacroExpansionExploration.internal">
+		<item key="size.width" value="714"/>
+		<item key="size.height" value="231"/>
+	</section>
 </section>

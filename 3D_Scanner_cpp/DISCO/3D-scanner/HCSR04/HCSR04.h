@@ -20,13 +20,15 @@ typedef struct {
     uint16_t trigPin;
     TIM_HandleTypeDef* htim;
     uint32_t timChannel;
+    uint32_t timIT;
     volatile uint32_t ic_rising;
     volatile uint32_t ic_falling;
     volatile uint8_t capture_state;
+    volatile uint32_t distance;
 } HCSR04_HandleTypeDef;
 
 void HCSR04_Init(HCSR04_HandleTypeDef *hcsr04, GPIO_TypeDef* trigPort,
-		uint16_t trigPin, TIM_HandleTypeDef* htim, uint32_t timChannel);
+		uint16_t trigPin, TIM_HandleTypeDef* htim, uint32_t timChannel, uint32_t timIT);
 void HCSR04_Trigger(HCSR04_HandleTypeDef *hcsr04);
 float HCSR04_GetDistance(HCSR04_HandleTypeDef *hcsr04);
 void HCSR04_CaptureCallback(HCSR04_HandleTypeDef *hcsr04);
