@@ -2,7 +2,7 @@
  * MPU6050.cpp
  *
  *  Created on: Mar 30, 2025
- *      Author: lenovo
+ *      Author: Barbra Gitonga(barbragitonga@gmail.com)
  */
 
 #include <MPU6050_driver/MPU6050.h>

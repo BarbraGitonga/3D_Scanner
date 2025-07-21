@@ -144,8 +144,8 @@ void Error_Handler(void);
 #define MPU_INT_Pin GPIO_PIN_3
 #define MPU_INT_GPIO_Port GPIOI
 #define MPU_INT_EXTI_IRQn EXTI3_IRQn
-#define LED_Pin GPIO_PIN_2
-#define LED_GPIO_Port GPIOI
+#define TRIG_Pin GPIO_PIN_2
+#define TRIG_GPIO_Port GPIOI
 #define OTG_FS_N_Pin GPIO_PIN_11
 #define OTG_FS_N_GPIO_Port GPIOA
 #define uSD_Detect_Pin GPIO_PIN_13
@@ -200,8 +200,8 @@ void Error_Handler(void);
 #define LCD_G6_GPIO_Port GPIOK
 #define LCD_G7_Pin GPIO_PIN_2
 #define LCD_G7_GPIO_Port GPIOK
-#define ARDUINO_PWM_D10_Pin GPIO_PIN_8
-#define ARDUINO_PWM_D10_GPIO_Port GPIOA
+#define ECHO_Pin GPIO_PIN_8
+#define ECHO_GPIO_Port GPIOA
 #define OSC_25M_Pin GPIO_PIN_0
 #define OSC_25M_GPIO_Port GPIOH
 #define FMC_A2_Pin GPIO_PIN_2
@@ -214,8 +214,8 @@ void Error_Handler(void);
 #define LCD_G4_GPIO_Port GPIOJ
 #define LCD_G5_Pin GPIO_PIN_0
 #define LCD_G5_GPIO_Port GPIOK
-#define ARDUINO_RX_D0_Pin GPIO_PIN_7
-#define ARDUINO_RX_D0_GPIO_Port GPIOC
+#define ARDIONO_D0_Pin GPIO_PIN_7
+#define ARDIONO_D0_GPIO_Port GPIOC
 #define FMC_A3_Pin GPIO_PIN_3
 #define FMC_A3_GPIO_Port GPIOF
 #define LCD_CLK_Pin GPIO_PIN_14
@@ -228,8 +228,8 @@ void Error_Handler(void);
 #define LCD_G3_GPIO_Port GPIOJ
 #define FMC_SDCLK_Pin GPIO_PIN_8
 #define FMC_SDCLK_GPIO_Port GPIOG
-#define ARDUINO_TX_D1_Pin GPIO_PIN_6
-#define ARDUINO_TX_D1_GPIO_Port GPIOC
+#define ARDUINO_D1_Pin GPIO_PIN_6
+#define ARDUINO_D1_GPIO_Port GPIOC
 #define FMC_A4_Pin GPIO_PIN_4
 #define FMC_A4_GPIO_Port GPIOF
 #define FMC_SDNME_Pin GPIO_PIN_5

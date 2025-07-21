@@ -2,6 +2,7 @@
 <section name="Workbench">
 	<item key="LastUsedSourceTemplate" value="Default C++ source template"/>
 	<item key="org.eclipse.cdt.utils.ui.controls.FileListControl" value="-lm"/>
+	<item key="LastUsedHeaderTemplate" value="Default C++ header template"/>
 	<section name="completion_proposal_size">
 	</section>
 	<section name="org.eclipse.cdt.ui.text.hover.CMacroExpansionExploration">
@@ -35,5 +36,11 @@
 	<section name="CRenameRefactoringInputPage">
 	</section>
 	<section name="PDOMSearchPage">
+		<item key="caseSensitive" value="false"/>
+		<item key="searchFlags" value="227191"/>
+		<list key="previousPatterns">
+			<item value="htim1"/>
+			<item value="HAL_TIM_IC_Start_IT"/>
+		</list>
 	</section>
 </section>

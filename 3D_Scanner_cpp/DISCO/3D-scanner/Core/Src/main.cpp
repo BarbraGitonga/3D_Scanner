@@ -27,6 +27,7 @@
 #include "stm32f7xx_hal.h"
 #include "MPU6050_driver/MPU6050.h"
 #include "Ext_Kalman_filter/Extkalmanfilter.h"
+#include "HCSR04/HCSR04.h"
 #include <cstdio>
 /* USER CODE END Includes */
 
@@ -125,6 +126,7 @@ uint32_t timerLED = 0;
 uint32_t timerPredict = 0;
 uint32_t timerUpdate = 0;
 MPU6050Data data; // to be passed to the EKF
+HCSR04_HandleTypeDef hcsr04;
 
 /* USER CODE END PV */
 
@@ -170,6 +172,32 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
     }
 }
 
+extern HCSR04_HandleTypeDef hcsr04;
+
+void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
+{
+    // Ensure that this callback is for the correct timer
+    if (htim == &htim1) {
+        HCSR04_CaptureCallback(&hcsr04);
+    }
+}
+
+static void Debug_Checks(void) {
+    // Ensure NVIC interrupt is enabled
+    HAL_NVIC_EnableIRQ(TIM1_CC_IRQn);
+    // Check timer clock
+    if (__HAL_RCC_TIM1_IS_CLK_ENABLED() == 0) {
+        __HAL_RCC_TIM1_CLK_ENABLE();
+    }
+    // Print diagnostic information (requires UART setup)
+    printf("Timer ARR=%lu PSC=%lu\r\n", htim1.Init.Period, htim1.Init.Prescaler);
+    char usbBuf[64];
+    uint8_t usbBufLen = snprintf(usbBuf, 64,
+    			         " Timer ARR=%lu PSC=%lu\r\n",
+						 htim1.Init.Period, htim1.Init.Prescaler);
+    HAL_UART_Transmit(&huart1, (uint8_t *)usbBuf, usbBufLen, 100);
+}
+
 /* USER CODE END 0 */
 
 /**
@@ -181,6 +209,18 @@ int main(void)
 
   /* USER CODE BEGIN 1 */
 
+  // Initializing Kalman filter
+
+  float Pinit = 0.01f;
+  float phi_bias = -0.03f;
+  float theta_bias = -0.02f;
+
+  float Q[2] = {0.0052360f, 0.0034907f};
+  float R[3] = {0.0099270f, 0.0099270f, 0.011788f};
+
+  ExtKalmanFilter EKF(Pinit, Q, R, phi_bias, theta_bias);
+
+
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -189,6 +229,7 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
+
   /* USER CODE END Init */
 
   /* Configure the system clock */
@@ -236,17 +277,11 @@ int main(void)
   mpu_sensor.initialize(&mpu_data, &hi2c1);
   HAL_UART_Transmit(&huart1, (uint8_t *)"MPU6050 Initialized\n", 20, HAL_MAX_DELAY);
 
-  // Initializing Kalman filter
-
-  float Pinit = 0.01f;
-  float phi_bias = -0.03f;
-  float theta_bias = -0.02f;
-
-  float Q[2] = {0.0052360f, 0.0034907f};
-  float R[3] = {0.0099270f, 0.0099270f, 0.011788f};
-
-  ExtKalmanFilter EKF(Pinit, Q, R, phi_bias, theta_bias);
-
+  // Initialize HCSR04
+  HCSR04_Init(&hcsr04, TRIG_GPIO_Port, TRIG_Pin, &htim1, TIM_CHANNEL_1);
+  HAL_TIM_IC_Start_IT(&htim1, TIM_CHANNEL_1);
+  float distance;
+  Debug_Checks();
   // filter data holders
   float gyrPrev[3] = {0.0f, 0.0f, 0.0f};
   float accPrev[3] = {0.0f, 0.0f, 0.0f};
@@ -260,61 +295,54 @@ int main(void)
 	 char usbBuf[64];
 	 HAL_GPIO_TogglePin(GREEN_LED_GPIO_Port, GREEN_LED_Pin);
 
-	 if (data_ready) {
-		 mpu_sensor.accelerometer(&mpu_data);
-		 mpu_sensor.gyroscope(&mpu_data);
-		 mpu_sensor.temperature(&mpu_data);
+//	 if (data_ready) {
+//		 mpu_sensor.accelerometer(&mpu_data);
+//		 mpu_sensor.gyroscope(&mpu_data);
+//		 mpu_sensor.temperature(&mpu_data);
+//
+//		 mpu_data.gyro_rad[0] = LPF_GYR_ALPHA * gyrPrev[0] + ( 1.0f - LPF_GYR_ALPHA) * mpu_data.gyro_rad[0];
+//		 mpu_data.gyro_rad[1] = LPF_GYR_ALPHA * gyrPrev[1] + ( 1.0f - LPF_GYR_ALPHA) * mpu_data.gyro_rad[1];
+//		 mpu_data.gyro_rad[2] = LPF_GYR_ALPHA * gyrPrev[2] + ( 1.0f - LPF_GYR_ALPHA) * mpu_data.gyro_rad[2];
+//
+//
+//		 mpu_data.acc_mps2[0] = LPF_ACC_ALPHA * accPrev[0] + ( 1.0f - LPF_ACC_ALPHA) * mpu_data.acc_mps2[0];
+//		 mpu_data.acc_mps2[1] = LPF_ACC_ALPHA * accPrev[1] + ( 1.0f - LPF_ACC_ALPHA) * mpu_data.acc_mps2[1];
+//		 mpu_data.acc_mps2[2] = LPF_ACC_ALPHA * accPrev[2] + ( 1.0f - LPF_ACC_ALPHA) * mpu_data.acc_mps2[2];
+//
+//		 gyrPrev[0] = mpu_data.gyro_rad[0];
+//		 gyrPrev[1] = mpu_data.gyro_rad[1];
+//		 gyrPrev[2] = mpu_data.gyro_rad[2];
+//		 accPrev[0] = mpu_data.acc_mps2[0];
+//		 accPrev[1] = mpu_data.acc_mps2[1];
+//		 accPrev[2] = mpu_data.acc_mps2[2];
+//
+//		 data.setFrom(mpu_data);
+//
+//		 data_ready = 0;
+//	  }
+//
+//	 if ((HAL_GetTick() - timerPredict) >= KALMAN_PREDICT_PERIOD_MS) {
+//	 		EKF.predict(data, 0.001f * KALMAN_PREDICT_PERIOD_MS);
+//
+//	 		timerPredict += KALMAN_PREDICT_PERIOD_MS;
+//	 }
+//
+//	 if ((HAL_GetTick() - timerUpdate) >= KALMAN_UPDATE_PERIOD_MS) {
+//	 		EKF.update(data);
+//
+//	 		timerUpdate += KALMAN_UPDATE_PERIOD_MS;
+//	 }
 
-		 mpu_data.gyro_rad[0] = LPF_GYR_ALPHA * gyrPrev[0] + ( 1.0f - LPF_GYR_ALPHA) * mpu_data.gyro_rad[0];
-		 mpu_data.gyro_rad[1] = LPF_GYR_ALPHA * gyrPrev[1] + ( 1.0f - LPF_GYR_ALPHA) * mpu_data.gyro_rad[1];
-		 mpu_data.gyro_rad[2] = LPF_GYR_ALPHA * gyrPrev[2] + ( 1.0f - LPF_GYR_ALPHA) * mpu_data.gyro_rad[2];
-
-
-		 mpu_data.acc_mps2[0] = LPF_ACC_ALPHA * accPrev[0] + ( 1.0f - LPF_ACC_ALPHA) * mpu_data.acc_mps2[0];
-		 mpu_data.acc_mps2[1] = LPF_ACC_ALPHA * accPrev[1] + ( 1.0f - LPF_ACC_ALPHA) * mpu_data.acc_mps2[1];
-		 mpu_data.acc_mps2[2] = LPF_ACC_ALPHA * accPrev[2] + ( 1.0f - LPF_ACC_ALPHA) * mpu_data.acc_mps2[2];
-
-		 gyrPrev[0] = mpu_data.gyro_rad[0];
-		 gyrPrev[1] = mpu_data.gyro_rad[1];
-		 gyrPrev[2] = mpu_data.gyro_rad[2];
-		 accPrev[0] = mpu_data.acc_mps2[0];
-		 accPrev[1] = mpu_data.acc_mps2[1];
-		 accPrev[2] = mpu_data.acc_mps2[2];
-
-		 data.setFrom(mpu_data);
-
-		 data_ready = 0;
-	  }
-
-	 if ((HAL_GetTick() - timerPredict) >= KALMAN_PREDICT_PERIOD_MS) {
-	 		EKF.predict(data, 0.001f * KALMAN_PREDICT_PERIOD_MS);
-
-	 		timerPredict += KALMAN_PREDICT_PERIOD_MS;
-	 }
-
-	 if ((HAL_GetTick() - timerUpdate) >= KALMAN_UPDATE_PERIOD_MS) {
-	 		EKF.update(data);
-
-	 		timerUpdate += KALMAN_UPDATE_PERIOD_MS;
-	 }
-
+	distance = HCSR04_GetDistance(&hcsr04);
 
 	 if ((HAL_GetTick() - timerLog) >= SAMPLE_TIME_LOG_MS) {
-		AngleEstimate angle = EKF.getAngle();
-
-//	    uint8_t usbBufLen = snprintf(usbBuf, 64,
-//	         "%.2f ax, %.2f ay, %.2f az, %.2f gx, %.2f gy, %.2f gz \r\n",
-//	         mpu_data.acc_mps2[0], mpu_data.acc_mps2[1], mpu_data.acc_mps2[2],
-//	         mpu_data.gyro_rad[0], mpu_data.gyro_rad[1], mpu_data.gyro_rad[2]);
-
-//		if (std::isnan(angle.roll) || std::isnan(angle.pitch)) {
-//			HAL_UART_Transmit(&huart1, (uint8_t *)"NaN detected: detG", 20, HAL_MAX_DELAY);
-//		}
-
-//
+//		AngleEstimate angle = EKF.getAngle();
+//		uint8_t usbBufLen = snprintf(usbBuf, 64,
+//			         " %.2f roll, %.2f pitch, %0.2f distance \r\n",
+//			         angle.roll, angle.pitch, distance);
 		uint8_t usbBufLen = snprintf(usbBuf, 64,
-			         " %.2f roll, %.2f pitch \r\n",
-			         angle.roll, angle.pitch);
+					         " %0.2f distance \r\n",
+					         distance);
 
 	    HAL_UART_Transmit(&huart1, (uint8_t *)usbBuf, usbBufLen, 100);
 
@@ -1107,31 +1135,20 @@ static void MX_TIM1_Init(void)
 
   /* USER CODE END TIM1_Init 0 */
 
-  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
   TIM_MasterConfigTypeDef sMasterConfig = {0};
-  TIM_OC_InitTypeDef sConfigOC = {0};
-  TIM_BreakDeadTimeConfigTypeDef sBreakDeadTimeConfig = {0};
+  TIM_IC_InitTypeDef sConfigIC = {0};
 
   /* USER CODE BEGIN TIM1_Init 1 */
 
   /* USER CODE END TIM1_Init 1 */
   htim1.Instance = TIM1;
-  htim1.Init.Prescaler = 0;
+  htim1.Init.Prescaler = 200-1;
   htim1.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim1.Init.Period = 65535;
+  htim1.Init.Period = 0xffff-1;
   htim1.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim1.Init.RepetitionCounter = 0;
   htim1.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
-  if (HAL_TIM_Base_Init(&htim1) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
-  if (HAL_TIM_ConfigClockSource(&htim1, &sClockSourceConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  if (HAL_TIM_PWM_Init(&htim1) != HAL_OK)
+  if (HAL_TIM_IC_Init(&htim1) != HAL_OK)
   {
     Error_Handler();
   }
@@ -1142,36 +1159,17 @@ static void MX_TIM1_Init(void)
   {
     Error_Handler();
   }
-  sConfigOC.OCMode = TIM_OCMODE_PWM1;
-  sConfigOC.Pulse = 0;
-  sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
-  sConfigOC.OCNPolarity = TIM_OCNPOLARITY_HIGH;
-  sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
-  sConfigOC.OCIdleState = TIM_OCIDLESTATE_RESET;
-  sConfigOC.OCNIdleState = TIM_OCNIDLESTATE_RESET;
-  if (HAL_TIM_PWM_ConfigChannel(&htim1, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  sBreakDeadTimeConfig.OffStateRunMode = TIM_OSSR_DISABLE;
-  sBreakDeadTimeConfig.OffStateIDLEMode = TIM_OSSI_DISABLE;
-  sBreakDeadTimeConfig.LockLevel = TIM_LOCKLEVEL_OFF;
-  sBreakDeadTimeConfig.DeadTime = 0;
-  sBreakDeadTimeConfig.BreakState = TIM_BREAK_DISABLE;
-  sBreakDeadTimeConfig.BreakPolarity = TIM_BREAKPOLARITY_HIGH;
-  sBreakDeadTimeConfig.BreakFilter = 0;
-  sBreakDeadTimeConfig.Break2State = TIM_BREAK2_DISABLE;
-  sBreakDeadTimeConfig.Break2Polarity = TIM_BREAK2POLARITY_HIGH;
-  sBreakDeadTimeConfig.Break2Filter = 0;
-  sBreakDeadTimeConfig.AutomaticOutput = TIM_AUTOMATICOUTPUT_DISABLE;
-  if (HAL_TIMEx_ConfigBreakDeadTime(&htim1, &sBreakDeadTimeConfig) != HAL_OK)
+  sConfigIC.ICPolarity = TIM_INPUTCHANNELPOLARITY_RISING;
+  sConfigIC.ICSelection = TIM_ICSELECTION_DIRECTTI;
+  sConfigIC.ICPrescaler = TIM_ICPSC_DIV1;
+  sConfigIC.ICFilter = 0;
+  if (HAL_TIM_IC_ConfigChannel(&htim1, &sConfigIC, TIM_CHANNEL_1) != HAL_OK)
   {
     Error_Handler();
   }
   /* USER CODE BEGIN TIM1_Init 2 */
 
   /* USER CODE END TIM1_Init 2 */
-  HAL_TIM_MspPostInit(&htim1);
 
 }
 
@@ -1605,9 +1603,6 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(OTG_FS_PowerSwitchOn_GPIO_Port, OTG_FS_PowerSwitchOn_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, GPIO_PIN_RESET);
-
-  /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(LCD_BL_CTRL_GPIO_Port, LCD_BL_CTRL_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
@@ -1660,12 +1655,11 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(MPU_INT_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : LED_Pin LCD_DISP_Pin */
-  GPIO_InitStruct.Pin = LED_Pin|LCD_DISP_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  /*Configure GPIO pin : TRIG_Pin */
+  GPIO_InitStruct.Pin = TRIG_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOI, &GPIO_InitStruct);
+  HAL_GPIO_Init(TRIG_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : uSD_Detect_Pin */
   GPIO_InitStruct.Pin = uSD_Detect_Pin;
@@ -1691,6 +1685,13 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOH, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : LCD_DISP_Pin */
+  GPIO_InitStruct.Pin = LCD_DISP_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(LCD_DISP_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : DCMI_PWR_EN_Pin */
   GPIO_InitStruct.Pin = DCMI_PWR_EN_Pin;
