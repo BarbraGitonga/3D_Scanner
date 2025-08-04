@@ -12,7 +12,7 @@
 	</section>
 	<section name="NewClassWizardPage">
 		<item key="namespaceSelected" value="false"/>
-		<item key="testFileSelected" value="false"/>
+		<item key="testFileSelected" value="true"/>
 		<item key="finalSelected" value="false"/>
 		<item key="stubImpl0" value="DEFINITION"/>
 		<item key="stubSelected0" value="true"/>

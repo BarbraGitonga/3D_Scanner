@@ -166,11 +166,6 @@ void MX_USB_HOST_Process(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
-    if (GPIO_Pin == MPU_INT_Pin) {
-    	data_ready = 1;
-    }
-}
 
 
 void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)

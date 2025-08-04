@@ -4,7 +4,7 @@
  *  Created on: Mar 30, 2025
  *      Author: Barbra Gitonga(barbragitonga@gmail.com)
  */
-
+;
 #include <MPU6050_driver/MPU6050.h>
 #include <cstdio>
 #define RAD_TO_DEG 57.2957795f
