@@ -31,11 +31,6 @@ extern "C" {
 
 //acceleration readings
 #define ACCEL_XOUT_H        0x3B
-#define ACCEL_XOUT_L        0x3C
-#define ACCEL_YOUT_H        0x3D
-#define ACCEL_YOUT_L        0x3E
-#define ACCEL_ZOUT_H        0x3F
-#define ACCEL_ZOUT_L        0x40
 
 //temperature readings
 #define TEMP_OUT_H          0x41
@@ -43,15 +38,13 @@ extern "C" {
 
 //gyroscope readings
 #define GYRO_XOUT_H         0x43
-#define GYRO_XOUT_L         0x44
-#define GYRO_YOUT_H         0x45
-#define GYRO_YOUT_L         0x46
-#define GYRO_ZOUT_H         0x47
-#define GYRO_ZOUT_L         0x48
+
 
 //identity
-#define WHO_AM_I            0x75 // register that holds identity
-#define MPU9250_ID         (0x71 << 1) // default value of who am i register
+#define WHO_AM_I			0x75
+#define MPU9250_ADDR		(0x68 << 1)
+#define AKM_WIA				0x00
+#define AKM_ID				(0x0C << 1)
 
 //power management 1 parameters
 #define PWR_MGMT_1          0x6B
@@ -68,12 +61,12 @@ extern "C" {
 #define FIFO_EN				0x23
 
 // Magnetometer
-#define MAG_HXL				0x03H
-#define MAG_HXH				0x04H
-#define MAG_HYL 			0x05H
-#define MAG_HYH				0x06H
-#define MAG_HZL 			0x07H
-#define MAG_HZH				0x08H
+#define MAG_HXL				0x03
+
+// Scales to convert to respective SI units
+#define CONVERT_TO_MPS      2.0f / 32768.0f
+#define CONVERT_TO_DEGPS    250.0 / 32768.0
+#define CONVERT_TO_UT		0.6f
 
 typedef struct {
 	/* I2C HAndle */
@@ -91,7 +84,10 @@ typedef struct {
 	/* Temperature data in degrees */
 	float temp_C;
 
+	// flag
+	uint8_t rxFlag;
 } MPU9250_data;
+
 
 class MPU9250 {
 public:
@@ -103,13 +99,11 @@ public:
 		// Data Acquisition
 		HAL_StatusTypeDef readRegister(MPU9250_data *dev, uint8_t reg, uint8_t *data);
 		HAL_StatusTypeDef writeRegister(MPU9250_data *dev, uint8_t reg, uint8_t *data);
-		HAL_StatusTypeDef burstReadRegister(MPU9250_data *dev, uint8_t reg, uint8_t *data, uint8_t length);
+		HAL_StatusTypeDef read_IMU_DMA(MPU9250_data *dev);
+		HAL_StatusTypeDef read_MAG_DMA(MPU9250_data *dev);
 
 		// Sensor data
-		HAL_StatusTypeDef temperature(MPU9250_data *dev);
-		HAL_StatusTypeDef gyroscope(MPU9250_data *dev);
-		HAL_StatusTypeDef accelerometer(MPU9250_data *dev);
-		HAL_StatusTypeDef magnetometer(MPU9250_data *dev);
+		uint8_t process_data(MPU9250_data *dev);
 };
 
 #ifdef __cplusplus

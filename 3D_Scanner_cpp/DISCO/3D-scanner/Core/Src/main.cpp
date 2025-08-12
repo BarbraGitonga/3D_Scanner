@@ -25,7 +25,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "stm32f7xx_hal.h"
-#include "MPU6050_driver/MPU6050.h"
+#include "MPU9250/MPU9250.h"
 #include "Ext_Kalman_filter/Extkalmanfilter.h"
 #include "HCSR04/HCSR04.h"
 #include <cstdio>
@@ -39,7 +39,7 @@
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
 #define SAMPLE_TIME_LOG_MS 250
-#define SAMPLE_TIME_LED_MS 500
+#define SAMPLE_TIME_LED_MS 800
 
 #define LPF_GYR_ALPHA 0.01f
 #define LPF_ACC_ALPHA 0.10f
@@ -119,14 +119,16 @@ SDRAM_HandleTypeDef hsdram1;
 
 /* USER CODE BEGIN PV */
 
-MPU6050_data mpu_data;
-uint8_t data_ready;
+MPU9250_data mpu_data;
+uint8_t data_ready; // DMA flag
 uint32_t timerLog = 0;
 uint32_t timerLED = 0;
 uint32_t timerPredict = 0;
 uint32_t timerUpdate = 0;
-MPU6050Data data; // to be passed to the EKF
+MPU9250Data data; // to be passed to the EKF
 HCSR04_HandleTypeDef hcsr04;
+MPU9250 mpu_sensor;
+uint8_t complete = 0;
 
 /* USER CODE END PV */
 
@@ -135,7 +137,6 @@ void SystemClock_Config(void);
 void PeriphCommonClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_DMA_Init(void);
-static void MX_CRC_Init(void);
 static void MX_DCMI_Init(void);
 static void MX_DMA2D_Init(void);
 static void MX_ETH_Init(void);
@@ -158,6 +159,7 @@ static void MX_TIM12_Init(void);
 static void MX_USART1_UART_Init(void);
 static void MX_USART6_UART_Init(void);
 static void MX_ADC3_Init(void);
+static void MX_CRC_Init(void);
 void MX_USB_HOST_Process(void);
 
 /* USER CODE BEGIN PFP */
@@ -168,16 +170,78 @@ void MX_USB_HOST_Process(void);
 /* USER CODE BEGIN 0 */
 
 
-void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
-{
-    // Ensure that this callback is for the correct timer
-    if (htim == &htim1) {
-        HCSR04_CaptureCallback(&hcsr04);
+typedef enum {
+    DMA_IDLE,
+    DMA_IMU_READING,
+    DMA_MAG_READY_TO_READ,
+    DMA_MAG_READING
+} dma_state_t;
 
-//        HAL_GPIO_TogglePin(GREEN_LED_GPIO_Port, GREEN_LED_Pin);
+volatile dma_state_t dmaState = DMA_IDLE;
+
+void HAL_I2C_MemRxCpltCallback(I2C_HandleTypeDef *hi2c) {
+    if (hi2c->Instance == I2C1) {
+        switch (dmaState) {
+        case DMA_IMU_READING:
+            dmaState = DMA_MAG_READY_TO_READ; // Request MAG read in main loop
+
+            break;
+
+        case DMA_MAG_READING:
+            data_ready = 1; // Both IMU & MAG done
+            dmaState = DMA_IDLE;
+
+            break;
+
+        default:
+            dmaState = DMA_IDLE;
+            break;
+        }
     }
 }
 
+
+void I2C_Scanner(I2C_HandleTypeDef *hi2c, UART_HandleTypeDef *huart) {
+    HAL_StatusTypeDef result;
+    uint8_t devicesFound = 0;
+    uint8_t usbBufLen;
+    char usbBuf[50];
+
+    for (uint8_t i = 1; i < 128; i++) {
+        result = HAL_I2C_IsDeviceReady(hi2c, (uint16_t)(i << 1), 2, 5);
+        if (result == HAL_OK) {
+            usbBufLen = snprintf(usbBuf, sizeof(usbBuf),
+                                 "I2C device found at address 0x%02X\r\n", i);
+            HAL_UART_Transmit(huart, (uint8_t *)usbBuf, usbBufLen, 100);
+            devicesFound++;
+        }
+    }
+
+    if (devicesFound == 0) {
+        const char *noDevMsg = "No I2C devices found\r\n";
+        HAL_UART_Transmit(huart, (uint8_t *)noDevMsg, strlen(noDevMsg), 100);
+    } else {
+        usbBufLen = snprintf(usbBuf, sizeof(usbBuf),
+                             "Found %d I2C device(s)\r\n", devicesFound);
+        HAL_UART_Transmit(huart, (uint8_t *)usbBuf, usbBufLen, 100);
+    }
+}
+
+void HAL_I2C_ErrorCallback(I2C_HandleTypeDef *hi2c)
+{
+    if (hi2c->Instance == hi2c1.Instance) {
+        // Debug: Send error info via UART
+        char errorBuf[100];
+        uint8_t len = snprintf(errorBuf, sizeof(errorBuf),
+                              "I2C DMA Error: 0x%08X, State: %d\r\n",
+                              (unsigned int)hi2c->ErrorCode, (int)dmaState);
+        HAL_UART_Transmit(&huart1, (uint8_t *)errorBuf, len, 100);
+
+        // Reset DMA state
+        dmaState = DMA_IDLE;
+        data_ready = 0;
+    }
+}
 
 /* USER CODE END 0 */
 
@@ -216,7 +280,6 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_DMA_Init();
-  MX_CRC_Init();
   MX_DCMI_Init();
   MX_DMA2D_Init();
   MX_ETH_Init();
@@ -240,14 +303,25 @@ int main(void)
   MX_USART6_UART_Init();
   MX_FATFS_Init();
   MX_ADC3_Init();
+  MX_CRC_Init();
   MX_USB_HOST_Init();
   /* USER CODE BEGIN 2 */
+  HAL_Delay(2000);
+  I2C_Scanner(&hi2c1, &huart1);
 
   // Initializing mpu6050
-  MPU6050 mpu_sensor;
-  mpu_sensor.initialize(&mpu_data, &hi2c1);
-  HAL_UART_Transmit(&huart1, (uint8_t *)"MPU6050 Initialized\n", 20, HAL_MAX_DELAY);
+//  uint8_t pwr = 0x00;
+//  HAL_I2C_Mem_Write(&hi2c1, MPU9250_ADDR, 0x6B, I2C_MEMADD_SIZE_8BIT, &pwr, 1, HAL_MAX_DELAY);
+//  HAL_Delay(100);
+  HAL_StatusTypeDef init = mpu_sensor.initialize(&mpu_data, &hi2c1);
 
+  HAL_Delay(2000);
+
+  if(init == HAL_OK){
+	  HAL_UART_Transmit(&huart1, (uint8_t *)"MPU9250 Initialized\n", 20, HAL_MAX_DELAY);
+  }
+
+//  dummy.initialize(&fake, &hi2c1);
   // Initializing Kalman filter
 
   float Pinit = 0.01f;
@@ -259,13 +333,11 @@ int main(void)
 
   ExtKalmanFilter EKF(Pinit, Q, R, phi_bias, theta_bias);
 
-  // Initialize HCSR04
-  HCSR04_Init(&hcsr04, TRIG_GPIO_Port, TRIG_Pin, &htim1, TIM_CHANNEL_1, TIM_IT_CC1);
-  HAL_TIM_IC_Start_IT(&htim1, TIM_CHANNEL_1);
-  float distance;
   // filter data holders
   float gyrPrev[3] = {0.0f, 0.0f, 0.0f};
   float accPrev[3] = {0.0f, 0.0f, 0.0f};
+
+
 
   /* USER CODE END 2 */
 
@@ -276,14 +348,11 @@ int main(void)
 	 char usbBuf[64];
 
 	 if (data_ready) {
-		 mpu_sensor.accelerometer(&mpu_data);
-		 mpu_sensor.gyroscope(&mpu_data);
-		 mpu_sensor.temperature(&mpu_data);
 
+	     mpu_sensor.process_data(&mpu_data);
 		 mpu_data.gyro_rad[0] = LPF_GYR_ALPHA * gyrPrev[0] + ( 1.0f - LPF_GYR_ALPHA) * mpu_data.gyro_rad[0];
 		 mpu_data.gyro_rad[1] = LPF_GYR_ALPHA * gyrPrev[1] + ( 1.0f - LPF_GYR_ALPHA) * mpu_data.gyro_rad[1];
 		 mpu_data.gyro_rad[2] = LPF_GYR_ALPHA * gyrPrev[2] + ( 1.0f - LPF_GYR_ALPHA) * mpu_data.gyro_rad[2];
-
 
 		 mpu_data.acc_mps2[0] = LPF_ACC_ALPHA * accPrev[0] + ( 1.0f - LPF_ACC_ALPHA) * mpu_data.acc_mps2[0];
 		 mpu_data.acc_mps2[1] = LPF_ACC_ALPHA * accPrev[1] + ( 1.0f - LPF_ACC_ALPHA) * mpu_data.acc_mps2[1];
@@ -315,11 +384,10 @@ int main(void)
 
 
 	 if ((HAL_GetTick() - timerLog) >= SAMPLE_TIME_LOG_MS) {
-		distance = HCSR04_GetDistance(&hcsr04);
 		AngleEstimate angle = EKF.getAngle();
 		uint8_t usbBufLen = snprintf(usbBuf, 64,
-			         " %.2f roll, %.2f pitch, %0.2f distance \r\n",
-			         angle.roll, angle.pitch, distance);
+			         " %.2f roll, %.2f pitch, %0.2f temp \r\n",
+			         angle.roll, angle.pitch, mpu_data.temp_C);
 
 
 	    HAL_UART_Transmit(&huart1, (uint8_t *)usbBuf, usbBufLen, 100);
@@ -329,12 +397,21 @@ int main(void)
 
 
 	  if ((HAL_GetTick() - timerLED) >= SAMPLE_TIME_LED_MS) {
-		HAL_GPIO_TogglePin(GREEN_LED_GPIO_Port, GREEN_LED_Pin);
 
+		  if (dmaState == DMA_IDLE) {
+				  dmaState = DMA_IMU_READING;
+				  mpu_sensor.read_IMU_DMA(&mpu_data);
 
-		timerLED += SAMPLE_TIME_LED_MS;
+			  }
+		  if (dmaState == DMA_MAG_READY_TO_READ) {
+		  		  dmaState = DMA_MAG_READING;
+		  		  mpu_sensor.read_MAG_DMA(&mpu_data);
+		  }
+
+		  timerLED += SAMPLE_TIME_LED_MS;
 
 	  }
+
   }
     /* USER CODE END WHILE */
     MX_USB_HOST_Process();

@@ -37,7 +37,7 @@ ExtKalmanFilter::ExtKalmanFilter(float Pinit, float *Q_var, float *R_var, float 
 	state.R[2] = R_var[2];
 }
 
-void ExtKalmanFilter::predict(const MPU6050Data& gyro, float dt) {
+void ExtKalmanFilter::predict(const MPU9250Data& gyro, float dt) {
 	float p = gyro.gyroX;
 	float q = gyro.gyroY;
 	float r = gyro.gyroZ;
@@ -131,7 +131,7 @@ void ExtKalmanFilter::predict(const MPU6050Data& gyro, float dt) {
 
 }
 
-void ExtKalmanFilter::update(const MPU6050Data& accel) {
+void ExtKalmanFilter::update(const MPU9250Data& accel) {
 	float ax = accel.accX;
 	float ay = accel.accY;
 	float az = accel.accZ;

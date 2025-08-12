@@ -7,21 +7,20 @@
 
 #include <MPU9250/MPU9250.h>
 
+uint8_t imuBuffer[14];
+uint8_t magBuffer[6]; // stores all 8 bit information from the registers
+
 MPU9250::MPU9250() {
 	// TODO Auto-generated constructor stub
 
 }
 
 HAL_StatusTypeDef MPU9250::writeRegister(MPU9250_data *dev, uint8_t reg, uint8_t *data){
-	return HAL_I2C_Mem_Write_DMA(dev->i2cHandle, MPU9250_ID, reg, I2C_MEMADD_SIZE_8BIT, data ,1);
+	return HAL_I2C_Mem_Write(dev->i2cHandle, MPU9250_ADDR, reg, I2C_MEMADD_SIZE_8BIT, data ,1, HAL_MAX_DELAY);
 }
 
 HAL_StatusTypeDef MPU9250::readRegister(MPU9250_data *dev, uint8_t reg, uint8_t *data){
-	return HAL_12C_Mem_Read_DMA(dev->i2cHandle, MPU9250_ID, reg, I2C_MEMADD_SIZE_8BIT, data, 1);
-}
-
-HAL_StatusTypeDef MPU9250::burstReadRegister(MPU9250_data *dev, uint8 reg, uint8_t *data, uint8_t length){
-	return HAL_I2C_Mem_Read_DMA(dev->i2cHandle, MPU9250_ID, reg, I2C_MEMADD_SIZE_8BIT, data, length);
+	return HAL_I2C_Mem_Read(dev->i2cHandle, MPU9250_ADDR, reg, I2C_MEMADD_SIZE_8BIT, data, 1, HAL_MAX_DELAY);
 }
 
 HAL_StatusTypeDef MPU9250::initialize(MPU9250_data *dev, I2C_HandleTypeDef *hi2c){
@@ -42,7 +41,7 @@ HAL_StatusTypeDef MPU9250::initialize(MPU9250_data *dev, I2C_HandleTypeDef *hi2c
 	dev->mag_uT[1] = 0.0f;
 	dev->mag_uT[2] = 0.0f;
 
-
+	dev->rxFlag = 0;
 	/* Store a number of transaction error */
 	uint8_t errNum = 0;
 	HAL_StatusTypeDef status;
@@ -53,7 +52,7 @@ HAL_StatusTypeDef MPU9250::initialize(MPU9250_data *dev, I2C_HandleTypeDef *hi2c
 	errNum += (status != HAL_OK);
 
 
-	if (regData == 0x75){
+	if (regData == 0x75 || regData == 0x68){
 		// Setting clock speed and enabling sensors
 		uint8_t reset = 0x80;
 		status = writeRegister(dev, PWR_MGMT_1, &reset);
@@ -79,19 +78,6 @@ HAL_StatusTypeDef MPU9250::initialize(MPU9250_data *dev, I2C_HandleTypeDef *hi2c
 		errNum += (status != HAL_OK);
 		HAL_Delay(50);
 
-		uint8_t intPinConfig = 0x00;  // Active HIGH
-		status = writeRegister(dev, INT_PIN_CFG, &intPinConfig);
-		errNum += (status != HAL_OK);
-		HAL_Delay(100);
-
-		uint8_t data = 0x01;  // Enable data ready interrupt
-		status = writeRegister(dev, INT_ENABLE, &data);
-		errNum += (status != HAL_OK);
-
-		uint8_t int_status;
-		status = readRegister(dev, INT_STATUS, &int_status);
-		errNum += (status != HAL_OK);
-
 		reset = 0x00;
 		status = writeRegister(dev, GYRO_CONFIG, &reset); //full scale range of 250
 		errNum += (status != HAL_OK);
@@ -100,93 +86,75 @@ HAL_StatusTypeDef MPU9250::initialize(MPU9250_data *dev, I2C_HandleTypeDef *hi2c
 		status = writeRegister(dev, ACCEL_CONFIG, &reset); //full scale range of 2g
 		errNum += (status != HAL_OK);
 
+		// Enable bypass mode
+		uint8_t bypass = 0x02;
+		writeRegister(dev, INT_PIN_CFG, &bypass);
+		HAL_Delay(10);
+
+
 		HAL_Delay(100);
 		return (errNum == 0) ? HAL_OK : HAL_ERROR;
 	}
 	return HAL_ERROR;
 }
 
-HAL_StatusTypeDef MPU9250::accelerometer(MPU9250_data *dev) {
-    uint8_t buffer[6];  // Changed from int8_t to uint8_t to match burstReadRegister
-    uint8_t errNum = 0;
-    HAL_StatusTypeDef status;
+HAL_StatusTypeDef MPU9250::read_MAG_DMA(MPU9250_data *dev){
+	HAL_StatusTypeDef status = HAL_I2C_Mem_Read_DMA(
+			dev->i2cHandle,
+			MPU9250_ADDR,
+			MAG_HXL,
+			I2C_MEMADD_SIZE_8BIT,
+			magBuffer,
+			6
+		);
 
-    status = burstReadRegister(dev, ACCEL_XOUT_H, buffer, 6);
-    errNum += (status != HAL_OK);
-
-    // storing raw data in the buffer variable
-    int16_t accel_x_out = (int16_t)((buffer[0] << 8) | buffer[1]);
-    int16_t accel_y_out = (int16_t)((buffer[2] << 8) | buffer[3]);
-    int16_t accel_z_out = (int16_t)((buffer[4] << 8) | buffer[5]);
-
-    float scale = 2.0f / 32768.0f; // convert raw data to m/s^2
-    dev->acc_mps2[0] = accel_x_out * scale;
-    dev->acc_mps2[1] = accel_y_out * scale;
-    dev->acc_mps2[2] = accel_z_out * scale;
-
-    return (errNum == 0) ? HAL_OK : HAL_ERROR;
+	return status;
 }
 
-HAL_StatusTypeDef MPU9250::gyroscope(MPU9250_data *dev){
-	uint8_t buffer[6];
-	uint8_t errNum = 0;
-	HAL_StatusTypeDef status;
+HAL_StatusTypeDef MPU9250::read_IMU_DMA(MPU9250_data *dev){
+	HAL_StatusTypeDef status = HAL_I2C_Mem_Read_DMA(dev->i2cHandle, MPU9250_ADDR, ACCEL_XOUT_H,
+			I2C_MEMADD_SIZE_8BIT, imuBuffer, 14);
 
-	status = burstReadRegister(dev, GYRO_XOUT_H, buffer, 6);
-	errNum += (status != HAL_OK);
-
-	int16_t gyro_x_out = (int16_t)((buffer[0] << 8) | buffer[1]);
-	int16_t gyro_y_out = (int16_t)((buffer[2] << 8) | buffer[3]);
-	int16_t gyro_z_out = (int16_t)((buffer[4] << 8) | buffer[5]);
-
-	float scale = 250.0 / 32768.0; // convert raw values to degrees per second
-	dev->gyro_rad[0] = gyro_x_out * scale * DEG_TO_RAD;
-	dev->gyro_rad[1] = gyro_y_out * scale * DEG_TO_RAD;
-	dev->gyro_rad[2] = gyro_z_out * scale * DEG_TO_RAD;
-	return (errNum == 0) ? HAL_OK : HAL_ERROR;
+	return status;
 }
 
-HAL_StatusTypeDef MPU9250::temperature(MPU9250_data *dev){
-	uint8_t buffer[2];
-	uint8_t errNum = 0;
-	HAL_StatusTypeDef status;
 
-	status = burstReadRegister(dev, TEMP_OUT_H, buffer, 2);
-	errNum += (status != HAL_OK);
+uint8_t MPU9250::process_data(MPU9250_data *dev){
+	int16_t mag_x_out = (int16_t)((magBuffer[1] << 8) | magBuffer[0]);  // Note: [1] is MSB
+	int16_t mag_y_out = (int16_t)((magBuffer[3] << 8) | magBuffer[2]);
+	int16_t mag_z_out = (int16_t)((magBuffer[5] << 8) | magBuffer[4]);
 
-	if (errNum == 0) {
-        int16_t temp_out = (static_cast<int16_t>(buffer[0]) << 8) | buffer[1];
-        dev->temp_C = (static_cast<float>(temp_out) / 340.0f) + 36.53f;
-        return HAL_OK;
-    }
-    return HAL_ERROR;
-}
+	int16_t accel_x_out = (int16_t)((imuBuffer[0] << 8) | imuBuffer[1]);
+	int16_t accel_y_out = (int16_t)((imuBuffer[2] << 8) | imuBuffer[3]);
+	int16_t accel_z_out = (int16_t)((imuBuffer[4] << 8) | imuBuffer[5]);
 
-HAL_StatusTypeDef MPU9250::magnetometer(MPU9250_data *dev){
-	uint8_t buffer[6];
-	uint8_t errNum = 0;
-	HAL_StatusTypeDef status;
+	int16_t temp_out    = (int16_t)((imuBuffer[6] << 8) | imuBuffer[7]);
 
-	status = burstReadRegister(dev, MAG_HXL, buffer, 6);
-	errNum += (status != HAL_OK);
-
-	// resolution is 0.6uT/LSB
-	float scale = 0.6f;
-
-	/* Magnetometer values are stored in 2s compliment,and little edian format.*/
-	// Combine (int16_t)((MSB << 8) | LSB)
-	int16_t mag_x_out = (int16_t)((buffer[1] << 8) | buffer[0]);  // Note: [1] is MSB
-	int16_t mag_y_out = (int16_t)((buffer[3] << 8) | buffer[2]);
-	int16_t mag_z_out = (int16_t)((buffer[5] << 8) | buffer[4]);
+	int16_t gyro_x_out  = (int16_t)((imuBuffer[8] << 8) | imuBuffer[9]);
+	int16_t gyro_y_out  = (int16_t)((imuBuffer[10] << 8) | imuBuffer[11]);
+	int16_t gyro_z_out  = (int16_t)((imuBuffer[12] << 8) | imuBuffer[13]);
 
 	// convert to uT using the resolution
-	dev->mag_uT[0] = mag_x_out * scale;
-	dev->mag_uT[1] = mag_x_out * scale;
-	dev->mag_uT[2] = mag_x_out * scale;
+	dev->mag_uT[0] = mag_x_out * CONVERT_TO_UT;
+	dev->mag_uT[1] = mag_y_out * CONVERT_TO_UT;
+	dev->mag_uT[2] = mag_z_out * CONVERT_TO_UT;
 
-	return (errNum == 0) ? HAL_OK : HAL_ERROR;
+	// convert readings to mps^2
+	dev->acc_mps2[0] = accel_x_out * CONVERT_TO_MPS;
+	dev->acc_mps2[1] = accel_y_out * CONVERT_TO_MPS;
+	dev->acc_mps2[2] = accel_z_out * CONVERT_TO_MPS;
 
+	// convert to degrees celcius
+	dev->temp_C = (static_cast<float>(temp_out) / 340.0f) + 36.53f;
+
+	// convert to radians per second
+	dev->gyro_rad[0] = gyro_x_out * CONVERT_TO_DEGPS * DEG_TO_RAD;
+	dev->gyro_rad[1] = gyro_y_out * CONVERT_TO_DEGPS * DEG_TO_RAD;
+	dev->gyro_rad[2] = gyro_z_out * CONVERT_TO_DEGPS * DEG_TO_RAD;
+
+	return dev->rxFlag = 1;
 }
+
 MPU9250::~MPU9250() {
 	// TODO Auto-generated destructor stub
 }

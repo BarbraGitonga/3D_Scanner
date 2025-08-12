@@ -23,8 +23,6 @@ HAL_StatusTypeDef MPU6050::burstReadRegister(MPU6050_data *dev, uint8_t reg, uin
     return HAL_I2C_Mem_Read(dev->i2cHandle, MPU6050_ID, reg, I2C_MEMADD_SIZE_8BIT, data, length, HAL_MAX_DELAY);
 }
 
-
-
 HAL_StatusTypeDef MPU6050::initialize(MPU6050_data *dev, I2C_HandleTypeDef *hi2c){
 	/* Setting struct parameters */
 	dev->i2cHandle = hi2c;
