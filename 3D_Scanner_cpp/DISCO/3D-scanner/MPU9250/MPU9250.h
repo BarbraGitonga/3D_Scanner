@@ -62,6 +62,11 @@ extern "C" {
 
 // Magnetometer
 #define MAG_HXL				0x03
+#define CNTRL_1				0x0A
+#define CNTRL_2				0x0B
+
+
+#define USER_CTRL 			0x6A
 
 // Scales to convert to respective SI units
 #define CONVERT_TO_MPS      2.0f / 32768.0f
@@ -78,16 +83,20 @@ typedef struct {
 	/* Gyroscope data (X, Y, Z) in rad/s */
 	float gyro_rad[3];
 
-	/* Magnetometer data (X, Y, Z) in microtesla*/
+	/* Magnetometer data (X,  Y, Z) in microtesla*/
 	float mag_uT[3];
 
+	float gyroBias[3];
+
+	float accelBias[3];
+
+	float magBias[3];
 	/* Temperature data in degrees */
 	float temp_C;
 
 	// flag
 	uint8_t rxFlag;
 } MPU9250_data;
-
 
 class MPU9250 {
 public:
@@ -99,11 +108,19 @@ public:
 		// Data Acquisition
 		HAL_StatusTypeDef readRegister(MPU9250_data *dev, uint8_t reg, uint8_t *data);
 		HAL_StatusTypeDef writeRegister(MPU9250_data *dev, uint8_t reg, uint8_t *data);
+		HAL_StatusTypeDef burstReadRegister(MPU9250_data *dev, uint8_t reg, uint8_t *data, uint8_t length);
+
 		HAL_StatusTypeDef read_IMU_DMA(MPU9250_data *dev);
 		HAL_StatusTypeDef read_MAG_DMA(MPU9250_data *dev);
+		HAL_StatusTypeDef accelerometer(MPU9250_data *dev);
+		HAL_StatusTypeDef gyroscope(MPU9250_data *dev);
+		HAL_StatusTypeDef temperature(MPU9250_data *dev);
+		HAL_StatusTypeDef magnetometer(MPU9250_data *dev);
 
 		// Sensor data
 		uint8_t process_data(MPU9250_data *dev);
+		HAL_StatusTypeDef callibrate_stationary(MPU9250_data *dev);
+		HAL_StatusTypeDef callibrate_mag(MPU9250_data * dev);
 };
 
 #ifdef __cplusplus

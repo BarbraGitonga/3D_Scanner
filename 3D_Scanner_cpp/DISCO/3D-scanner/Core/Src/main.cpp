@@ -39,7 +39,7 @@
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
 #define SAMPLE_TIME_LOG_MS 250
-#define SAMPLE_TIME_LED_MS 800
+#define SAMPLE_TIME_LED_MS 100
 
 #define LPF_GYR_ALPHA 0.01f
 #define LPF_ACC_ALPHA 0.10f
@@ -309,20 +309,22 @@ int main(void)
   HAL_Delay(2000);
   I2C_Scanner(&hi2c1, &huart1);
 
-  // Initializing mpu6050
-//  uint8_t pwr = 0x00;
-//  HAL_I2C_Mem_Write(&hi2c1, MPU9250_ADDR, 0x6B, I2C_MEMADD_SIZE_8BIT, &pwr, 1, HAL_MAX_DELAY);
-//  HAL_Delay(100);
+  // Initializing mpu9250
   HAL_StatusTypeDef init = mpu_sensor.initialize(&mpu_data, &hi2c1);
-
-  HAL_Delay(2000);
 
   if(init == HAL_OK){
 	  HAL_UART_Transmit(&huart1, (uint8_t *)"MPU9250 Initialized\n", 20, HAL_MAX_DELAY);
   }
 
-//  dummy.initialize(&fake, &hi2c1);
-  // Initializing Kalman filter
+  uint8_t id;
+  HAL_I2C_Mem_Read(&hi2c1, AKM_ID, 0x00, I2C_MEMADD_SIZE_8BIT, &id, 1, HAL_MAX_DELAY);
+  printf("AK8963 ID: 0x%02X\r\n", id); // Should be 0x48
+
+  mpu_sensor.callibrate_stationary(&mpu_data);
+  HAL_Delay(10);
+  HAL_UART_Transmit(&huart1, (uint8_t *)"Rotate sensor to callibrate magnetometer", 50, HAL_MAX_DELAY);
+  HAL_Delay(10);
+  mpu_sensor.callibrate_mag(&mpu_data);
 
   float Pinit = 0.01f;
   float phi_bias = -0.03f;
@@ -337,8 +339,6 @@ int main(void)
   float gyrPrev[3] = {0.0f, 0.0f, 0.0f};
   float accPrev[3] = {0.0f, 0.0f, 0.0f};
 
-
-
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -347,16 +347,18 @@ int main(void)
   {
 	 char usbBuf[64];
 
+
 	 if (data_ready) {
 
 	     mpu_sensor.process_data(&mpu_data);
-		 mpu_data.gyro_rad[0] = LPF_GYR_ALPHA * gyrPrev[0] + ( 1.0f - LPF_GYR_ALPHA) * mpu_data.gyro_rad[0];
-		 mpu_data.gyro_rad[1] = LPF_GYR_ALPHA * gyrPrev[1] + ( 1.0f - LPF_GYR_ALPHA) * mpu_data.gyro_rad[1];
-		 mpu_data.gyro_rad[2] = LPF_GYR_ALPHA * gyrPrev[2] + ( 1.0f - LPF_GYR_ALPHA) * mpu_data.gyro_rad[2];
 
-		 mpu_data.acc_mps2[0] = LPF_ACC_ALPHA * accPrev[0] + ( 1.0f - LPF_ACC_ALPHA) * mpu_data.acc_mps2[0];
-		 mpu_data.acc_mps2[1] = LPF_ACC_ALPHA * accPrev[1] + ( 1.0f - LPF_ACC_ALPHA) * mpu_data.acc_mps2[1];
-		 mpu_data.acc_mps2[2] = LPF_ACC_ALPHA * accPrev[2] + ( 1.0f - LPF_ACC_ALPHA) * mpu_data.acc_mps2[2];
+		 mpu_data.gyro_rad[0] = (LPF_GYR_ALPHA * gyrPrev[0] + ( 1.0f - LPF_GYR_ALPHA) * mpu_data.gyro_rad[0]);
+		 mpu_data.gyro_rad[1] = (LPF_GYR_ALPHA * gyrPrev[1] + ( 1.0f - LPF_GYR_ALPHA) * mpu_data.gyro_rad[1]);
+		 mpu_data.gyro_rad[2] = (LPF_GYR_ALPHA * gyrPrev[2] + ( 1.0f - LPF_GYR_ALPHA) * mpu_data.gyro_rad[2]);
+
+		 mpu_data.acc_mps2[0] = (LPF_ACC_ALPHA * accPrev[0] + ( 1.0f - LPF_ACC_ALPHA) * mpu_data.acc_mps2[0]);
+		 mpu_data.acc_mps2[1] = (LPF_ACC_ALPHA * accPrev[1] + ( 1.0f - LPF_ACC_ALPHA) * mpu_data.acc_mps2[1]);
+		 mpu_data.acc_mps2[2] = (LPF_ACC_ALPHA * accPrev[2] + ( 1.0f - LPF_ACC_ALPHA) * mpu_data.acc_mps2[2]);
 
 		 gyrPrev[0] = mpu_data.gyro_rad[0];
 		 gyrPrev[1] = mpu_data.gyro_rad[1];
@@ -384,11 +386,15 @@ int main(void)
 
 
 	 if ((HAL_GetTick() - timerLog) >= SAMPLE_TIME_LOG_MS) {
-		AngleEstimate angle = EKF.getAngle();
-		uint8_t usbBufLen = snprintf(usbBuf, 64,
-			         " %.2f roll, %.2f pitch, %0.2f temp \r\n",
-			         angle.roll, angle.pitch, mpu_data.temp_C);
+//		AngleEstimate angle = EKF.getAngle();
+//		uint8_t usbBufLen = snprintf(usbBuf, 64,
+//			         " %.2f roll, %.2f pitch, %0.2f temp , %0.2 magnetometer\r\n",
+//			         angle.roll, angle.pitch, mpu_data.temp_C, mpu_data.mag_uT[0]);
 
+		uint8_t usbBufLen = snprintf(usbBuf, 64,
+					         " %.2f gx, %.2f ax, %0.2f temp , %0.2 xmagnetometer\r\n",
+					         mpu_data.gyro_rad[0], mpu_data.acc_mps2[0],
+							 mpu_data.temp_C, mpu_data.mag_uT[0]);
 
 	    HAL_UART_Transmit(&huart1, (uint8_t *)usbBuf, usbBufLen, 100);
 
@@ -406,6 +412,7 @@ int main(void)
 		  if (dmaState == DMA_MAG_READY_TO_READ) {
 		  		  dmaState = DMA_MAG_READING;
 		  		  mpu_sensor.read_MAG_DMA(&mpu_data);
+
 		  }
 
 		  timerLED += SAMPLE_TIME_LED_MS;
