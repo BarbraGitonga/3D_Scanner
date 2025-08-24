@@ -28,6 +28,7 @@
 #include "MPU9250/MPU9250.h"
 #include "Ext_Kalman_filter/Extkalmanfilter.h"
 #include "HCSR04/HCSR04.h"
+#include "HMC5883L/HMC5883L.h"
 #include <cstdio>
 /* USER CODE END Includes */
 
@@ -118,7 +119,7 @@ UART_HandleTypeDef huart6;
 SDRAM_HandleTypeDef hsdram1;
 
 /* USER CODE BEGIN PV */
-
+//
 MPU9250_data mpu_data;
 uint8_t data_ready; // DMA flag
 uint32_t timerLog = 0;
@@ -128,7 +129,8 @@ uint32_t timerUpdate = 0;
 MPU9250Data data; // to be passed to the EKF
 HCSR04_HandleTypeDef hcsr04;
 MPU9250 mpu_sensor;
-uint8_t complete = 0;
+//uint8_t complete = 0;
+HMC_data mag;
 
 /* USER CODE END PV */
 
@@ -195,6 +197,7 @@ void HAL_I2C_MemRxCpltCallback(I2C_HandleTypeDef *hi2c) {
 
         default:
             dmaState = DMA_IDLE;
+
             break;
         }
     }
@@ -206,6 +209,7 @@ void I2C_Scanner(I2C_HandleTypeDef *hi2c, UART_HandleTypeDef *huart) {
     uint8_t devicesFound = 0;
     uint8_t usbBufLen;
     char usbBuf[50];
+
 
     for (uint8_t i = 1; i < 128; i++) {
         result = HAL_I2C_IsDeviceReady(hi2c, (uint16_t)(i << 1), 2, 5);
@@ -307,24 +311,18 @@ int main(void)
   MX_USB_HOST_Init();
   /* USER CODE BEGIN 2 */
   HAL_Delay(2000);
-  I2C_Scanner(&hi2c1, &huart1);
 
-  // Initializing mpu9250
+//   Initializing mpu9250
   HAL_StatusTypeDef init = mpu_sensor.initialize(&mpu_data, &hi2c1);
 
   if(init == HAL_OK){
 	  HAL_UART_Transmit(&huart1, (uint8_t *)"MPU9250 Initialized\n", 20, HAL_MAX_DELAY);
   }
+  // Initializing magnetometer
+  I2C_Scanner(&hi2c1, &huart1);
 
-  uint8_t id;
-  HAL_I2C_Mem_Read(&hi2c1, AKM_ID, 0x00, I2C_MEMADD_SIZE_8BIT, &id, 1, HAL_MAX_DELAY);
-  printf("AK8963 ID: 0x%02X\r\n", id); // Should be 0x48
-
-  mpu_sensor.callibrate_stationary(&mpu_data);
-  HAL_Delay(10);
-  HAL_UART_Transmit(&huart1, (uint8_t *)"Rotate sensor to callibrate magnetometer", 50, HAL_MAX_DELAY);
-  HAL_Delay(10);
-  mpu_sensor.callibrate_mag(&mpu_data);
+  HMC5883L Mag;
+  Mag.init(&hi2c1, &mag);
 
   float Pinit = 0.01f;
   float phi_bias = -0.03f;
@@ -351,6 +349,7 @@ int main(void)
 	 if (data_ready) {
 
 	     mpu_sensor.process_data(&mpu_data);
+	     Mag.data_processing(&mag);
 
 		 mpu_data.gyro_rad[0] = (LPF_GYR_ALPHA * gyrPrev[0] + ( 1.0f - LPF_GYR_ALPHA) * mpu_data.gyro_rad[0]);
 		 mpu_data.gyro_rad[1] = (LPF_GYR_ALPHA * gyrPrev[1] + ( 1.0f - LPF_GYR_ALPHA) * mpu_data.gyro_rad[1]);
@@ -392,9 +391,8 @@ int main(void)
 //			         angle.roll, angle.pitch, mpu_data.temp_C, mpu_data.mag_uT[0]);
 
 		uint8_t usbBufLen = snprintf(usbBuf, 64,
-					         " %.2f gx, %.2f ax, %0.2f temp , %0.2 xmagnetometer\r\n",
-					         mpu_data.gyro_rad[0], mpu_data.acc_mps2[0],
-							 mpu_data.temp_C, mpu_data.mag_uT[0]);
+					         "%.2f ax, %.2f gy, %0.2f mz \r\n",
+					        mpu_data.acc_mps2[0], mpu_data.gyro_rad[1], mag.mag[2]);
 
 	    HAL_UART_Transmit(&huart1, (uint8_t *)usbBuf, usbBufLen, 100);
 
@@ -403,7 +401,6 @@ int main(void)
 
 
 	  if ((HAL_GetTick() - timerLED) >= SAMPLE_TIME_LED_MS) {
-
 		  if (dmaState == DMA_IDLE) {
 				  dmaState = DMA_IMU_READING;
 				  mpu_sensor.read_IMU_DMA(&mpu_data);
@@ -411,7 +408,7 @@ int main(void)
 			  }
 		  if (dmaState == DMA_MAG_READY_TO_READ) {
 		  		  dmaState = DMA_MAG_READING;
-		  		  mpu_sensor.read_MAG_DMA(&mpu_data);
+		  		  Mag.readDMA(&mag);
 
 		  }
 

@@ -35,10 +35,8 @@ HAL_StatusTypeDef MPU9250::initialize(MPU9250_data *dev, I2C_HandleTypeDef *hi2c
     for (int i = 0; i < 3; i++) {
         dev->acc_mps2[i] = 0.0f;
         dev->gyro_rad[i] = 0.0f;
-        dev->mag_uT[i] = 0.0f;
         dev->accelBias[i] = 0.0f;
         dev->gyroBias[i] = 0.0f;
-        dev->magBias[i] = 0.0f;
     }
     dev->rxFlag = 0;
 
@@ -50,7 +48,7 @@ HAL_StatusTypeDef MPU9250::initialize(MPU9250_data *dev, I2C_HandleTypeDef *hi2c
     status = readRegister(dev, WHO_AM_I, &regData);
     errNum += (status != HAL_OK);
 
-    if (regData == 0x75) {   // keeping your original identity check
+    if (regData == 0x68) {   // keeping your original identity check
         /* Reset device */
         uint8_t reset = 0x80;
         status = writeRegister(dev, PWR_MGMT_1, &reset);
@@ -83,56 +81,10 @@ HAL_StatusTypeDef MPU9250::initialize(MPU9250_data *dev, I2C_HandleTypeDef *hi2c
         status = writeRegister(dev, ACCEL_CONFIG, &reset);
         errNum += (status != HAL_OK);
 
-        /* --- Enable bypass mode properly --- */
-        uint8_t userCtrl = 0x00; // Disable I2C master
-        writeRegister(dev, USER_CTRL, &userCtrl);
-        HAL_Delay(10);
-
-        uint8_t bypass = 0x02; // I2C_BYPASS_EN
-        writeRegister(dev, INT_PIN_CFG, &bypass);
-        HAL_Delay(10);
-
-        /* --- Configure AK8963 magnetometer --- */
-        uint8_t magCtrl;
-
-        // Power down magnetometer
-        magCtrl = 0x00;
-        HAL_I2C_Mem_Write(dev->i2cHandle, AKM_ID, CNTRL_1, I2C_MEMADD_SIZE_8BIT, &magCtrl, 1, HAL_MAX_DELAY);
-        HAL_Delay(10);
-
-        // Enter fuse ROM access mode (optional for calibration)
-        magCtrl = 0x0F;
-        HAL_I2C_Mem_Write(dev->i2cHandle, AKM_ID, 0x0A, I2C_MEMADD_SIZE_8BIT, &magCtrl, 1, HAL_MAX_DELAY);
-        HAL_Delay(10);
-
-        // Read adjustment values here if needed...
-
-        // Power down again
-        magCtrl = 0x00;
-        HAL_I2C_Mem_Write(dev->i2cHandle, AKM_ID, 0x0A, I2C_MEMADD_SIZE_8BIT, &magCtrl, 1, HAL_MAX_DELAY);
-        HAL_Delay(10);
-
-        // Continuous measurement mode 2 (100Hz), 16-bit
-        magCtrl = 0x16;
-        HAL_I2C_Mem_Write(dev->i2cHandle, AKM_ID, 0x0A, I2C_MEMADD_SIZE_8BIT, &magCtrl, 1, HAL_MAX_DELAY);
-        HAL_Delay(10);
 
         return (errNum == 0) ? HAL_OK : HAL_ERROR;
     }
     return HAL_ERROR;
-}
-
-HAL_StatusTypeDef MPU9250::read_MAG_DMA(MPU9250_data *dev){
-	HAL_StatusTypeDef status = HAL_I2C_Mem_Read_DMA(
-			dev->i2cHandle,
-			AKM_ID,
-			MAG_HXL,
-			I2C_MEMADD_SIZE_8BIT,
-			magBuffer,
-			6
-		);
-
-	return status;
 }
 
 HAL_StatusTypeDef MPU9250::read_IMU_DMA(MPU9250_data *dev){
@@ -144,9 +96,6 @@ HAL_StatusTypeDef MPU9250::read_IMU_DMA(MPU9250_data *dev){
 
 
 uint8_t MPU9250::process_data(MPU9250_data *dev){
-	int16_t mag_x_out = (int16_t)((magBuffer[1] << 8) | magBuffer[0]);  // Note: [1] is MSB
-	int16_t mag_y_out = (int16_t)((magBuffer[3] << 8) | magBuffer[2]);
-	int16_t mag_z_out = (int16_t)((magBuffer[5] << 8) | magBuffer[4]);
 
 	int16_t accel_x_out = (int16_t)((imuBuffer[0] << 8) | imuBuffer[1]);
 	int16_t accel_y_out = (int16_t)((imuBuffer[2] << 8) | imuBuffer[3]);
@@ -158,10 +107,6 @@ uint8_t MPU9250::process_data(MPU9250_data *dev){
 	int16_t gyro_y_out  = (int16_t)((imuBuffer[10] << 8) | imuBuffer[11]);
 	int16_t gyro_z_out  = (int16_t)((imuBuffer[12] << 8) | imuBuffer[13]);
 
-	// convert to uT using the resolution
-	dev->mag_uT[0] = (mag_x_out * CONVERT_TO_UT) - dev->magBias[0];
-	dev->mag_uT[1] = (mag_y_out * CONVERT_TO_UT) - dev->magBias[1];
-	dev->mag_uT[2] = (mag_z_out * CONVERT_TO_UT) - dev->magBias[2];
 
 	// convert readings to mps^2
 	dev->acc_mps2[0] = (accel_x_out * CONVERT_TO_MPS) - dev->accelBias[0];
@@ -235,26 +180,6 @@ HAL_StatusTypeDef MPU9250::temperature(MPU9250_data *dev){
     return HAL_ERROR;
 }
 
-HAL_StatusTypeDef MPU9250::magnetometer(MPU9250_data *dev){
-	uint8_t Buffer[6];
-	uint8_t errNum = 0;
-	HAL_StatusTypeDef status;
-
-	status = burstReadRegister(dev, MAG_HXL, Buffer, 6);
-	errNum += (status != HAL_OK);
-
-	int16_t mag_x_out = (int16_t)((Buffer[1] << 8) | Buffer[0]);  // Note: [1] is MSB
-	int16_t mag_y_out = (int16_t)((Buffer[3] << 8) | Buffer[2]);
-	int16_t mag_z_out = (int16_t)((Buffer[5] << 8) | Buffer[4]);
-
-	// convert to uT using the resolution
-	dev->mag_uT[0] = (mag_x_out * CONVERT_TO_UT) - dev->magBias[0];
-	dev->mag_uT[1] = (mag_y_out * CONVERT_TO_UT) - dev->magBias[1];
-	dev->mag_uT[2] = (mag_z_out * CONVERT_TO_UT) - dev->magBias[2];
-
-	return (errNum == 0) ? HAL_OK : HAL_ERROR;
-}
-
 HAL_StatusTypeDef MPU9250::callibrate_stationary(MPU9250_data *data){
     const uint16_t samples = 2000;   // More samples = better accuracy
     const uint16_t delayMs = 2;      // Delay between samples
@@ -291,35 +216,6 @@ HAL_StatusTypeDef MPU9250::callibrate_stationary(MPU9250_data *data){
     return HAL_OK;
 }
 
-HAL_StatusTypeDef MPU9250::callibrate_mag(MPU9250_data *data){
-   // ----------- Magnetometer Calibration (Figure-8 motion) -----------
-	// Collect max/min for each axis
-	float mxMin = 32767, myMin = 32767, mzMin = 32767;
-	float mxMax = -32768, myMax = -32768, mzMax = -32768;
-
-	uint32_t startTime = HAL_GetTick();
-	while (HAL_GetTick() - startTime < 15000) { // 15 seconds
-		if (magnetometer(data) != HAL_OK) {
-			return HAL_ERROR;
-		}
-
-		if (data->mag_uT[0] < mxMin) mxMin = data->mag_uT[0];
-		if (data->mag_uT[1] < myMin) myMin = data->mag_uT[1];
-		if (data->mag_uT[2] < mzMin) mzMin = data->mag_uT[2];
-
-		if (data->mag_uT[0] > mxMax) mxMax = data->mag_uT[0];
-		if (data->mag_uT[1] > myMax) myMax = data->mag_uT[1];
-		if (data->mag_uT[2] > mzMax) mzMax = data->mag_uT[2];
-
-		HAL_Delay(12); // ~80 Hz
-	}
-
-	data->magBias[0] = (mxMax + mxMin) / 2.0f;
-	data->magBias[1] = (myMax + myMin) / 2.0f;
-	data->magBias[2] = (mzMax + mzMin) / 2.0f;
-
-	return HAL_OK;
-}
 
 MPU9250::~MPU9250() {
 	// TODO Auto-generated destructor stub

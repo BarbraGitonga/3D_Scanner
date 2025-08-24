@@ -43,8 +43,6 @@ extern "C" {
 //identity
 #define WHO_AM_I			0x75
 #define MPU9250_ADDR		(0x68 << 1)
-#define AKM_WIA				0x00
-#define AKM_ID				(0x0C << 1)
 
 //power management 1 parameters
 #define PWR_MGMT_1          0x6B
@@ -61,17 +59,12 @@ extern "C" {
 #define FIFO_EN				0x23
 
 // Magnetometer
-#define MAG_HXL				0x03
-#define CNTRL_1				0x0A
-#define CNTRL_2				0x0B
-
-
-#define USER_CTRL 			0x6A
+#include "stm32f7xx_hal.h"
+#include "MPU9250.h"
 
 // Scales to convert to respective SI units
 #define CONVERT_TO_MPS      2.0f / 32768.0f
 #define CONVERT_TO_DEGPS    250.0 / 32768.0
-#define CONVERT_TO_UT		0.6f
 
 typedef struct {
 	/* I2C HAndle */
@@ -84,13 +77,11 @@ typedef struct {
 	float gyro_rad[3];
 
 	/* Magnetometer data (X,  Y, Z) in microtesla*/
-	float mag_uT[3];
 
 	float gyroBias[3];
 
 	float accelBias[3];
 
-	float magBias[3];
 	/* Temperature data in degrees */
 	float temp_C;
 
@@ -111,16 +102,13 @@ public:
 		HAL_StatusTypeDef burstReadRegister(MPU9250_data *dev, uint8_t reg, uint8_t *data, uint8_t length);
 
 		HAL_StatusTypeDef read_IMU_DMA(MPU9250_data *dev);
-		HAL_StatusTypeDef read_MAG_DMA(MPU9250_data *dev);
 		HAL_StatusTypeDef accelerometer(MPU9250_data *dev);
 		HAL_StatusTypeDef gyroscope(MPU9250_data *dev);
 		HAL_StatusTypeDef temperature(MPU9250_data *dev);
-		HAL_StatusTypeDef magnetometer(MPU9250_data *dev);
 
 		// Sensor data
 		uint8_t process_data(MPU9250_data *dev);
 		HAL_StatusTypeDef callibrate_stationary(MPU9250_data *dev);
-		HAL_StatusTypeDef callibrate_mag(MPU9250_data * dev);
 };
 
 #ifdef __cplusplus
