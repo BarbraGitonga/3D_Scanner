@@ -1,3 +1,16 @@
+/**
+ * @file HMC5883L.cpp
+ * @author Barbra Gitonga (barbragitonga@gmail.com)
+ * @brief This is the implementation file for the HMC5883L magnetometer driver for the STM32F7 series.
+ * It provides functions to initialize the sensor, read magnetometer data, and process the data.
+ * The driver uses I2C communication protocol to interact with the sensor.
+ * This driver is suitable for polling and DMA-based data acquisition.
+ * @version 0.1
+ * @date 2025-08-21
+ * 
+ * @copyright Copyright (c) 2025
+ * 
+ */
 #include <HMC5883L/HMC5883L.h>
 
 uint8_t rawBuffer[6]; // stores all raw 8 bit information from the registers

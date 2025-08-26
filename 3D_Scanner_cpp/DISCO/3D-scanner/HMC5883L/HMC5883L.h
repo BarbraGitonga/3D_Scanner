@@ -1,3 +1,14 @@
+/**
+ * @file HMC5883L.h
+ * @author Barbra Gitonga (barbragitonga@gmail.com)
+ * @brief This is the header file for the HMC5883L magnetometer driver for the STM32F7 series.
+ * It contains the necessary definitions, structures, and function prototypes.
+ * @version 0.1
+ * @date 2025-08-21
+ * 
+ * @copyright Copyright (c) 2025
+ * 
+ */
 #ifndef HMC5883L_H_
 #define HMC588L_H_
 
