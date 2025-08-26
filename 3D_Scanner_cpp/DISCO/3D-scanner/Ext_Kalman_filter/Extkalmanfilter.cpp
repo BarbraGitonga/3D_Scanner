@@ -1,13 +1,32 @@
-/*
- * Extkalmanfilter.cpp
- *
- *  Created on: Jun 20, 2025
- *      Author: Barbra Gitonga (barbragitonga@gmail.com)
- *
+/**
+ * @file Extkalmanfilter.cpp
+ * @author Barbra Gitonga (barbragitonga@gmail.com)
+ * @brief This is the implementation of an Extended Kalman Filter (EKF) for estimating roll and pitch angles from IMU data.
+ * @version 0.1
+ * @date 2025-06-20
+ * 
+ * @copyright Copyright (c) 2025
+ * 
  */
 
 #include <Ext_Kalman_filter/Extkalmanfilter.h>
 
+/**
+ * @brief Constructor initializing EKF state, covariance, and noise matrices.
+ *
+ * - Sets initial attitude estimates (phi_rad, theta_rad) to 0 and applies given biases.
+ * - Zeros the 4x4 a priori covariance P, then sets its diagonal to Pinit.
+ * - Initializes process noise Q from Q_var for angle states and from bias terms for bias states.
+ * - Initializes measurement noise covariance R from R_var.
+ *
+ * @param Pinit      Initial variance placed on the diagonal of P for all states.
+ * @param Q_var      Pointer to at least two elements: process noise variances for [phi, theta].
+ * @param R_var      Pointer to at least three elements: measurement noise variances.
+ * @param phi_bias   Initial bias for phi and its corresponding process noise entry.
+ * @param theta_bias Initial bias for theta and its corresponding process noise entry.
+ *
+ * @pre Q_var != nullptr and R_var != nullptr with the lengths stated above.
+ */
 ExtKalmanFilter::ExtKalmanFilter(float Pinit, float *Q_var, float *R_var, float phi_bias, float theta_bias) {
     // state estimates
 	state.phi_rad= 0.0f;
@@ -37,6 +56,22 @@ ExtKalmanFilter::ExtKalmanFilter(float Pinit, float *Q_var, float *R_var, float 
 	state.R[2] = R_var[2];
 }
 
+/**
+ * Predicts the EKF attitude state and covariance from gyroscope measurements.
+ *
+ * Integrates roll (state.phi_rad) and pitch (state.theta_rad) over dt using
+ * body rates (p,q,r) from gyro, subtracting the current bias estimates.
+ * Builds the continuous-time Jacobian A at the updated state and performs the
+ * covariance propagation:
+ *   P += dt * (A*P + P*A' + Q)
+ *
+ * @param gyro Gyroscope data (rad/s); uses gyroX→p, gyroY→q, gyroZ→r.
+ * @param dt   Integration timestep in seconds (dt > 0).
+ *
+ * @post Updates state.phi_rad, state.theta_rad, and the 4x4 covariance state.P in place.
+ *       Uses state.Q as process noise.
+ * @note cos(phi) and cos(theta) are clamped away from zero to avoid singularities.
+ */
 void ExtKalmanFilter::predict(const MPU6050Data& gyro, float dt) {
 	float p = gyro.gyroX;
 	float q = gyro.gyroY;
@@ -131,6 +166,19 @@ void ExtKalmanFilter::predict(const MPU6050Data& gyro, float dt) {
 
 }
 
+/**
+ * @brief Performs the EKF measurement update using 3-axis accelerometer data.
+ *
+ * @param accel Calibrated accelerometer sample (m/s^2); only accX/accY/accZ are used.
+ *
+ * Normalizes the measured acceleration, predicts the gravity vector in the body frame
+ * h = [ g*st, -g*ct*sp, -g*ct*cp ], builds the measurement Jacobian C, forms S = C P C' + R,
+ * inverts S, computes the Kalman gain K = P C' S^{-1}, and applies the correction to
+ * state.phi_rad, state.theta_rad, state.bias_phi, state.bias_theta. The covariance P is
+ * updated via (I - K C) P. Early-exits if the accel norm is ~0 or if S is near-singular.
+ *
+ * Angles are in radians; acceleration in m/s^2; g = 9.81.
+ */
 void ExtKalmanFilter::update(const MPU6050Data& accel) {
 	float ax = accel.accX;
 	float ay = accel.accY;
@@ -379,6 +427,14 @@ void ExtKalmanFilter::update(const MPU6050Data& accel) {
 
 }
 
+/**
+ * Get the current roll and pitch angles in degrees.
+ *
+ * Converts the internal state angles (phi_rad, theta_rad) from radians using
+ * RAD_TO_DEG and returns them as an AngleEstimate.
+ *
+ * @return AngleEstimate with roll and pitch in degrees.
+ */
 AngleEstimate ExtKalmanFilter::getAngle() const {
     AngleEstimate angle;
     angle.roll = state.phi_rad * RAD_TO_DEG;   // or x[0] * RAD_TO_DEG
