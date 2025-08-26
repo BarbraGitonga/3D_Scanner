@@ -27,7 +27,6 @@
 #include "stm32f7xx_hal.h"
 #include "MPU9250/MPU9250.h"
 #include "Ext_Kalman_filter/Extkalmanfilter.h"
-#include "HCSR04/HCSR04.h"
 #include "HMC5883L/HMC5883L.h"
 #include <cstdio>
 /* USER CODE END Includes */
@@ -127,7 +126,6 @@ uint32_t timerLED = 0;
 uint32_t timerPredict = 0;
 uint32_t timerUpdate = 0;
 MPU9250Data data; // to be passed to the EKF
-HCSR04_HandleTypeDef hcsr04;
 MPU9250 mpu_sensor;
 //uint8_t complete = 0;
 HMC_data mag;
