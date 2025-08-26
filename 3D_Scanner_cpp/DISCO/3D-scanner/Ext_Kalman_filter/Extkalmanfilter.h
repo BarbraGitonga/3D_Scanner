@@ -9,8 +9,7 @@
 #define EXT_KALMAN_FILTER_H
 
 #include <math.h>
-#include "MPU6050_driver/MPU6050.h"
-#include "MPU9250/MPU9250.h"
+#include "MPU6050/MPU6050.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -20,13 +19,13 @@ extern "C" {
 #define DEG_TO_RAD 0.0174533f
 #define g ((float) 9.81f)
 
-struct MPU9250Data {
+struct MPU6050Data {
 	float accX, accY, accZ;
 	float gyroX, gyroY, gyroZ;
 	float magX;
 
 
-	void setFrom(MPU9250_data& mpu_data) {
+	void setFrom(MPU6050_data& mpu_data) {
 		accX  = mpu_data.acc_mps2[1];
 		accY  = mpu_data.acc_mps2[0];
 		accZ  = mpu_data.acc_mps2[2];
@@ -57,8 +56,8 @@ class ExtKalmanFilter {
 public:
     ExtKalmanFilter(float Pinit ,float* Q_var, float* R_var, float phi_bias, float theta_bias);
 
-    void predict(const MPU9250Data& gyro, float dt);
-    void update (const MPU9250Data& accel);
+    void predict(const MPU6050Data& gyro, float dt);
+    void update (const MPU6050Data& accel);
     AngleEstimate getAngle() const;
 
 private:

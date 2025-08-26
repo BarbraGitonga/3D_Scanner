@@ -1,33 +1,75 @@
-/*
- * MPU9250.cpp
- *
- *  Created on: Jul 31, 2025
- *      Author: Barbra Gitonga(barbragitonga@gmail.com)
+/**
+ * @file MPU6050.cpp
+ * @author Barbra Gitonga (barbragitonga@gmail.com)
+ * @brief This file contains the implementation of the MPU6050 class for interfacing with the MPU6050 and MPU6000 sensor.
+  It includes methods for initializing the sensor, reading data, and processing the data.
+  The class uses I2C communication to interact with the sensor.
+ * @version 0.1
+ * @date 2025-07-31
+ * 
+ * @copyright Copyright (c) 2025
+ * 
  */
 
-#include <MPU9250/MPU9250.h>
+#include <MPU6050/MPU6050.h>
 
 uint8_t imuBuffer[14];
 uint8_t magBuffer[6]; // stores all 8 bit information from the registers
 
-MPU9250::MPU9250() {
+/**
+ * @brief Construct a new MPU6050::MPU6050 object
+ * 
+ */
+MPU6050::MPU6050() {
 	// TODO Auto-generated constructor stub
 
 }
 
-HAL_StatusTypeDef MPU9250::writeRegister(MPU9250_data *dev, uint8_t reg, uint8_t *data){
-	return HAL_I2C_Mem_Write(dev->i2cHandle, MPU9250_ADDR, reg, I2C_MEMADD_SIZE_8BIT, data ,1, HAL_MAX_DELAY);
+/**
+ * @brief Write to a register
+ * 
+ * @param dev -  a pointer to the MPU6050_data structure
+ * @param reg - register address
+ * @param data - pointer to the data to be written
+ * @return HAL_StatusTypeDef 
+ */
+HAL_StatusTypeDef MPU6050::writeRegister(MPU6050_data *dev, uint8_t reg, uint8_t *data){
+	return HAL_I2C_Mem_Write(dev->i2cHandle, MPU6050_ADDR, reg, I2C_MEMADD_SIZE_8BIT, data ,1, HAL_MAX_DELAY);
 }
 
-HAL_StatusTypeDef MPU9250::readRegister(MPU9250_data *dev, uint8_t reg, uint8_t *data){
-	return HAL_I2C_Mem_Read(dev->i2cHandle, MPU9250_ADDR, reg, I2C_MEMADD_SIZE_8BIT, data, 1, HAL_MAX_DELAY);
+/**
+ * @brief Read from a register
+ * 
+ * @param dev - a pointer to the MPU6050_data structure
+ * @param reg - register address
+ * @param data - pointer to the data to be read
+ * @return HAL_StatusTypeDef 
+ */
+HAL_StatusTypeDef MPU6050::readRegister(MPU6050_data *dev, uint8_t reg, uint8_t *data){
+	return HAL_I2C_Mem_Read(dev->i2cHandle, MPU6050_ADDR, reg, I2C_MEMADD_SIZE_8BIT, data, 1, HAL_MAX_DELAY);
 }
 
-HAL_StatusTypeDef MPU9250::burstReadRegister(MPU9250_data *dev, uint8_t reg, uint8_t *data, uint8_t length) {
-    return HAL_I2C_Mem_Read(dev->i2cHandle, MPU9250_ADDR, reg, I2C_MEMADD_SIZE_8BIT, data, length, HAL_MAX_DELAY);
+/**
+ * @brief Burst read from multiple registers
+ * 
+ * @param dev - a pointer to the MPU6050_data structure
+ * @param reg - starting register address
+ * @param data - pointer to the data buffer to store read values
+ * @param length - number of bytes to read
+ * @return HAL_StatusTypeDef 
+ */
+HAL_StatusTypeDef MPU6050::burstReadRegister(MPU6050_data *dev, uint8_t reg, uint8_t *data, uint8_t length) {
+    return HAL_I2C_Mem_Read(dev->i2cHandle, MPU6050_ADDR, reg, I2C_MEMADD_SIZE_8BIT, data, length, HAL_MAX_DELAY);
 }
 
-HAL_StatusTypeDef MPU9250::initialize(MPU9250_data *dev, I2C_HandleTypeDef *hi2c) {
+/**
+ * @brief Initialize the MPU6050 sensor
+ * 
+ * @param dev a pointer to the MPU6050_data structure
+ * @param hi2c a pointer to the I2C handle
+ * @return HAL_StatusTypeDef 
+ */
+HAL_StatusTypeDef MPU6050::initialize(MPU6050_data *dev, I2C_HandleTypeDef *hi2c) {
     /* Store handle */
     dev->i2cHandle = hi2c;
 
@@ -87,15 +129,26 @@ HAL_StatusTypeDef MPU9250::initialize(MPU9250_data *dev, I2C_HandleTypeDef *hi2c
     return HAL_ERROR;
 }
 
-HAL_StatusTypeDef MPU9250::read_IMU_DMA(MPU9250_data *dev){
-	HAL_StatusTypeDef status = HAL_I2C_Mem_Read_DMA(dev->i2cHandle, MPU9250_ADDR, ACCEL_XOUT_H,
+/**
+ * @brief Read IMU data using DMA
+ * 
+ * @param dev - a pointer to the MPU6050_data structure
+ * @return HAL_StatusTypeDef 
+ */
+HAL_StatusTypeDef MPU6050::read_IMU_DMA(MPU6050_data *dev){
+	HAL_StatusTypeDef status = HAL_I2C_Mem_Read_DMA(dev->i2cHandle, MPU6050_ADDR, ACCEL_XOUT_H,
 			I2C_MEMADD_SIZE_8BIT, imuBuffer, 14);
 
 	return status;
 }
 
-
-uint8_t MPU9250::process_data(MPU9250_data *dev){
+/**
+ * @brief Process raw IMU data and convert to physical units
+ * 
+ * @param dev - a pointer to the MPU6050_data structure 
+ * @return uint8_t 
+ */
+uint8_t MPU6050::process_data(MPU6050_data *dev){
 
 	int16_t accel_x_out = (int16_t)((imuBuffer[0] << 8) | imuBuffer[1]);
 	int16_t accel_y_out = (int16_t)((imuBuffer[2] << 8) | imuBuffer[3]);
@@ -124,7 +177,13 @@ uint8_t MPU9250::process_data(MPU9250_data *dev){
 	return dev->rxFlag = 1;
 }
 
-HAL_StatusTypeDef MPU9250::accelerometer(MPU9250_data *dev) {
+/**
+ * @brief Read accelerometer data
+ * 
+ * @param dev -  a pointer to the MPU6050_data structure
+ * @return HAL_StatusTypeDef 
+ */
+HAL_StatusTypeDef MPU6050::accelerometer(MPU6050_data *dev) {
     uint8_t buffer[6];  // Changed from int8_t to uint8_t to match burstReadRegister
     uint8_t errNum = 0;
     HAL_StatusTypeDef status;
@@ -145,7 +204,13 @@ HAL_StatusTypeDef MPU9250::accelerometer(MPU9250_data *dev) {
     return (errNum == 0) ? HAL_OK : HAL_ERROR;
 }
 
-HAL_StatusTypeDef MPU9250::gyroscope(MPU9250_data *dev){
+/**
+ * @brief Read gyroscope data
+ * 
+ * @param dev -  a pointer to the MPU6050_data structure
+ * @return HAL_StatusTypeDef 
+ */
+HAL_StatusTypeDef MPU6050::gyroscope(MPU6050_data *dev){
 	uint8_t buffer[6];
 	uint8_t errNum = 0;
 	HAL_StatusTypeDef status;
@@ -164,7 +229,13 @@ HAL_StatusTypeDef MPU9250::gyroscope(MPU9250_data *dev){
 	return (errNum == 0) ? HAL_OK : HAL_ERROR;
 }
 
-HAL_StatusTypeDef MPU9250::temperature(MPU9250_data *dev){
+/**
+ * @brief Read temperature data
+ * 
+ * @param dev - a pointer to the MPU6050_data structure
+ * @return HAL_StatusTypeDef 
+ */
+HAL_StatusTypeDef MPU6050::temperature(MPU6050_data *dev){
 	uint8_t buffer[2];
 	uint8_t errNum = 0;
 	HAL_StatusTypeDef status;
@@ -180,7 +251,13 @@ HAL_StatusTypeDef MPU9250::temperature(MPU9250_data *dev){
     return HAL_ERROR;
 }
 
-HAL_StatusTypeDef MPU9250::callibrate_stationary(MPU9250_data *data){
+/**
+ * @brief Calibrate the sensor while stationary to determine biases
+ * 
+ * @param data - a pointer to the MPU6050_data structure
+ * @return HAL_StatusTypeDef 
+ */
+HAL_StatusTypeDef MPU6050::callibrate_stationary(MPU6050_data *data){
     const uint16_t samples = 2000;   // More samples = better accuracy
     const uint16_t delayMs = 2;      // Delay between samples
 
@@ -217,7 +294,7 @@ HAL_StatusTypeDef MPU9250::callibrate_stationary(MPU9250_data *data){
 }
 
 
-MPU9250::~MPU9250() {
+MPU6050::~MPU6050() {
 	// TODO Auto-generated destructor stub
 }
 

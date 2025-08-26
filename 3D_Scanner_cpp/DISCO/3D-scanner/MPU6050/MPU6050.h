@@ -1,12 +1,17 @@
-/*
- * MPU9250.h
- *
- *  Created on: Jul 31, 2025
- *      Author: lenovo
+/**
+ * @file MPU6050.cpp
+ * @author Barbra Gitonga (barbragitonga@gmail.com)
+ * @brief This is the header file for the MPU6050 class which provides an
+ * interface to interact with the MPU6050 or MPU6000 sensor.
+ * @version 0.1
+ * @date 2025-07-31
+ * 
+ * @copyright Copyright (c) 2025
+ * 
  */
 
-#ifndef MPU9250_H_
-#define MPU9250_H_
+#ifndef MPU6050_H_
+#define MPU6050_H_
 
 #define RAD_TO_DEG 57.2957795f
 #define DEG_TO_RAD 0.0174533f
@@ -42,7 +47,7 @@ extern "C" {
 
 //identity
 #define WHO_AM_I			0x75
-#define MPU9250_ADDR		(0x68 << 1)
+#define MPU6050_ADDR		(0x68 << 1)
 
 //power management 1 parameters
 #define PWR_MGMT_1          0x6B
@@ -60,7 +65,7 @@ extern "C" {
 
 // Magnetometer
 #include "stm32f7xx_hal.h"
-#include "MPU9250.h"
+#include "MPU6050.h"
 
 // Scales to convert to respective SI units
 #define CONVERT_TO_MPS      2.0f / 32768.0f
@@ -87,32 +92,32 @@ typedef struct {
 
 	// flag
 	uint8_t rxFlag;
-} MPU9250_data;
+} MPU6050_data;
 
-class MPU9250 {
+class MPU6050 {
 public:
-	MPU9250();
-	virtual ~MPU9250();
+	MPU6050();
+	virtual ~MPU6050();
 	// Initialization
-		HAL_StatusTypeDef initialize(MPU9250_data *dev, I2C_HandleTypeDef *hi2c);
+		HAL_StatusTypeDef initialize(MPU6050_data *dev, I2C_HandleTypeDef *hi2c);
 
 		// Data Acquisition
-		HAL_StatusTypeDef readRegister(MPU9250_data *dev, uint8_t reg, uint8_t *data);
-		HAL_StatusTypeDef writeRegister(MPU9250_data *dev, uint8_t reg, uint8_t *data);
-		HAL_StatusTypeDef burstReadRegister(MPU9250_data *dev, uint8_t reg, uint8_t *data, uint8_t length);
+		HAL_StatusTypeDef readRegister(MPU6050_data *dev, uint8_t reg, uint8_t *data);
+		HAL_StatusTypeDef writeRegister(MPU6050_data *dev, uint8_t reg, uint8_t *data);
+		HAL_StatusTypeDef burstReadRegister(MPU6050_data *dev, uint8_t reg, uint8_t *data, uint8_t length);
 
-		HAL_StatusTypeDef read_IMU_DMA(MPU9250_data *dev);
-		HAL_StatusTypeDef accelerometer(MPU9250_data *dev);
-		HAL_StatusTypeDef gyroscope(MPU9250_data *dev);
-		HAL_StatusTypeDef temperature(MPU9250_data *dev);
+		HAL_StatusTypeDef read_IMU_DMA(MPU6050_data *dev);
+		HAL_StatusTypeDef accelerometer(MPU6050_data *dev);
+		HAL_StatusTypeDef gyroscope(MPU6050_data *dev);
+		HAL_StatusTypeDef temperature(MPU6050_data *dev);
 
 		// Sensor data
-		uint8_t process_data(MPU9250_data *dev);
-		HAL_StatusTypeDef callibrate_stationary(MPU9250_data *dev);
+		uint8_t process_data(MPU6050_data *dev);
+		HAL_StatusTypeDef callibrate_stationary(MPU6050_data *dev);
 };
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* MPU9250_H_ */
+#endif /* MPU6050_H_ */

@@ -25,7 +25,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "stm32f7xx_hal.h"
-#include "MPU9250/MPU9250.h"
+#include "MPU6050/MPU6050.h"
 #include "Ext_Kalman_filter/Extkalmanfilter.h"
 #include "HMC5883L/HMC5883L.h"
 #include <cstdio>
@@ -119,14 +119,14 @@ SDRAM_HandleTypeDef hsdram1;
 
 /* USER CODE BEGIN PV */
 //
-MPU9250_data mpu_data;
+MPU6050_data mpu_data;
 uint8_t data_ready; // DMA flag
 uint32_t timerLog = 0;
 uint32_t timerLED = 0;
 uint32_t timerPredict = 0;
 uint32_t timerUpdate = 0;
-MPU9250Data data; // to be passed to the EKF
-MPU9250 mpu_sensor;
+MPU6050Data data; // to be passed to the EKF
+MPU6050 mpu_sensor;
 //uint8_t complete = 0;
 HMC_data mag;
 
@@ -310,11 +310,11 @@ int main(void)
   /* USER CODE BEGIN 2 */
   HAL_Delay(2000);
 
-//   Initializing mpu9250
+//   Initializing MPU6050
   HAL_StatusTypeDef init = mpu_sensor.initialize(&mpu_data, &hi2c1);
 
   if(init == HAL_OK){
-	  HAL_UART_Transmit(&huart1, (uint8_t *)"MPU9250 Initialized\n", 20, HAL_MAX_DELAY);
+	  HAL_UART_Transmit(&huart1, (uint8_t *)"MPU6050 Initialized\n", 20, HAL_MAX_DELAY);
   }
   // Initializing magnetometer
   I2C_Scanner(&hi2c1, &huart1);
