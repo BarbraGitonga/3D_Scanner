@@ -19,6 +19,13 @@ HMC5883L::HMC5883L(){
 
 }
 
+/**
+ * @brief Initializes the HMC5883L sensor with the provided I2C handle and data structure.
+ * 
+ * @param hi2c - Pointer to the I2C handle
+ * @param data - Pointer to the HMC_data structure to store sensor data
+ * @return HAL_StatusTypeDef 
+ */
 HAL_StatusTypeDef HMC5883L::init(I2C_HandleTypeDef *hi2c, HMC_data *data){
 	data->i2c_handle = hi2c;
 	data->mag[0] = 0.0f;
@@ -49,6 +56,18 @@ HAL_StatusTypeDef HMC5883L::init(I2C_HandleTypeDef *hi2c, HMC_data *data){
 	return HAL_OK;
 }
 
+/**
+ * @brief Reads magnetometer data from the HMC5883L sensor and stores it in the provided data structure.
+  The function performs a blocking read operation.
+  It reads 6 bytes of data starting from the X-axis MSB register, processes the raw data, and converts it to milliGauss.
+  The processed data is stored in the mag array of the HMC_data structure.
+  The function returns HAL_OK if the read operation is successful, otherwise returns HAL_ERROR.
+  Note: Ensure that the sensor is properly initialized before calling this function.
+  This function is suitable for applications where immediate data retrieval is required without using DMA.
+ * 
+ * @param data - Pointer to the HMC_data structure to store sensor data
+ * @return HAL_StatusTypeDef 
+ */
 HAL_StatusTypeDef HMC5883L::read(HMC_data *data){
 	uint8_t magBuffer[6]; // stores all raw 8 bit information from the registers
 
@@ -70,6 +89,12 @@ HAL_StatusTypeDef HMC5883L::read(HMC_data *data){
 	return HAL_OK;
 }
 
+/**
+ * @brief Reads magnetometer data from the HMC5883L sensor using DMA and stores it in the provided data structure.
+ * 
+ * @param data - Pointer to the HMC_data structure to store sensor data
+ * @return HAL_StatusTypeDef 
+ */
 HAL_StatusTypeDef HMC5883L::readDMA(HMC_data *data){
 	HAL_StatusTypeDef status;
 	status = HAL_I2C_Mem_Read_DMA(data->i2c_handle, HMC_ADDR, X_MAGM, I2C_MEMADD_SIZE_8BIT, rawBuffer, 6);
@@ -78,6 +103,19 @@ HAL_StatusTypeDef HMC5883L::readDMA(HMC_data *data){
 	return HAL_OK;
 }
 
+/**
+ * @brief Convert raw HMC5883L bytes to calibrated magnetic field readings.
+ *
+ * Interprets six 2's-complement bytes from rawBuffer as MSB-first words
+ * in the device order (X, Z, Y), converts to signed 16-bit values, and
+ * scales to milliGauss using the scale constant. Stores results in
+ * data->mag as [X, Y, Z].
+ *
+ * Preconditions: rawBuffer holds the latest 6-byte measurement.
+ *
+ * @param data Pointer to HMC_data that receives the scaled readings; must not be null.
+ * @return int8_t 1 on success.
+ */
 int8_t HMC5883L::data_processing(HMC_data *data){
 	// processing data. since it is in 2's complement. (MSB << 8 | LSB)
 	int16_t raw_x_mag = (int16_t)(rawBuffer[0] << 8) | rawBuffer[1];
