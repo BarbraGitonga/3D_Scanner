@@ -14531,3 +14531,598 @@ Finished building: default.size.stdout
  
 Finished building: 3D-scanner.list
  
+00:09:40 **** Build of configuration Debug for project 3D-scanner ****
+make -j16 all 
+arm-none-eabi-g++ "../MPU6050/MPU6050.cpp" -mcpu=cortex-m7 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F746xx -c -I../Core/Inc -I../FATFS/Target -I../FATFS/App -I../USB_HOST/App -I../USB_HOST/Target -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FatFs/src -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -I.././ -I"C:/Users/lenovo/Desktop/3D_Scanner/3D_Scanner_cpp/DISCO/3D-scanner/Ext_Kalman_filter" -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"MPU6050/MPU6050.d" -MT"MPU6050/MPU6050.o" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -o "MPU6050/MPU6050.o"
+arm-none-eabi-g++ "../MPU6050/MPU6050_test.cpp" -mcpu=cortex-m7 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F746xx -c -I../Core/Inc -I../FATFS/Target -I../FATFS/App -I../USB_HOST/App -I../USB_HOST/Target -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FatFs/src -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -I.././ -I"C:/Users/lenovo/Desktop/3D_Scanner/3D_Scanner_cpp/DISCO/3D-scanner/Ext_Kalman_filter" -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"MPU6050/MPU6050_test.d" -MT"MPU6050/MPU6050_test.o" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -o "MPU6050/MPU6050_test.o"
+arm-none-eabi-g++ "../HMC5883L/HMC5883L.cpp" -mcpu=cortex-m7 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F746xx -c -I../Core/Inc -I../FATFS/Target -I../FATFS/App -I../USB_HOST/App -I../USB_HOST/Target -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FatFs/src -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -I.././ -I"C:/Users/lenovo/Desktop/3D_Scanner/3D_Scanner_cpp/DISCO/3D-scanner/Ext_Kalman_filter" -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"HMC5883L/HMC5883L.d" -MT"HMC5883L/HMC5883L.o" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -o "HMC5883L/HMC5883L.o"
+arm-none-eabi-g++ "../Ext_Kalman_filter/Extkalmanfilter.cpp" -mcpu=cortex-m7 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F746xx -c -I../Core/Inc -I../FATFS/Target -I../FATFS/App -I../USB_HOST/App -I../USB_HOST/Target -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FatFs/src -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -I.././ -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Ext_Kalman_filter/Extkalmanfilter.d" -MT"Ext_Kalman_filter/Extkalmanfilter.o" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -o "Ext_Kalman_filter/Extkalmanfilter.o"
+arm-none-eabi-g++ "../Core/Src/main.cpp" -mcpu=cortex-m7 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F746xx -c -I../Core/Inc -I../FATFS/Target -I../FATFS/App -I../USB_HOST/App -I../USB_HOST/Target -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FatFs/src -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -I.././ -I"C:/Users/lenovo/Desktop/3D_Scanner/3D_Scanner_cpp/DISCO/3D-scanner/Ext_Kalman_filter" -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../HMC5883L/HMC5883L.cpp: In member function 'HAL_StatusTypeDef HMC5883L::init(I2C_HandleTypeDef*, HMC_data*, float)':
+../HMC5883L/HMC5883L.cpp:35:15: error: 'struct HMC_data' has no member named 'inclination'; did you mean 'declination'?
+   35 |         data->inclination = inclination;
+      |               ^~~~~~~~~~~
+      |               declination
+../HMC5883L/HMC5883L.cpp: In member function 'int8_t HMC5883L::calibrated_data(HMC_data*, float (*)[3], float*)':
+../HMC5883L/HMC5883L.cpp:137:25: error: cannot convert 'HMC_data**' to 'HMC_data*'
+  137 |         data_processing(&data);
+      |                         ^~~~~
+      |                         |
+      |                         HMC_data**
+../HMC5883L/HMC5883L.cpp:121:42: note:   initializing argument 1 of 'void HMC5883L::data_processing(HMC_data*)'
+  121 | void HMC5883L::data_processing(HMC_data *data){
+      |                                ~~~~~~~~~~^~~~
+../HMC5883L/HMC5883L.cpp:145:23: error: 'struct HMC_data' has no member named 'callibrated'; did you mean 'calibrated'?
+  145 |                 data->callibrated[i] = (soft_cal[i][0] * hard[i]) +
+      |                       ^~~~~~~~~~~
+      |                       calibrated
+../HMC5883L/HMC5883L.cpp: At global scope:
+../HMC5883L/HMC5883L.cpp:153:19: error: no declaration matches 'HAL_StatusTypeDef HMC5883L::callibrate(HMC_data*, uint8_t)'
+  153 | HAL_StatusTypeDef HMC5883L::callibrate(HMC_data *data, uint8_t samples){
+      |                   ^~~~~~~~
+In file included from ../HMC5883L/HMC5883L.cpp:14:
+.././HMC5883L/HMC5883L.h:72:27: note: candidate is: 'HAL_StatusTypeDef HMC5883L::callibrate(HMC_data*)'
+   72 |         HAL_StatusTypeDef callibrate(HMC_data *data);
+      |                           ^~~~~~~~~~
+.././HMC5883L/HMC5883L.h:63:7: note: 'class HMC5883L' defined here
+   63 | class HMC5883L {
+      |       ^~~~~~~~
+../HMC5883L/HMC5883L.cpp:193:7: error: no declaration matches 'float HMC5883L::get_heading(HMC_data*, float, float, float (*)[3], float*)'
+  193 | float HMC5883L::get_heading(HMC_data *data, float roll, float pitch, float (*soft_cal)[3], float *hard_cal){
+      |       ^~~~~~~~
+.././HMC5883L/HMC5883L.h:73:15: note: candidate is: 'float HMC5883L::get_heading(HMC_data*, float, float)'
+   73 |         float get_heading(HMC_data *data, float roll, float pitch);
+      |               ^~~~~~~~~~~
+.././HMC5883L/HMC5883L.h:63:7: note: 'class HMC5883L' defined here
+   63 | class HMC5883L {
+      |       ^~~~~~~~
+../Ext_Kalman_filter/Extkalmanfilter.cpp:75:37: error: 'IMU_Data' does not name a type
+   75 | void ExtKalmanFilter::predict(const IMU_Data& gyro, float dt) {
+      |                                     ^~~~~~~~
+../Ext_Kalman_filter/Extkalmanfilter.cpp:75:6: error: no declaration matches 'void ExtKalmanFilter::predict(const int&, float)'
+   75 | void ExtKalmanFilter::predict(const IMU_Data& gyro, float dt) {
+      |      ^~~~~~~~~~~~~~~
+In file included from ../Ext_Kalman_filter/Extkalmanfilter.cpp:12:
+.././Ext_Kalman_filter/Extkalmanfilter.h:59:10: note: candidate is: 'void ExtKalmanFilter::predict(const MPU6050Data&, float)'
+   59 |     void predict(const MPU6050Data& gyro, float dt);
+      |          ^~~~~~~
+.././Ext_Kalman_filter/Extkalmanfilter.h:55:7: note: 'class ExtKalmanFilter' defined here
+   55 | class ExtKalmanFilter {
+      |       ^~~~~~~~~~~~~~~
+../Ext_Kalman_filter/Extkalmanfilter.cpp:182:36: error: 'IMU_Data' does not name a type
+  182 | void ExtKalmanFilter::update(const IMU_Data& accel) {
+      |                                    ^~~~~~~~
+../Ext_Kalman_filter/Extkalmanfilter.cpp:182:6: error: no declaration matches 'void ExtKalmanFilter::update(const int&)'
+  182 | void ExtKalmanFilter::update(const IMU_Data& accel) {
+      |      ^~~~~~~~~~~~~~~
+.././Ext_Kalman_filter/Extkalmanfilter.h:60:10: note: candidate is: 'void ExtKalmanFilter::update(const MPU6050Data&)'
+   60 |     void update (const MPU6050Data& accel);
+      |          ^~~~~~
+.././Ext_Kalman_filter/Extkalmanfilter.h:55:7: note: 'class ExtKalmanFilter' defined here
+   55 | class ExtKalmanFilter {
+      |       ^~~~~~~~~~~~~~~
+make: *** [Ext_Kalman_filter/subdir.mk:19: Ext_Kalman_filter/Extkalmanfilter.o] Error 1
+make: *** Waiting for unfinished jobs....
+make: *** [HMC5883L/subdir.mk:19: HMC5883L/HMC5883L.o] Error 1
+../Core/Src/main.cpp: In function 'int main()':
+../Core/Src/main.cpp:323:11: error: no matching function for call to 'HMC5883L::init(I2C_HandleTypeDef*, HMC_data*)'
+  323 |   Mag.init(&hi2c1, &mag);
+      |   ~~~~~~~~^~~~~~~~~~~~~~
+In file included from ../Core/Src/main.cpp:30:
+.././HMC5883L/HMC5883L.h:66:27: note: candidate: 'HAL_StatusTypeDef HMC5883L::init(I2C_HandleTypeDef*, HMC_data*, float)'
+   66 |         HAL_StatusTypeDef init(I2C_HandleTypeDef *hi2c, HMC_data *data, float declination);
+      |                           ^~~~
+.././HMC5883L/HMC5883L.h:66:27: note:   candidate expects 3 arguments, 2 provided
+../Core/Src/main.cpp:392:46: error: no matching function for call to 'HMC5883L::get_heading(HMC_data*, float&, float&, float (*)[3][3], float (*)[3])'
+  392 |                         yaw = Mag.get_heading(&mag, roll, pitch, &soft_cal, &hard_cal);
+      |                               ~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.././HMC5883L/HMC5883L.h:73:15: note: candidate: 'float HMC5883L::get_heading(HMC_data*, float, float)'
+   73 |         float get_heading(HMC_data *data, float roll, float pitch);
+      |               ^~~~~~~~~~~
+.././HMC5883L/HMC5883L.h:73:15: note:   candidate expects 3 arguments, 5 provided
+make: *** [Core/Src/subdir.mk:41: Core/Src/main.o] Error 1
+"make -j16 all" terminated with exit code 2. Build might be incomplete.
+00:12:34 **** Incremental Build of configuration Debug for project 3D-scanner ****
+make -j16 all 
+arm-none-eabi-g++ "../HMC5883L/HMC5883L.cpp" -mcpu=cortex-m7 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F746xx -c -I../Core/Inc -I../FATFS/Target -I../FATFS/App -I../USB_HOST/App -I../USB_HOST/Target -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FatFs/src -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -I.././ -I"C:/Users/lenovo/Desktop/3D_Scanner/3D_Scanner_cpp/DISCO/3D-scanner/Ext_Kalman_filter" -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"HMC5883L/HMC5883L.d" -MT"HMC5883L/HMC5883L.o" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -o "HMC5883L/HMC5883L.o"
+arm-none-eabi-g++ "../Ext_Kalman_filter/Extkalmanfilter.cpp" -mcpu=cortex-m7 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F746xx -c -I../Core/Inc -I../FATFS/Target -I../FATFS/App -I../USB_HOST/App -I../USB_HOST/Target -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FatFs/src -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -I.././ -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Ext_Kalman_filter/Extkalmanfilter.d" -MT"Ext_Kalman_filter/Extkalmanfilter.o" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -o "Ext_Kalman_filter/Extkalmanfilter.o"
+arm-none-eabi-g++ "../Core/Src/main.cpp" -mcpu=cortex-m7 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F746xx -c -I../Core/Inc -I../FATFS/Target -I../FATFS/App -I../USB_HOST/App -I../USB_HOST/Target -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FatFs/src -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -I.././ -I"C:/Users/lenovo/Desktop/3D_Scanner/3D_Scanner_cpp/DISCO/3D-scanner/Ext_Kalman_filter" -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../HMC5883L/HMC5883L.cpp: In member function 'int8_t HMC5883L::calibrated_data(HMC_data*, float (*)[3], float*)':
+../HMC5883L/HMC5883L.cpp:137:25: error: cannot convert 'HMC_data**' to 'HMC_data*'
+  137 |         data_processing(&data);
+      |                         ^~~~~
+      |                         |
+      |                         HMC_data**
+../HMC5883L/HMC5883L.cpp:121:42: note:   initializing argument 1 of 'void HMC5883L::data_processing(HMC_data*)'
+  121 | void HMC5883L::data_processing(HMC_data *data){
+      |                                ~~~~~~~~~~^~~~
+../HMC5883L/HMC5883L.cpp:145:23: error: 'struct HMC_data' has no member named 'callibrated'; did you mean 'calibrated'?
+  145 |                 data->callibrated[i] = (soft_cal[i][0] * hard[i]) +
+      |                       ^~~~~~~~~~~
+      |                       calibrated
+../HMC5883L/HMC5883L.cpp: At global scope:
+../HMC5883L/HMC5883L.cpp:153:19: error: no declaration matches 'HAL_StatusTypeDef HMC5883L::callibrate(HMC_data*, uint8_t)'
+  153 | HAL_StatusTypeDef HMC5883L::callibrate(HMC_data *data, uint8_t samples){
+      |                   ^~~~~~~~
+In file included from ../HMC5883L/HMC5883L.cpp:14:
+.././HMC5883L/HMC5883L.h:72:27: note: candidate is: 'HAL_StatusTypeDef HMC5883L::callibrate(HMC_data*)'
+   72 |         HAL_StatusTypeDef callibrate(HMC_data *data);
+      |                           ^~~~~~~~~~
+.././HMC5883L/HMC5883L.h:63:7: note: 'class HMC5883L' defined here
+   63 | class HMC5883L {
+      |       ^~~~~~~~
+../HMC5883L/HMC5883L.cpp:193:7: error: no declaration matches 'float HMC5883L::get_heading(HMC_data*, float, float, float (*)[3], float*)'
+  193 | float HMC5883L::get_heading(HMC_data *data, float roll, float pitch, float (*soft_cal)[3], float *hard_cal){
+      |       ^~~~~~~~
+.././HMC5883L/HMC5883L.h:73:15: note: candidate is: 'float HMC5883L::get_heading(HMC_data*, float, float)'
+   73 |         float get_heading(HMC_data *data, float roll, float pitch);
+      |               ^~~~~~~~~~~
+.././HMC5883L/HMC5883L.h:63:7: note: 'class HMC5883L' defined here
+   63 | class HMC5883L {
+      |       ^~~~~~~~
+../Ext_Kalman_filter/Extkalmanfilter.cpp:75:37: error: 'IMU_Data' does not name a type
+   75 | void ExtKalmanFilter::predict(const IMU_Data& gyro, float dt) {
+      |                                     ^~~~~~~~
+../Ext_Kalman_filter/Extkalmanfilter.cpp:75:6: error: no declaration matches 'void ExtKalmanFilter::predict(const int&, float)'
+   75 | void ExtKalmanFilter::predict(const IMU_Data& gyro, float dt) {
+      |      ^~~~~~~~~~~~~~~
+In file included from ../Ext_Kalman_filter/Extkalmanfilter.cpp:12:
+.././Ext_Kalman_filter/Extkalmanfilter.h:59:10: note: candidate is: 'void ExtKalmanFilter::predict(const MPU6050Data&, float)'
+   59 |     void predict(const MPU6050Data& gyro, float dt);
+      |          ^~~~~~~
+.././Ext_Kalman_filter/Extkalmanfilter.h:55:7: note: 'class ExtKalmanFilter' defined here
+   55 | class ExtKalmanFilter {
+      |       ^~~~~~~~~~~~~~~
+make: *** [HMC5883L/subdir.mk:19: HMC5883L/HMC5883L.o] Error 1
+make: *** Waiting for unfinished jobs....
+../Ext_Kalman_filter/Extkalmanfilter.cpp:182:36: error: 'IMU_Data' does not name a type
+  182 | void ExtKalmanFilter::update(const IMU_Data& accel) {
+      |                                    ^~~~~~~~
+../Ext_Kalman_filter/Extkalmanfilter.cpp:182:6: error: no declaration matches 'void ExtKalmanFilter::update(const int&)'
+  182 | void ExtKalmanFilter::update(const IMU_Data& accel) {
+      |      ^~~~~~~~~~~~~~~
+.././Ext_Kalman_filter/Extkalmanfilter.h:60:10: note: candidate is: 'void ExtKalmanFilter::update(const MPU6050Data&)'
+   60 |     void update (const MPU6050Data& accel);
+      |          ^~~~~~
+.././Ext_Kalman_filter/Extkalmanfilter.h:55:7: note: 'class ExtKalmanFilter' defined here
+   55 | class ExtKalmanFilter {
+      |       ^~~~~~~~~~~~~~~
+make: *** [Ext_Kalman_filter/subdir.mk:19: Ext_Kalman_filter/Extkalmanfilter.o] Error 1
+../Core/Src/main.cpp: In function 'int main()':
+../Core/Src/main.cpp:393:46: error: no matching function for call to 'HMC5883L::get_heading(HMC_data*, float&, float&, float (*)[3][3], float (*)[3])'
+  393 |                         yaw = Mag.get_heading(&mag, roll, pitch, &soft_cal, &hard_cal);
+      |                               ~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from ../Core/Src/main.cpp:30:
+.././HMC5883L/HMC5883L.h:73:15: note: candidate: 'float HMC5883L::get_heading(HMC_data*, float, float)'
+   73 |         float get_heading(HMC_data *data, float roll, float pitch);
+      |               ^~~~~~~~~~~
+.././HMC5883L/HMC5883L.h:73:15: note:   candidate expects 3 arguments, 5 provided
+make: *** [Core/Src/subdir.mk:41: Core/Src/main.o] Error 1
+"make -j16 all" terminated with exit code 2. Build might be incomplete.
+00:13:11 **** Incremental Build of configuration Debug for project 3D-scanner ****
+make -j16 all 
+arm-none-eabi-g++ "../HMC5883L/HMC5883L.cpp" -mcpu=cortex-m7 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F746xx -c -I../Core/Inc -I../FATFS/Target -I../FATFS/App -I../USB_HOST/App -I../USB_HOST/Target -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FatFs/src -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -I.././ -I"C:/Users/lenovo/Desktop/3D_Scanner/3D_Scanner_cpp/DISCO/3D-scanner/Ext_Kalman_filter" -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"HMC5883L/HMC5883L.d" -MT"HMC5883L/HMC5883L.o" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -o "HMC5883L/HMC5883L.o"
+arm-none-eabi-g++ "../Ext_Kalman_filter/Extkalmanfilter.cpp" -mcpu=cortex-m7 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F746xx -c -I../Core/Inc -I../FATFS/Target -I../FATFS/App -I../USB_HOST/App -I../USB_HOST/Target -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FatFs/src -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -I.././ -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Ext_Kalman_filter/Extkalmanfilter.d" -MT"Ext_Kalman_filter/Extkalmanfilter.o" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -o "Ext_Kalman_filter/Extkalmanfilter.o"
+arm-none-eabi-g++ "../Core/Src/main.cpp" -mcpu=cortex-m7 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F746xx -c -I../Core/Inc -I../FATFS/Target -I../FATFS/App -I../USB_HOST/App -I../USB_HOST/Target -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FatFs/src -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -I.././ -I"C:/Users/lenovo/Desktop/3D_Scanner/3D_Scanner_cpp/DISCO/3D-scanner/Ext_Kalman_filter" -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../HMC5883L/HMC5883L.cpp: In member function 'int8_t HMC5883L::calibrated_data(HMC_data*, float (*)[3], float*)':
+../HMC5883L/HMC5883L.cpp:137:25: error: cannot convert 'HMC_data' to 'HMC_data*'
+  137 |         data_processing(*data);
+      |                         ^~~~~
+      |                         |
+      |                         HMC_data
+../HMC5883L/HMC5883L.cpp:121:42: note:   initializing argument 1 of 'void HMC5883L::data_processing(HMC_data*)'
+  121 | void HMC5883L::data_processing(HMC_data *data){
+      |                                ~~~~~~~~~~^~~~
+../HMC5883L/HMC5883L.cpp:145:23: error: 'struct HMC_data' has no member named 'callibrated'; did you mean 'calibrated'?
+  145 |                 data->callibrated[i] = (soft_cal[i][0] * hard[i]) +
+      |                       ^~~~~~~~~~~
+      |                       calibrated
+../HMC5883L/HMC5883L.cpp: At global scope:
+../HMC5883L/HMC5883L.cpp:153:19: error: no declaration matches 'HAL_StatusTypeDef HMC5883L::callibrate(HMC_data*, uint8_t)'
+  153 | HAL_StatusTypeDef HMC5883L::callibrate(HMC_data *data, uint8_t samples){
+      |                   ^~~~~~~~
+In file included from ../HMC5883L/HMC5883L.cpp:14:
+.././HMC5883L/HMC5883L.h:72:27: note: candidate is: 'HAL_StatusTypeDef HMC5883L::callibrate(HMC_data*)'
+   72 |         HAL_StatusTypeDef callibrate(HMC_data *data);
+      |                           ^~~~~~~~~~
+.././HMC5883L/HMC5883L.h:63:7: note: 'class HMC5883L' defined here
+   63 | class HMC5883L {
+      |       ^~~~~~~~
+../HMC5883L/HMC5883L.cpp:193:7: error: no declaration matches 'float HMC5883L::get_heading(HMC_data*, float, float, float (*)[3], float*)'
+  193 | float HMC5883L::get_heading(HMC_data *data, float roll, float pitch, float (*soft_cal)[3], float *hard_cal){
+      |       ^~~~~~~~
+.././HMC5883L/HMC5883L.h:73:15: note: candidate is: 'float HMC5883L::get_heading(HMC_data*, float, float)'
+   73 |         float get_heading(HMC_data *data, float roll, float pitch);
+      |               ^~~~~~~~~~~
+.././HMC5883L/HMC5883L.h:63:7: note: 'class HMC5883L' defined here
+   63 | class HMC5883L {
+      |       ^~~~~~~~
+make: *** [HMC5883L/subdir.mk:19: HMC5883L/HMC5883L.o] Error 1
+make: *** Waiting for unfinished jobs....
+../Ext_Kalman_filter/Extkalmanfilter.cpp:75:37: error: 'IMU_Data' does not name a type
+   75 | void ExtKalmanFilter::predict(const IMU_Data& gyro, float dt) {
+      |                                     ^~~~~~~~
+../Ext_Kalman_filter/Extkalmanfilter.cpp:75:6: error: no declaration matches 'void ExtKalmanFilter::predict(const int&, float)'
+   75 | void ExtKalmanFilter::predict(const IMU_Data& gyro, float dt) {
+      |      ^~~~~~~~~~~~~~~
+In file included from ../Ext_Kalman_filter/Extkalmanfilter.cpp:12:
+.././Ext_Kalman_filter/Extkalmanfilter.h:59:10: note: candidate is: 'void ExtKalmanFilter::predict(const MPU6050Data&, float)'
+   59 |     void predict(const MPU6050Data& gyro, float dt);
+      |          ^~~~~~~
+.././Ext_Kalman_filter/Extkalmanfilter.h:55:7: note: 'class ExtKalmanFilter' defined here
+   55 | class ExtKalmanFilter {
+      |       ^~~~~~~~~~~~~~~
+../Ext_Kalman_filter/Extkalmanfilter.cpp:182:36: error: 'IMU_Data' does not name a type
+  182 | void ExtKalmanFilter::update(const IMU_Data& accel) {
+      |                                    ^~~~~~~~
+../Ext_Kalman_filter/Extkalmanfilter.cpp:182:6: error: no declaration matches 'void ExtKalmanFilter::update(const int&)'
+  182 | void ExtKalmanFilter::update(const IMU_Data& accel) {
+      |      ^~~~~~~~~~~~~~~
+.././Ext_Kalman_filter/Extkalmanfilter.h:60:10: note: candidate is: 'void ExtKalmanFilter::update(const MPU6050Data&)'
+   60 |     void update (const MPU6050Data& accel);
+      |          ^~~~~~
+.././Ext_Kalman_filter/Extkalmanfilter.h:55:7: note: 'class ExtKalmanFilter' defined here
+   55 | class ExtKalmanFilter {
+      |       ^~~~~~~~~~~~~~~
+make: *** [Ext_Kalman_filter/subdir.mk:19: Ext_Kalman_filter/Extkalmanfilter.o] Error 1
+../Core/Src/main.cpp: In function 'int main()':
+../Core/Src/main.cpp:393:46: error: no matching function for call to 'HMC5883L::get_heading(HMC_data*, float&, float&, float (*)[3][3], float (*)[3])'
+  393 |                         yaw = Mag.get_heading(&mag, roll, pitch, &soft_cal, &hard_cal);
+      |                               ~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from ../Core/Src/main.cpp:30:
+.././HMC5883L/HMC5883L.h:73:15: note: candidate: 'float HMC5883L::get_heading(HMC_data*, float, float)'
+   73 |         float get_heading(HMC_data *data, float roll, float pitch);
+      |               ^~~~~~~~~~~
+.././HMC5883L/HMC5883L.h:73:15: note:   candidate expects 3 arguments, 5 provided
+make: *** [Core/Src/subdir.mk:41: Core/Src/main.o] Error 1
+"make -j16 all" terminated with exit code 2. Build might be incomplete.
+00:13:34 **** Incremental Build of configuration Debug for project 3D-scanner ****
+make -j16 all 
+arm-none-eabi-g++ "../HMC5883L/HMC5883L.cpp" -mcpu=cortex-m7 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F746xx -c -I../Core/Inc -I../FATFS/Target -I../FATFS/App -I../USB_HOST/App -I../USB_HOST/Target -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FatFs/src -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -I.././ -I"C:/Users/lenovo/Desktop/3D_Scanner/3D_Scanner_cpp/DISCO/3D-scanner/Ext_Kalman_filter" -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"HMC5883L/HMC5883L.d" -MT"HMC5883L/HMC5883L.o" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -o "HMC5883L/HMC5883L.o"
+arm-none-eabi-g++ "../Ext_Kalman_filter/Extkalmanfilter.cpp" -mcpu=cortex-m7 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F746xx -c -I../Core/Inc -I../FATFS/Target -I../FATFS/App -I../USB_HOST/App -I../USB_HOST/Target -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FatFs/src -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -I.././ -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Ext_Kalman_filter/Extkalmanfilter.d" -MT"Ext_Kalman_filter/Extkalmanfilter.o" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -o "Ext_Kalman_filter/Extkalmanfilter.o"
+arm-none-eabi-g++ "../Core/Src/main.cpp" -mcpu=cortex-m7 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F746xx -c -I../Core/Inc -I../FATFS/Target -I../FATFS/App -I../USB_HOST/App -I../USB_HOST/Target -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FatFs/src -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -I.././ -I"C:/Users/lenovo/Desktop/3D_Scanner/3D_Scanner_cpp/DISCO/3D-scanner/Ext_Kalman_filter" -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../HMC5883L/HMC5883L.cpp: In member function 'int8_t HMC5883L::calibrated_data(HMC_data*, float (*)[3], float*)':
+../HMC5883L/HMC5883L.cpp:137:25: error: cannot convert 'HMC_data**' to 'HMC_data*'
+  137 |         data_processing(&data);
+      |                         ^~~~~
+      |                         |
+      |                         HMC_data**
+../HMC5883L/HMC5883L.cpp:121:42: note:   initializing argument 1 of 'void HMC5883L::data_processing(HMC_data*)'
+  121 | void HMC5883L::data_processing(HMC_data *data){
+      |                                ~~~~~~~~~~^~~~
+../HMC5883L/HMC5883L.cpp:145:23: error: 'struct HMC_data' has no member named 'callibrated'; did you mean 'calibrated'?
+  145 |                 data->callibrated[i] = (soft_cal[i][0] * hard[i]) +
+      |                       ^~~~~~~~~~~
+      |                       calibrated
+../HMC5883L/HMC5883L.cpp: At global scope:
+../HMC5883L/HMC5883L.cpp:153:19: error: no declaration matches 'HAL_StatusTypeDef HMC5883L::callibrate(HMC_data*, uint8_t)'
+  153 | HAL_StatusTypeDef HMC5883L::callibrate(HMC_data *data, uint8_t samples){
+      |                   ^~~~~~~~
+In file included from ../HMC5883L/HMC5883L.cpp:14:
+.././HMC5883L/HMC5883L.h:72:27: note: candidate is: 'HAL_StatusTypeDef HMC5883L::callibrate(HMC_data*)'
+   72 |         HAL_StatusTypeDef callibrate(HMC_data *data);
+      |                           ^~~~~~~~~~
+.././HMC5883L/HMC5883L.h:63:7: note: 'class HMC5883L' defined here
+   63 | class HMC5883L {
+      |       ^~~~~~~~
+../HMC5883L/HMC5883L.cpp:193:7: error: no declaration matches 'float HMC5883L::get_heading(HMC_data*, float, float, float (*)[3], float*)'
+  193 | float HMC5883L::get_heading(HMC_data *data, float roll, float pitch, float (*soft_cal)[3], float *hard_cal){
+      |       ^~~~~~~~
+.././HMC5883L/HMC5883L.h:73:15: note: candidate is: 'float HMC5883L::get_heading(HMC_data*, float, float)'
+   73 |         float get_heading(HMC_data *data, float roll, float pitch);
+      |               ^~~~~~~~~~~
+.././HMC5883L/HMC5883L.h:63:7: note: 'class HMC5883L' defined here
+   63 | class HMC5883L {
+      |       ^~~~~~~~
+make: *** [HMC5883L/subdir.mk:19: HMC5883L/HMC5883L.o] Error 1
+make: *** Waiting for unfinished jobs....
+../Ext_Kalman_filter/Extkalmanfilter.cpp:75:37: error: 'IMU_Data' does not name a type
+   75 | void ExtKalmanFilter::predict(const IMU_Data& gyro, float dt) {
+      |                                     ^~~~~~~~
+../Ext_Kalman_filter/Extkalmanfilter.cpp:75:6: error: no declaration matches 'void ExtKalmanFilter::predict(const int&, float)'
+   75 | void ExtKalmanFilter::predict(const IMU_Data& gyro, float dt) {
+      |      ^~~~~~~~~~~~~~~
+In file included from ../Ext_Kalman_filter/Extkalmanfilter.cpp:12:
+.././Ext_Kalman_filter/Extkalmanfilter.h:59:10: note: candidate is: 'void ExtKalmanFilter::predict(const MPU6050Data&, float)'
+   59 |     void predict(const MPU6050Data& gyro, float dt);
+      |          ^~~~~~~
+.././Ext_Kalman_filter/Extkalmanfilter.h:55:7: note: 'class ExtKalmanFilter' defined here
+   55 | class ExtKalmanFilter {
+      |       ^~~~~~~~~~~~~~~
+../Ext_Kalman_filter/Extkalmanfilter.cpp:182:36: error: 'IMU_Data' does not name a type
+  182 | void ExtKalmanFilter::update(const IMU_Data& accel) {
+      |                                    ^~~~~~~~
+../Ext_Kalman_filter/Extkalmanfilter.cpp:182:6: error: no declaration matches 'void ExtKalmanFilter::update(const int&)'
+  182 | void ExtKalmanFilter::update(const IMU_Data& accel) {
+      |      ^~~~~~~~~~~~~~~
+.././Ext_Kalman_filter/Extkalmanfilter.h:60:10: note: candidate is: 'void ExtKalmanFilter::update(const MPU6050Data&)'
+   60 |     void update (const MPU6050Data& accel);
+      |          ^~~~~~
+.././Ext_Kalman_filter/Extkalmanfilter.h:55:7: note: 'class ExtKalmanFilter' defined here
+   55 | class ExtKalmanFilter {
+      |       ^~~~~~~~~~~~~~~
+make: *** [Ext_Kalman_filter/subdir.mk:19: Ext_Kalman_filter/Extkalmanfilter.o] Error 1
+../Core/Src/main.cpp: In function 'int main()':
+../Core/Src/main.cpp:393:46: error: no matching function for call to 'HMC5883L::get_heading(HMC_data*, float&, float&, float (*)[3][3], float (*)[3])'
+  393 |                         yaw = Mag.get_heading(&mag, roll, pitch, &soft_cal, &hard_cal);
+      |                               ~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from ../Core/Src/main.cpp:30:
+.././HMC5883L/HMC5883L.h:73:15: note: candidate: 'float HMC5883L::get_heading(HMC_data*, float, float)'
+   73 |         float get_heading(HMC_data *data, float roll, float pitch);
+      |               ^~~~~~~~~~~
+.././HMC5883L/HMC5883L.h:73:15: note:   candidate expects 3 arguments, 5 provided
+make: *** [Core/Src/subdir.mk:41: Core/Src/main.o] Error 1
+"make -j16 all" terminated with exit code 2. Build might be incomplete.
+00:17:00 **** Incremental Build of configuration Debug for project 3D-scanner ****
+make -j16 all 
+arm-none-eabi-g++ "../HMC5883L/HMC5883L.cpp" -mcpu=cortex-m7 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F746xx -c -I../Core/Inc -I../FATFS/Target -I../FATFS/App -I../USB_HOST/App -I../USB_HOST/Target -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FatFs/src -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -I.././ -I"C:/Users/lenovo/Desktop/3D_Scanner/3D_Scanner_cpp/DISCO/3D-scanner/Ext_Kalman_filter" -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"HMC5883L/HMC5883L.d" -MT"HMC5883L/HMC5883L.o" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -o "HMC5883L/HMC5883L.o"
+arm-none-eabi-g++ "../Ext_Kalman_filter/Extkalmanfilter.cpp" -mcpu=cortex-m7 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F746xx -c -I../Core/Inc -I../FATFS/Target -I../FATFS/App -I../USB_HOST/App -I../USB_HOST/Target -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FatFs/src -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -I.././ -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Ext_Kalman_filter/Extkalmanfilter.d" -MT"Ext_Kalman_filter/Extkalmanfilter.o" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -o "Ext_Kalman_filter/Extkalmanfilter.o"
+arm-none-eabi-g++ "../Core/Src/main.cpp" -mcpu=cortex-m7 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F746xx -c -I../Core/Inc -I../FATFS/Target -I../FATFS/App -I../USB_HOST/App -I../USB_HOST/Target -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FatFs/src -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -I.././ -I"C:/Users/lenovo/Desktop/3D_Scanner/3D_Scanner_cpp/DISCO/3D-scanner/Ext_Kalman_filter" -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../HMC5883L/HMC5883L.cpp: In member function 'HAL_StatusTypeDef HMC5883L::callibrate(HMC_data*, uint8_t)':
+../HMC5883L/HMC5883L.cpp:163:33: error: cannot convert 'HMC_data**' to 'HMC_data*'
+  163 |                 data_processing(&data);
+      |                                 ^~~~~
+      |                                 |
+      |                                 HMC_data**
+../HMC5883L/HMC5883L.cpp:121:42: note:   initializing argument 1 of 'void HMC5883L::data_processing(HMC_data*)'
+  121 | void HMC5883L::data_processing(HMC_data *data){
+      |                                ~~~~~~~~~~^~~~
+../HMC5883L/HMC5883L.cpp:166:29: error: 'raw' was not declared in this scope
+  166 |                         if (raw[j] < minVal[j]) minVal[j] = raw[j];
+      |                             ^~~
+../HMC5883L/HMC5883L.cpp:167:29: error: 'raw' was not declared in this scope
+  167 |                         if (raw[j] > maxVal[j]) maxVal[j] = raw[j];
+      |                             ^~~
+../HMC5883L/HMC5883L.cpp: In member function 'float HMC5883L::get_heading(HMC_data*, float, float, float (*)[3], float*)':
+../HMC5883L/HMC5883L.cpp:196:25: error: cannot convert 'HMC_data**' to 'HMC_data*'
+  196 |         calibrated_data(&data, &soft_cal, &hard_cal);
+      |                         ^~~~~
+      |                         |
+      |                         HMC_data**
+../HMC5883L/HMC5883L.cpp:134:44: note:   initializing argument 1 of 'int8_t HMC5883L::calibrated_data(HMC_data*, float (*)[3], float*)'
+  134 | int8_t HMC5883L::calibrated_data(HMC_data *data, float (*soft_cal)[3], float *hard_cal){
+      |                                  ~~~~~~~~~~^~~~
+../Ext_Kalman_filter/Extkalmanfilter.cpp:75:37: error: 'IMU_Data' does not name a type
+   75 | void ExtKalmanFilter::predict(const IMU_Data& gyro, float dt) {
+      |                                     ^~~~~~~~
+../Ext_Kalman_filter/Extkalmanfilter.cpp:75:6: error: no declaration matches 'void ExtKalmanFilter::predict(const int&, float)'
+   75 | void ExtKalmanFilter::predict(const IMU_Data& gyro, float dt) {
+      |      ^~~~~~~~~~~~~~~
+In file included from ../Ext_Kalman_filter/Extkalmanfilter.cpp:12:
+.././Ext_Kalman_filter/Extkalmanfilter.h:59:10: note: candidate is: 'void ExtKalmanFilter::predict(const MPU6050Data&, float)'
+   59 |     void predict(const MPU6050Data& gyro, float dt);
+      |          ^~~~~~~
+.././Ext_Kalman_filter/Extkalmanfilter.h:55:7: note: 'class ExtKalmanFilter' defined here
+   55 | class ExtKalmanFilter {
+      |       ^~~~~~~~~~~~~~~
+../Ext_Kalman_filter/Extkalmanfilter.cpp:182:36: error: 'IMU_Data' does not name a type
+  182 | void ExtKalmanFilter::update(const IMU_Data& accel) {
+      |                                    ^~~~~~~~
+../Ext_Kalman_filter/Extkalmanfilter.cpp:182:6: error: no declaration matches 'void ExtKalmanFilter::update(const int&)'
+  182 | void ExtKalmanFilter::update(const IMU_Data& accel) {
+      |      ^~~~~~~~~~~~~~~
+.././Ext_Kalman_filter/Extkalmanfilter.h:60:10: note: candidate is: 'void ExtKalmanFilter::update(const MPU6050Data&)'
+   60 |     void update (const MPU6050Data& accel);
+      |          ^~~~~~
+.././Ext_Kalman_filter/Extkalmanfilter.h:55:7: note: 'class ExtKalmanFilter' defined here
+   55 | class ExtKalmanFilter {
+      |       ^~~~~~~~~~~~~~~
+make: *** [HMC5883L/subdir.mk:19: HMC5883L/HMC5883L.o] Error 1
+make: *** Waiting for unfinished jobs....
+make: *** [Ext_Kalman_filter/subdir.mk:19: Ext_Kalman_filter/Extkalmanfilter.o] Error 1
+../Core/Src/main.cpp: In function 'int main()':
+../Core/Src/main.cpp:393:66: error: cannot convert 'float (*)[3][3]' to 'float (*)[3]'
+  393 |                         yaw = Mag.get_heading(&mag, roll, pitch, &soft_cal, &hard_cal);
+      |                                                                  ^~~~~~~~~
+      |                                                                  |
+      |                                                                  float (*)[3][3]
+In file included from ../Core/Src/main.cpp:30:
+.././HMC5883L/HMC5883L.h:73:76: note:   initializing argument 4 of 'float HMC5883L::get_heading(HMC_data*, float, float, float (*)[3], float*)'
+   73 |         float get_heading(HMC_data *data, float roll, float pitch, float (*soft_cal)[3], float *hard_cal);
+      |                                                                    ~~~~~~~~^~~~~~~~~~~~
+make: *** [Core/Src/subdir.mk:41: Core/Src/main.o] Error 1
+"make -j16 all" terminated with exit code 2. Build might be incomplete.
+00:19:02 **** Incremental Build of configuration Debug for project 3D-scanner ****
+make -j16 all 
+arm-none-eabi-g++ "../HMC5883L/HMC5883L.cpp" -mcpu=cortex-m7 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F746xx -c -I../Core/Inc -I../FATFS/Target -I../FATFS/App -I../USB_HOST/App -I../USB_HOST/Target -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FatFs/src -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -I.././ -I"C:/Users/lenovo/Desktop/3D_Scanner/3D_Scanner_cpp/DISCO/3D-scanner/Ext_Kalman_filter" -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"HMC5883L/HMC5883L.d" -MT"HMC5883L/HMC5883L.o" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -o "HMC5883L/HMC5883L.o"
+arm-none-eabi-g++ "../Ext_Kalman_filter/Extkalmanfilter.cpp" -mcpu=cortex-m7 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F746xx -c -I../Core/Inc -I../FATFS/Target -I../FATFS/App -I../USB_HOST/App -I../USB_HOST/Target -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FatFs/src -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -I.././ -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Ext_Kalman_filter/Extkalmanfilter.d" -MT"Ext_Kalman_filter/Extkalmanfilter.o" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -o "Ext_Kalman_filter/Extkalmanfilter.o"
+arm-none-eabi-g++ "../Core/Src/main.cpp" -mcpu=cortex-m7 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F746xx -c -I../Core/Inc -I../FATFS/Target -I../FATFS/App -I../USB_HOST/App -I../USB_HOST/Target -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FatFs/src -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -I.././ -I"C:/Users/lenovo/Desktop/3D_Scanner/3D_Scanner_cpp/DISCO/3D-scanner/Ext_Kalman_filter" -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../HMC5883L/HMC5883L.cpp: In member function 'float HMC5883L::get_heading(HMC_data*, float, float, float (*)[3], float*)':
+../HMC5883L/HMC5883L.cpp:196:25: error: cannot convert 'HMC_data**' to 'HMC_data*'
+  196 |         calibrated_data(&data, &soft_cal, &hard_cal);
+      |                         ^~~~~
+      |                         |
+      |                         HMC_data**
+../HMC5883L/HMC5883L.cpp:134:44: note:   initializing argument 1 of 'int8_t HMC5883L::calibrated_data(HMC_data*, float (*)[3], float*)'
+  134 | int8_t HMC5883L::calibrated_data(HMC_data *data, float (*soft_cal)[3], float *hard_cal){
+      |                                  ~~~~~~~~~~^~~~
+make: *** [HMC5883L/subdir.mk:19: HMC5883L/HMC5883L.o] Error 1
+make: *** Waiting for unfinished jobs....
+../Ext_Kalman_filter/Extkalmanfilter.cpp:75:37: error: 'IMU_Data' does not name a type
+   75 | void ExtKalmanFilter::predict(const IMU_Data& gyro, float dt) {
+      |                                     ^~~~~~~~
+../Ext_Kalman_filter/Extkalmanfilter.cpp:75:6: error: no declaration matches 'void ExtKalmanFilter::predict(const int&, float)'
+   75 | void ExtKalmanFilter::predict(const IMU_Data& gyro, float dt) {
+      |      ^~~~~~~~~~~~~~~
+In file included from ../Ext_Kalman_filter/Extkalmanfilter.cpp:12:
+.././Ext_Kalman_filter/Extkalmanfilter.h:59:10: note: candidate is: 'void ExtKalmanFilter::predict(const MPU6050Data&, float)'
+   59 |     void predict(const MPU6050Data& gyro, float dt);
+      |          ^~~~~~~
+.././Ext_Kalman_filter/Extkalmanfilter.h:55:7: note: 'class ExtKalmanFilter' defined here
+   55 | class ExtKalmanFilter {
+      |       ^~~~~~~~~~~~~~~
+../Ext_Kalman_filter/Extkalmanfilter.cpp:182:36: error: 'IMU_Data' does not name a type
+  182 | void ExtKalmanFilter::update(const IMU_Data& accel) {
+      |                                    ^~~~~~~~
+../Ext_Kalman_filter/Extkalmanfilter.cpp:182:6: error: no declaration matches 'void ExtKalmanFilter::update(const int&)'
+  182 | void ExtKalmanFilter::update(const IMU_Data& accel) {
+      |      ^~~~~~~~~~~~~~~
+.././Ext_Kalman_filter/Extkalmanfilter.h:60:10: note: candidate is: 'void ExtKalmanFilter::update(const MPU6050Data&)'
+   60 |     void update (const MPU6050Data& accel);
+      |          ^~~~~~
+.././Ext_Kalman_filter/Extkalmanfilter.h:55:7: note: 'class ExtKalmanFilter' defined here
+   55 | class ExtKalmanFilter {
+      |       ^~~~~~~~~~~~~~~
+make: *** [Ext_Kalman_filter/subdir.mk:19: Ext_Kalman_filter/Extkalmanfilter.o] Error 1
+../Core/Src/main.cpp: In function 'int main()':
+../Core/Src/main.cpp:393:66: error: cannot convert 'float (*)[3][3]' to 'float (*)[3]'
+  393 |                         yaw = Mag.get_heading(&mag, roll, pitch, &soft_cal, &hard_cal);
+      |                                                                  ^~~~~~~~~
+      |                                                                  |
+      |                                                                  float (*)[3][3]
+In file included from ../Core/Src/main.cpp:30:
+.././HMC5883L/HMC5883L.h:73:76: note:   initializing argument 4 of 'float HMC5883L::get_heading(HMC_data*, float, float, float (*)[3], float*)'
+   73 |         float get_heading(HMC_data *data, float roll, float pitch, float (*soft_cal)[3], float *hard_cal);
+      |                                                                    ~~~~~~~~^~~~~~~~~~~~
+make: *** [Core/Src/subdir.mk:41: Core/Src/main.o] Error 1
+"make -j16 all" terminated with exit code 2. Build might be incomplete.
+00:21:27 **** Incremental Build of configuration Debug for project 3D-scanner ****
+make -j16 all 
+arm-none-eabi-g++ "../HMC5883L/HMC5883L.cpp" -mcpu=cortex-m7 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F746xx -c -I../Core/Inc -I../FATFS/Target -I../FATFS/App -I../USB_HOST/App -I../USB_HOST/Target -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FatFs/src -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -I.././ -I"C:/Users/lenovo/Desktop/3D_Scanner/3D_Scanner_cpp/DISCO/3D-scanner/Ext_Kalman_filter" -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"HMC5883L/HMC5883L.d" -MT"HMC5883L/HMC5883L.o" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -o "HMC5883L/HMC5883L.o"
+arm-none-eabi-g++ "../Ext_Kalman_filter/Extkalmanfilter.cpp" -mcpu=cortex-m7 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F746xx -c -I../Core/Inc -I../FATFS/Target -I../FATFS/App -I../USB_HOST/App -I../USB_HOST/Target -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FatFs/src -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -I.././ -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Ext_Kalman_filter/Extkalmanfilter.d" -MT"Ext_Kalman_filter/Extkalmanfilter.o" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -o "Ext_Kalman_filter/Extkalmanfilter.o"
+arm-none-eabi-g++ "../Core/Src/main.cpp" -mcpu=cortex-m7 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F746xx -c -I../Core/Inc -I../FATFS/Target -I../FATFS/App -I../USB_HOST/App -I../USB_HOST/Target -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FatFs/src -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -I.././ -I"C:/Users/lenovo/Desktop/3D_Scanner/3D_Scanner_cpp/DISCO/3D-scanner/Ext_Kalman_filter" -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../HMC5883L/HMC5883L.cpp: In member function 'float HMC5883L::get_heading(HMC_data*, float, float, float (*)[3], float*)':
+../HMC5883L/HMC5883L.cpp:196:31: error: cannot convert 'float (**)[3]' to 'float (*)[3]'
+  196 |         calibrated_data(data, &soft_cal, &hard_cal);
+      |                               ^~~~~~~~~
+      |                               |
+      |                               float (**)[3]
+../HMC5883L/HMC5883L.cpp:134:58: note:   initializing argument 2 of 'int8_t HMC5883L::calibrated_data(HMC_data*, float (*)[3], float*)'
+  134 | int8_t HMC5883L::calibrated_data(HMC_data *data, float (*soft_cal)[3], float *hard_cal){
+      |                                                  ~~~~~~~~^~~~~~~~~~~~
+../Ext_Kalman_filter/Extkalmanfilter.cpp:75:6: error: no declaration matches 'void ExtKalmanFilter::predict(const MPU6050_data&, float)'
+   75 | void ExtKalmanFilter::predict(const MPU6050_data& gyro, float dt) {
+      |      ^~~~~~~~~~~~~~~
+In file included from ../Ext_Kalman_filter/Extkalmanfilter.cpp:12:
+.././Ext_Kalman_filter/Extkalmanfilter.h:59:10: note: candidate is: 'void ExtKalmanFilter::predict(const MPU6050Data&, float)'
+   59 |     void predict(const MPU6050Data& gyro, float dt);
+      |          ^~~~~~~
+.././Ext_Kalman_filter/Extkalmanfilter.h:55:7: note: 'class ExtKalmanFilter' defined here
+   55 | class ExtKalmanFilter {
+      |       ^~~~~~~~~~~~~~~
+../Ext_Kalman_filter/Extkalmanfilter.cpp:182:6: error: no declaration matches 'void ExtKalmanFilter::update(const MPU6050_data&)'
+  182 | void ExtKalmanFilter::update(const MPU6050_data& accel) {
+      |      ^~~~~~~~~~~~~~~
+.././Ext_Kalman_filter/Extkalmanfilter.h:60:10: note: candidate is: 'void ExtKalmanFilter::update(const MPU6050Data&)'
+   60 |     void update (const MPU6050Data& accel);
+      |          ^~~~~~
+.././Ext_Kalman_filter/Extkalmanfilter.h:55:7: note: 'class ExtKalmanFilter' defined here
+   55 | class ExtKalmanFilter {
+      |       ^~~~~~~~~~~~~~~
+make: *** [HMC5883L/subdir.mk:19: HMC5883L/HMC5883L.o] Error 1
+make: *** Waiting for unfinished jobs....
+make: *** [Ext_Kalman_filter/subdir.mk:19: Ext_Kalman_filter/Extkalmanfilter.o] Error 1
+../Core/Src/main.cpp: In function 'int main()':
+../Core/Src/main.cpp:393:66: error: cannot convert 'float (*)[3][3]' to 'float (*)[3]'
+  393 |                         yaw = Mag.get_heading(&mag, roll, pitch, &soft_cal, &hard_cal);
+      |                                                                  ^~~~~~~~~
+      |                                                                  |
+      |                                                                  float (*)[3][3]
+In file included from ../Core/Src/main.cpp:30:
+.././HMC5883L/HMC5883L.h:73:76: note:   initializing argument 4 of 'float HMC5883L::get_heading(HMC_data*, float, float, float (*)[3], float*)'
+   73 |         float get_heading(HMC_data *data, float roll, float pitch, float (*soft_cal)[3], float *hard_cal);
+      |                                                                    ~~~~~~~~^~~~~~~~~~~~
+make: *** [Core/Src/subdir.mk:41: Core/Src/main.o] Error 1
+"make -j16 all" terminated with exit code 2. Build might be incomplete.
+00:23:41 **** Incremental Build of configuration Debug for project 3D-scanner ****
+make -j16 all 
+arm-none-eabi-g++ "../HMC5883L/HMC5883L.cpp" -mcpu=cortex-m7 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F746xx -c -I../Core/Inc -I../FATFS/Target -I../FATFS/App -I../USB_HOST/App -I../USB_HOST/Target -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FatFs/src -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -I.././ -I"C:/Users/lenovo/Desktop/3D_Scanner/3D_Scanner_cpp/DISCO/3D-scanner/Ext_Kalman_filter" -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"HMC5883L/HMC5883L.d" -MT"HMC5883L/HMC5883L.o" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -o "HMC5883L/HMC5883L.o"
+arm-none-eabi-g++ "../Ext_Kalman_filter/Extkalmanfilter.cpp" -mcpu=cortex-m7 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F746xx -c -I../Core/Inc -I../FATFS/Target -I../FATFS/App -I../USB_HOST/App -I../USB_HOST/Target -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FatFs/src -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -I.././ -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Ext_Kalman_filter/Extkalmanfilter.d" -MT"Ext_Kalman_filter/Extkalmanfilter.o" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -o "Ext_Kalman_filter/Extkalmanfilter.o"
+arm-none-eabi-g++ "../Core/Src/main.cpp" -mcpu=cortex-m7 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F746xx -c -I../Core/Inc -I../FATFS/Target -I../FATFS/App -I../USB_HOST/App -I../USB_HOST/Target -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FatFs/src -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -I.././ -I"C:/Users/lenovo/Desktop/3D_Scanner/3D_Scanner_cpp/DISCO/3D-scanner/Ext_Kalman_filter" -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Ext_Kalman_filter/Extkalmanfilter.cpp:182:6: error: no declaration matches 'void ExtKalmanFilter::update(const MPU6050_data&)'
+  182 | void ExtKalmanFilter::update(const MPU6050_data& accel) {
+      |      ^~~~~~~~~~~~~~~
+In file included from ../Ext_Kalman_filter/Extkalmanfilter.cpp:12:
+.././Ext_Kalman_filter/Extkalmanfilter.h:60:10: note: candidate is: 'void ExtKalmanFilter::update(const MPU6050Data&)'
+   60 |     void update (const MPU6050Data& accel);
+      |          ^~~~~~
+.././Ext_Kalman_filter/Extkalmanfilter.h:55:7: note: 'class ExtKalmanFilter' defined here
+   55 | class ExtKalmanFilter {
+      |       ^~~~~~~~~~~~~~~
+make: *** [Ext_Kalman_filter/subdir.mk:19: Ext_Kalman_filter/Extkalmanfilter.o] Error 1
+make: *** Waiting for unfinished jobs....
+../Core/Src/main.cpp: In function 'int main()':
+../Core/Src/main.cpp:393:66: error: cannot convert 'float (*)[3][3]' to 'float (*)[3]'
+  393 |                         yaw = Mag.get_heading(&mag, roll, pitch, &soft_cal, &hard_cal);
+      |                                                                  ^~~~~~~~~
+      |                                                                  |
+      |                                                                  float (*)[3][3]
+In file included from ../Core/Src/main.cpp:30:
+.././HMC5883L/HMC5883L.h:73:76: note:   initializing argument 4 of 'float HMC5883L::get_heading(HMC_data*, float, float, float (*)[3], float*)'
+   73 |         float get_heading(HMC_data *data, float roll, float pitch, float (*soft_cal)[3], float *hard_cal);
+      |                                                                    ~~~~~~~~^~~~~~~~~~~~
+make: *** [Core/Src/subdir.mk:41: Core/Src/main.o] Error 1
+"make -j16 all" terminated with exit code 2. Build might be incomplete.
+00:24:11 **** Incremental Build of configuration Debug for project 3D-scanner ****
+make -j16 all 
+arm-none-eabi-g++ "../Ext_Kalman_filter/Extkalmanfilter.cpp" -mcpu=cortex-m7 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F746xx -c -I../Core/Inc -I../FATFS/Target -I../FATFS/App -I../USB_HOST/App -I../USB_HOST/Target -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FatFs/src -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -I.././ -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Ext_Kalman_filter/Extkalmanfilter.d" -MT"Ext_Kalman_filter/Extkalmanfilter.o" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -o "Ext_Kalman_filter/Extkalmanfilter.o"
+arm-none-eabi-g++ "../Core/Src/main.cpp" -mcpu=cortex-m7 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F746xx -c -I../Core/Inc -I../FATFS/Target -I../FATFS/App -I../USB_HOST/App -I../USB_HOST/Target -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FatFs/src -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -I.././ -I"C:/Users/lenovo/Desktop/3D_Scanner/3D_Scanner_cpp/DISCO/3D-scanner/Ext_Kalman_filter" -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.cpp: In function 'int main()':
+../Core/Src/main.cpp:393:66: error: cannot convert 'float (*)[3][3]' to 'float (*)[3]'
+  393 |                         yaw = Mag.get_heading(&mag, roll, pitch, &soft_cal, &hard_cal);
+      |                                                                  ^~~~~~~~~
+      |                                                                  |
+      |                                                                  float (*)[3][3]
+In file included from ../Core/Src/main.cpp:30:
+.././HMC5883L/HMC5883L.h:73:76: note:   initializing argument 4 of 'float HMC5883L::get_heading(HMC_data*, float, float, float (*)[3], float*)'
+   73 |         float get_heading(HMC_data *data, float roll, float pitch, float (*soft_cal)[3], float *hard_cal);
+      |                                                                    ~~~~~~~~^~~~~~~~~~~~
+make: *** [Core/Src/subdir.mk:41: Core/Src/main.o] Error 1
+make: *** Waiting for unfinished jobs....
+"make -j16 all" terminated with exit code 2. Build might be incomplete.
+00:24:52 **** Incremental Build of configuration Debug for project 3D-scanner ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/main.cpp" -mcpu=cortex-m7 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F746xx -c -I../Core/Inc -I../FATFS/Target -I../FATFS/App -I../USB_HOST/App -I../USB_HOST/Target -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FatFs/src -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -I.././ -I"C:/Users/lenovo/Desktop/3D_Scanner/3D_Scanner_cpp/DISCO/3D-scanner/Ext_Kalman_filter" -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-g++ -o "3D-scanner.elf" @"objects.list"   -mcpu=cortex-m7 -T"C:\Users\lenovo\Desktop\3D_Scanner\3D_Scanner_cpp\DISCO\3D-scanner\STM32F746NGHX_FLASH.ld" --specs=nosys.specs -Wl,-Map="3D-scanner.map" -Wl,--gc-sections -static -u _printf_float -lm --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: 3D-scanner.elf
+ 
+arm-none-eabi-size  3D-scanner.elf 
+arm-none-eabi-objdump -h -S 3D-scanner.elf  > "3D-scanner.list"
+   text	   data	    bss	    dec	    hex	filename
+ 119308	    820	   6652	 126780	  1ef3c	3D-scanner.elf
+Finished building: default.size.stdout
+ 
+Finished building: 3D-scanner.list
+ 
+00:33:32 **** Incremental Build of configuration Debug for project 3D-scanner ****
+make -j16 all 
+arm-none-eabi-g++ "../HMC5883L/HMC5883L.cpp" -mcpu=cortex-m7 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F746xx -c -I../Core/Inc -I../FATFS/Target -I../FATFS/App -I../USB_HOST/App -I../USB_HOST/Target -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FatFs/src -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -I.././ -I"C:/Users/lenovo/Desktop/3D_Scanner/3D_Scanner_cpp/DISCO/3D-scanner/Ext_Kalman_filter" -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"HMC5883L/HMC5883L.d" -MT"HMC5883L/HMC5883L.o" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -o "HMC5883L/HMC5883L.o"
+arm-none-eabi-g++ -o "3D-scanner.elf" @"objects.list"   -mcpu=cortex-m7 -T"C:\Users\lenovo\Desktop\3D_Scanner\3D_Scanner_cpp\DISCO\3D-scanner\STM32F746NGHX_FLASH.ld" --specs=nosys.specs -Wl,-Map="3D-scanner.map" -Wl,--gc-sections -static -u _printf_float -lm --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: 3D-scanner.elf
+ 
+arm-none-eabi-size  3D-scanner.elf 
+arm-none-eabi-objdump -h -S 3D-scanner.elf  > "3D-scanner.list"
+   text	   data	    bss	    dec	    hex	filename
+ 119364	    820	   6652	 126836	  1ef74	3D-scanner.elf
+Finished building: default.size.stdout
+ 
+Finished building: 3D-scanner.list
+ 
+00:35:07 **** Incremental Build of configuration Debug for project 3D-scanner ****
+make -j16 all 
+arm-none-eabi-g++ "../HMC5883L/HMC5883L.cpp" -mcpu=cortex-m7 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F746xx -c -I../Core/Inc -I../FATFS/Target -I../FATFS/App -I../USB_HOST/App -I../USB_HOST/Target -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FatFs/src -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -I.././ -I"C:/Users/lenovo/Desktop/3D_Scanner/3D_Scanner_cpp/DISCO/3D-scanner/Ext_Kalman_filter" -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"HMC5883L/HMC5883L.d" -MT"HMC5883L/HMC5883L.o" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -o "HMC5883L/HMC5883L.o"
+arm-none-eabi-g++ -o "3D-scanner.elf" @"objects.list"   -mcpu=cortex-m7 -T"C:\Users\lenovo\Desktop\3D_Scanner\3D_Scanner_cpp\DISCO\3D-scanner\STM32F746NGHX_FLASH.ld" --specs=nosys.specs -Wl,-Map="3D-scanner.map" -Wl,--gc-sections -static -u _printf_float -lm --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: 3D-scanner.elf
+ 
+arm-none-eabi-size  3D-scanner.elf 
+arm-none-eabi-objdump -h -S 3D-scanner.elf  > "3D-scanner.list"
+   text	   data	    bss	    dec	    hex	filename
+ 119364	    820	   6652	 126836	  1ef74	3D-scanner.elf
+Finished building: default.size.stdout
+ 
+Finished building: 3D-scanner.list
+ 
+00:44:58 **** Incremental Build of configuration Debug for project 3D-scanner ****
+make -j16 all 
+arm-none-eabi-g++ "../HMC5883L/HMC5883L.cpp" -mcpu=cortex-m7 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F746xx -c -I../Core/Inc -I../FATFS/Target -I../FATFS/App -I../USB_HOST/App -I../USB_HOST/Target -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FatFs/src -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -I.././ -I"C:/Users/lenovo/Desktop/3D_Scanner/3D_Scanner_cpp/DISCO/3D-scanner/Ext_Kalman_filter" -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"HMC5883L/HMC5883L.d" -MT"HMC5883L/HMC5883L.o" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -o "HMC5883L/HMC5883L.o"
+arm-none-eabi-g++ -o "3D-scanner.elf" @"objects.list"   -mcpu=cortex-m7 -T"C:\Users\lenovo\Desktop\3D_Scanner\3D_Scanner_cpp\DISCO\3D-scanner\STM32F746NGHX_FLASH.ld" --specs=nosys.specs -Wl,-Map="3D-scanner.map" -Wl,--gc-sections -static -u _printf_float -lm --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: 3D-scanner.elf
+ 
+arm-none-eabi-size  3D-scanner.elf 
+arm-none-eabi-objdump -h -S 3D-scanner.elf  > "3D-scanner.list"
+   text	   data	    bss	    dec	    hex	filename
+ 119324	    820	   6652	 126796	  1ef4c	3D-scanner.elf
+Finished building: default.size.stdout
+ 
+Finished building: 3D-scanner.list
+ 

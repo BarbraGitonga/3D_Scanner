@@ -17,6 +17,8 @@ extern "C" {
 #endif
 
 #include "stm32f7xx_hal.h"
+#include <math.h>
+#include "usb_host.h"
 
 #define HMC_ADDR	(0x1E << 1) // device address
 
@@ -46,17 +48,30 @@ extern "C" {
 typedef struct {
 	I2C_HandleTypeDef *i2c_handle;
 
+	float declination;
 	float mag[3];
+	float calibrated[3];
+	float yaw;
+
 } HMC_data;
+
+struct MagCalibration {
+    float offset[3];   // Hard-iron
+    float scales[3];    // Soft-iron (diagonal simple scale)
+};
 
 class HMC5883L {
 public:
 	HMC5883L();
-	HAL_StatusTypeDef init(I2C_HandleTypeDef *hi2c, HMC_data *data);
+	HAL_StatusTypeDef init(I2C_HandleTypeDef *hi2c, HMC_data *data, float declination);
 	HAL_StatusTypeDef read(HMC_data *data);
 	HAL_StatusTypeDef readDMA(HMC_data *data);
 
-	int8_t data_processing(HMC_data *data);
+	void data_processing(HMC_data *data);
+	int8_t calibrated_data(HMC_data *data, float (*soft_cal)[3], float *hard_cal);
+//	HAL_StatusTypeDef callibrate(HMC_data *data, uint8_t samples);
+	float get_heading(HMC_data *data, float roll, float pitch, float (*soft_cal)[3], float *hard_cal);
+
 };
 
 #ifdef __cplusplus

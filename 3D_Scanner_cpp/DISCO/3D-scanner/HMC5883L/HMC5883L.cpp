@@ -12,6 +12,7 @@
  * 
  */
 #include <HMC5883L/HMC5883L.h>
+MagCalibration magCalib;
 
 uint8_t rawBuffer[6]; // stores all raw 8 bit information from the registers
 
@@ -26,11 +27,12 @@ HMC5883L::HMC5883L(){
  * @param data - Pointer to the HMC_data structure to store sensor data
  * @return HAL_StatusTypeDef 
  */
-HAL_StatusTypeDef HMC5883L::init(I2C_HandleTypeDef *hi2c, HMC_data *data){
+HAL_StatusTypeDef HMC5883L::init(I2C_HandleTypeDef *hi2c, HMC_data *data, float declination){
 	data->i2c_handle = hi2c;
 	data->mag[0] = 0.0f;
 	data->mag[1] = 0.0f;
 	data->mag[2] = 0.0f;
+	data->declination = declination;
 
 	uint8_t errNum = 0;
 	HAL_StatusTypeDef status;
@@ -116,16 +118,95 @@ HAL_StatusTypeDef HMC5883L::readDMA(HMC_data *data){
  * @param data Pointer to HMC_data that receives the scaled readings; must not be null.
  * @return int8_t 1 on success.
  */
-int8_t HMC5883L::data_processing(HMC_data *data){
+void HMC5883L::data_processing(HMC_data *data){
 	// processing data. since it is in 2's complement. (MSB << 8 | LSB)
 	int16_t raw_x_mag = (int16_t)(rawBuffer[0] << 8) | rawBuffer[1];
 	int16_t raw_z_mag = (int16_t)(rawBuffer[2] << 8) | rawBuffer[3];
 	int16_t raw_y_mag = (int16_t)(rawBuffer[4] << 8) | rawBuffer[5];
 
-	// Get magnetometer readinsg in milliGauss
+// Get magnetometer readings in milliGauss
 	data->mag[0] = raw_x_mag * scale; // x-axis
 	data->mag[1] = raw_y_mag * scale; // y-axis
 	data->mag[2] = raw_z_mag * scale; // z-axis
 
+}
+
+int8_t HMC5883L::calibrated_data(HMC_data *data, float (*soft_cal)[3], float *hard_cal){
+	float hard[3]; // callibration of hard iron
+
+	data_processing(data);
+
+	// Applying hard iron callibration
+	for(uint8_t i = 0; i< 3; i++){
+		hard[i] = data->mag[i] - hard_cal[i];
+	}
+
+	for(uint8_t i = 0; i < 3; i++){
+		data->calibrated[i] = ((soft_cal[i][0] * hard[0]) +
+				(soft_cal[i][1] * hard[1])  +
+				(soft_cal[i][2] * hard[2])) * 0.1; // 0.1 converts to micorTesla
+	}
+
 	return 1;
+}
+
+//HAL_StatusTypeDef HMC5883L::callibrate(HMC_data *data, uint8_t samples){
+//	int16_t minVal[3] = {32767, 32767, 32767};
+//	int16_t maxVal[3] = {-32768, -32768, -32768};
+//
+//
+//	for (uint16_t i = 0; i < samples; i++) {
+//		HAL_StatusTypeDef status;
+//		status = HAL_I2C_Mem_Read(data->i2c_handle, HMC_ADDR, X_MAGM, I2C_MEMADD_SIZE_8BIT, rawBuffer, 6, HAL_MAX_DELAY);
+//		if (status != HAL_OK) return status;
+//
+//		data_processing(data);
+//
+//		for (int j = 0; j < 3; j++) {
+//			if (raw[j] < minVal[j]) minVal[j] = raw[j];
+//			if (raw[j] > maxVal[j]) maxVal[j] = raw[j];
+//		}
+//
+//		HAL_Delay(50); // small delay between samples
+//	}
+//
+//	// Compute hard-iron offset
+//	for (int j = 0; j < 3; j++) {
+//		magCalib.offset[j] = (maxVal[j] + minVal[j]) / 2.0f;
+//	}
+//
+//	// Compute scale factors (soft-iron approx)
+//	float avgDelta = 0;
+//	float delta[3];
+//	for (int j = 0; j < 3; j++) {
+//		delta[j] = (maxVal[j] - minVal[j]) / 2.0f;
+//		avgDelta += delta[j];
+//	}
+//	avgDelta /= 3.0f;
+//
+//	for (int j = 0; j < 3; j++) {
+//		magCalib.scales[j] = avgDelta / delta[j];
+//	}
+//	return HAL_OK;
+//}
+
+float HMC5883L::get_heading(HMC_data *data, float roll, float pitch, float (*soft_cal)[3], float *hard_cal){
+	float heading;
+	// Get calibrated data:
+	calibrated_data(data, soft_cal, hard_cal);
+	// roll: phi, pitch: theta
+	float ct = cosf(pitch); float cp = cosf(roll);
+	float st = sinf(pitch); float sp = sinf(roll);
+	const double pi = 3.14159265358979323846;
+
+	// heading = arctan(hy /hx) but for tilt compensation values of hx and hy:
+	float hx = data->calibrated[0] * cp + data->calibrated[1] * sp * st + data->calibrated[2] * ct *  sp; // tilt compensated magnetic x
+	float hy = data->calibrated[1] * ct - data->calibrated[2] * st; // tilt compensated magnetic y
+
+	heading = -1 * (atan2(-hy, hx) * 180 / pi) + data->declination;
+	// Wrap to [0,360)
+	if (heading < 0.0f) heading += 360.0f;
+	if (heading >= 360.0f) heading -= 360.0f;
+
+	return heading;
 }

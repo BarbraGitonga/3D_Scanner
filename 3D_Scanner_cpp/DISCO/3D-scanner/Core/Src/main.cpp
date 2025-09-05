@@ -320,7 +320,17 @@ int main(void)
   I2C_Scanner(&hi2c1, &huart1);
 
   HMC5883L Mag;
-  Mag.init(&hi2c1, &mag);
+  float declination = 0.33333333; // in degrees
+  Mag.init(&hi2c1, &mag, declination);
+  float roll = 0;
+  float pitch = 0;
+  float yaw = 0;
+  float soft_cal[3][3] = {
+		{1.008,  -0.060, 0.010},
+		{-0.060,  0.890, -0.005},
+		{0.010, -0.005,  1.119}
+  };
+  float hard_cal[3] = {7.77,  -14.30,  6.88};
 
   float Pinit = 0.01f;
   float phi_bias = -0.03f;
@@ -377,6 +387,10 @@ int main(void)
 
 	 if ((HAL_GetTick() - timerUpdate) >= KALMAN_UPDATE_PERIOD_MS) {
 	 		EKF.update(data);
+	 		AngleEstimate angle = EKF.getAngle();
+	 		roll = angle.roll;
+	 		pitch = angle.pitch;
+	 		yaw = Mag.get_heading(&mag, roll, pitch, soft_cal, hard_cal);
 
 	 		timerUpdate += KALMAN_UPDATE_PERIOD_MS;
 	 }
@@ -389,8 +403,8 @@ int main(void)
 //			         angle.roll, angle.pitch, mpu_data.temp_C, mpu_data.mag_uT[0]);
 
 		uint8_t usbBufLen = snprintf(usbBuf, 64,
-					         "%.2f ax, %.2f gy, %0.2f mz \r\n",
-					        mpu_data.acc_mps2[0], mpu_data.gyro_rad[1], mag.mag[2]);
+					         "%.2f mx, %.2f my, %0.2f mz \r\n",
+					        roll, pitch, yaw);
 
 	    HAL_UART_Transmit(&huart1, (uint8_t *)usbBuf, usbBufLen, 100);
 
