@@ -124,10 +124,10 @@ void HMC5883L::data_processing(HMC_data *data){
 	int16_t raw_z_mag = (int16_t)(rawBuffer[2] << 8) | rawBuffer[3];
 	int16_t raw_y_mag = (int16_t)(rawBuffer[4] << 8) | rawBuffer[5];
 
-// Get magnetometer readings in milliGauss
-	data->mag[0] = raw_x_mag * scale; // x-axis
-	data->mag[1] = raw_y_mag * scale; // y-axis
-	data->mag[2] = raw_z_mag * scale; // z-axis
+// Get magnetometer readings in microTesla
+	data->mag[0] = raw_x_mag * scale * 0.1; // x-axis
+	data->mag[1] = raw_y_mag * scale * 0.1; // y-axis
+	data->mag[2] = raw_z_mag * scale * 0.1; // z-axis
 
 }
 
@@ -144,7 +144,7 @@ int8_t HMC5883L::calibrated_data(HMC_data *data, float (*soft_cal)[3], float *ha
 	for(uint8_t i = 0; i < 3; i++){
 		data->calibrated[i] = ((soft_cal[i][0] * hard[0]) +
 				(soft_cal[i][1] * hard[1])  +
-				(soft_cal[i][2] * hard[2])) * 0.1; // 0.1 converts to micorTesla
+				(soft_cal[i][2] * hard[2])); // 0.1 converts to micorTesla
 	}
 
 	return 1;
@@ -203,7 +203,9 @@ float HMC5883L::get_heading(HMC_data *data, float roll, float pitch, float (*sof
 	float hx = data->calibrated[0] * cp + data->calibrated[1] * sp * st + data->calibrated[2] * ct *  sp; // tilt compensated magnetic x
 	float hy = data->calibrated[1] * ct - data->calibrated[2] * st; // tilt compensated magnetic y
 
-	heading = -1 * (atan2(-hy, hx) * 180 / pi) + data->declination;
+	heading = -1 * (atan2(hy,hx) * 180 / pi) + data->declination;
+//	heading = -1 * (atan2(data->calibrated[1], data->calibrated[0]) * 180 / pi) + data->declination;
+
 	// Wrap to [0,360)
 	if (heading < 0.0f) heading += 360.0f;
 	if (heading >= 360.0f) heading -= 360.0f;

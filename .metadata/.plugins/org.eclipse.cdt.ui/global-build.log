@@ -15126,3 +15126,609 @@ Finished building: default.size.stdout
  
 Finished building: 3D-scanner.list
  
+19:32:21 **** Build of configuration Debug for project 3D-scanner ****
+make -j16 all 
+arm-none-eabi-g++ "../HMC5883L/HMC5883L.cpp" -mcpu=cortex-m7 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F746xx -c -I../Core/Inc -I../FATFS/Target -I../FATFS/App -I../USB_HOST/App -I../USB_HOST/Target -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FatFs/src -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -I.././ -I"C:/Users/lenovo/Desktop/3D_Scanner/3D_Scanner_cpp/DISCO/3D-scanner/Ext_Kalman_filter" -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"HMC5883L/HMC5883L.d" -MT"HMC5883L/HMC5883L.o" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -o "HMC5883L/HMC5883L.o"
+arm-none-eabi-g++ "../Core/Src/main.cpp" -mcpu=cortex-m7 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F746xx -c -I../Core/Inc -I../FATFS/Target -I../FATFS/App -I../USB_HOST/App -I../USB_HOST/Target -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FatFs/src -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -I.././ -I"C:/Users/lenovo/Desktop/3D_Scanner/3D_Scanner_cpp/DISCO/3D-scanner/Ext_Kalman_filter" -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../HMC5883L/HMC5883L.cpp: In member function 'float HMC5883L::get_heading(HMC_data*, float, float, float (*)[3], float*)':
+../HMC5883L/HMC5883L.cpp:203:15: warning: unused variable 'hx' [-Wunused-variable]
+  203 |         float hx = data->calibrated[0] * cp + data->calibrated[1] * sp * st + data->calibrated[2] * ct *  sp; // tilt compensated magnetic x
+      |               ^~
+../HMC5883L/HMC5883L.cpp:204:15: warning: unused variable 'hy' [-Wunused-variable]
+  204 |         float hy = data->calibrated[1] * ct - data->calibrated[2] * st; // tilt compensated magnetic y
+      |               ^~
+arm-none-eabi-g++ -o "3D-scanner.elf" @"objects.list"   -mcpu=cortex-m7 -T"C:\Users\lenovo\Desktop\3D_Scanner\3D_Scanner_cpp\DISCO\3D-scanner\STM32F746NGHX_FLASH.ld" --specs=nosys.specs -Wl,-Map="3D-scanner.map" -Wl,--gc-sections -static -u _printf_float -lm --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: 3D-scanner.elf
+ 
+arm-none-eabi-size  3D-scanner.elf 
+arm-none-eabi-objdump -h -S 3D-scanner.elf  > "3D-scanner.list"
+   text	   data	    bss	    dec	    hex	filename
+ 119324	    820	   6652	 126796	  1ef4c	3D-scanner.elf
+Finished building: default.size.stdout
+ 
+Finished building: 3D-scanner.list
+ 
+20:00:45 **** Incremental Build of configuration Debug for project 3D-scanner ****
+make -j16 all 
+arm-none-eabi-g++ "../HMC5883L/HMC5883L.cpp" -mcpu=cortex-m7 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F746xx -c -I../Core/Inc -I../FATFS/Target -I../FATFS/App -I../USB_HOST/App -I../USB_HOST/Target -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FatFs/src -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -I.././ -I"C:/Users/lenovo/Desktop/3D_Scanner/3D_Scanner_cpp/DISCO/3D-scanner/Ext_Kalman_filter" -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"HMC5883L/HMC5883L.d" -MT"HMC5883L/HMC5883L.o" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -o "HMC5883L/HMC5883L.o"
+arm-none-eabi-g++ "../Core/Src/main.cpp" -mcpu=cortex-m7 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F746xx -c -I../Core/Inc -I../FATFS/Target -I../FATFS/App -I../USB_HOST/App -I../USB_HOST/Target -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FatFs/src -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -I.././ -I"C:/Users/lenovo/Desktop/3D_Scanner/3D_Scanner_cpp/DISCO/3D-scanner/Ext_Kalman_filter" -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../HMC5883L/HMC5883L.cpp: In member function 'float HMC5883L::get_heading(HMC_data*, float, float, float (*)[3], float*)':
+../HMC5883L/HMC5883L.cpp:198:15: warning: unused variable 'ct' [-Wunused-variable]
+  198 |         float ct = cosf(pitch); float cp = cosf(roll);
+      |               ^~
+../HMC5883L/HMC5883L.cpp:198:39: warning: unused variable 'cp' [-Wunused-variable]
+  198 |         float ct = cosf(pitch); float cp = cosf(roll);
+      |                                       ^~
+../HMC5883L/HMC5883L.cpp:199:15: warning: unused variable 'st' [-Wunused-variable]
+  199 |         float st = sinf(pitch); float sp = sinf(roll);
+      |               ^~
+../HMC5883L/HMC5883L.cpp:199:39: warning: unused variable 'sp' [-Wunused-variable]
+  199 |         float st = sinf(pitch); float sp = sinf(roll);
+      |                                       ^~
+arm-none-eabi-g++ -o "3D-scanner.elf" @"objects.list"   -mcpu=cortex-m7 -T"C:\Users\lenovo\Desktop\3D_Scanner\3D_Scanner_cpp\DISCO\3D-scanner\STM32F746NGHX_FLASH.ld" --specs=nosys.specs -Wl,-Map="3D-scanner.map" -Wl,--gc-sections -static -u _printf_float -lm --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: 3D-scanner.elf
+ 
+arm-none-eabi-size  3D-scanner.elf 
+arm-none-eabi-objdump -h -S 3D-scanner.elf  > "3D-scanner.list"
+   text	   data	    bss	    dec	    hex	filename
+ 119220	    820	   6652	 126692	  1eee4	3D-scanner.elf
+Finished building: default.size.stdout
+ 
+Finished building: 3D-scanner.list
+ 
+21:31:54 **** Incremental Build of configuration Debug for project 3D-scanner ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/main.cpp" -mcpu=cortex-m7 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F746xx -c -I../Core/Inc -I../FATFS/Target -I../FATFS/App -I../USB_HOST/App -I../USB_HOST/Target -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FatFs/src -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -I.././ -I"C:/Users/lenovo/Desktop/3D_Scanner/3D_Scanner_cpp/DISCO/3D-scanner/Ext_Kalman_filter" -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-g++ -o "3D-scanner.elf" @"objects.list"   -mcpu=cortex-m7 -T"C:\Users\lenovo\Desktop\3D_Scanner\3D_Scanner_cpp\DISCO\3D-scanner\STM32F746NGHX_FLASH.ld" --specs=nosys.specs -Wl,-Map="3D-scanner.map" -Wl,--gc-sections -static -u _printf_float -lm --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: 3D-scanner.elf
+ 
+arm-none-eabi-size  3D-scanner.elf 
+arm-none-eabi-objdump -h -S 3D-scanner.elf  > "3D-scanner.list"
+   text	   data	    bss	    dec	    hex	filename
+ 119220	    820	   6652	 126692	  1eee4	3D-scanner.elf
+Finished building: default.size.stdout
+ 
+Finished building: 3D-scanner.list
+ 
+21:36:51 **** Incremental Build of configuration Debug for project 3D-scanner ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/main.cpp" -mcpu=cortex-m7 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F746xx -c -I../Core/Inc -I../FATFS/Target -I../FATFS/App -I../USB_HOST/App -I../USB_HOST/Target -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FatFs/src -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -I.././ -I"C:/Users/lenovo/Desktop/3D_Scanner/3D_Scanner_cpp/DISCO/3D-scanner/Ext_Kalman_filter" -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.cpp: In function 'int main()':
+../Core/Src/main.cpp:327:9: warning: variable 'yaw' set but not used [-Wunused-but-set-variable]
+  327 |   float yaw = 0;
+      |         ^~~
+../Core/Src/main.cpp:407:45: warning: '%0.2f' directive output truncated writing between 3 and 313 bytes into a region of size 0 [-Wformat-truncation=]
+  407 |                 uint8_t usbBufLen = snprintf(usbBuf, 64,
+      |                                     ~~~~~~~~^~~~~~~~~~~~
+  408 |                                                          "%.2f ax, %.2f ay, %0.2f az, %.2f gx, %.2f gy, %0.2f gz, %.2f mx, %.2f my, %0.2f mz \r\n",
+      |                                                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  409 |                                                         mpu_data.acc_mps2[0], mpu_data.acc_mps2[1], mpu_data.acc_mps2[2],
+      |                                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  410 |                                                         mpu_data.gyro_rad[0], mpu_data.gyro_rad[1], mpu_data.gyro_rad[2],
+      |                                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  411 |                                                         mag.calibrated[0], mag.calibrated[1],mag.calibrated[2]);
+      |                                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../Core/Src/main.cpp:407:45: note: assuming directive output of 4 bytes
+../Core/Src/main.cpp:407:45: note: 'snprintf' output between 74 and 2864 bytes into a destination of size 64
+arm-none-eabi-g++ -o "3D-scanner.elf" @"objects.list"   -mcpu=cortex-m7 -T"C:\Users\lenovo\Desktop\3D_Scanner\3D_Scanner_cpp\DISCO\3D-scanner\STM32F746NGHX_FLASH.ld" --specs=nosys.specs -Wl,-Map="3D-scanner.map" -Wl,--gc-sections -static -u _printf_float -lm --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: 3D-scanner.elf
+ 
+arm-none-eabi-size  3D-scanner.elf 
+arm-none-eabi-objdump -h -S 3D-scanner.elf  > "3D-scanner.list"
+   text	   data	    bss	    dec	    hex	filename
+ 119428	    820	   6652	 126900	  1efb4	3D-scanner.elf
+Finished building: default.size.stdout
+ 
+Finished building: 3D-scanner.list
+ 
+21:37:46 **** Incremental Build of configuration Debug for project 3D-scanner ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/main.cpp" -mcpu=cortex-m7 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F746xx -c -I../Core/Inc -I../FATFS/Target -I../FATFS/App -I../USB_HOST/App -I../USB_HOST/Target -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FatFs/src -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -I.././ -I"C:/Users/lenovo/Desktop/3D_Scanner/3D_Scanner_cpp/DISCO/3D-scanner/Ext_Kalman_filter" -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.cpp: In function 'int main()':
+../Core/Src/main.cpp:327:9: warning: variable 'yaw' set but not used [-Wunused-but-set-variable]
+  327 |   float yaw = 0;
+      |         ^~~
+../Core/Src/main.cpp:407:45: warning: '%0.2f' directive output truncated writing between 3 and 313 bytes into a region of size 0 [-Wformat-truncation=]
+  407 |                 uint8_t usbBufLen = snprintf(usbBuf, 64,
+      |                                     ~~~~~~~~^~~~~~~~~~~~
+  408 |                                                          "%.2f ax, %.2f ay, %0.2f az, %.2f gx, %.2f gy, %0.2f gz, %.2f mx, %.2f my, %0.2f mz \r\n",
+      |                                                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  409 |                                                         mpu_data.acc_mps2[0], mpu_data.acc_mps2[1], mpu_data.acc_mps2[2],
+      |                                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  410 |                                                         mpu_data.gyro_rad[0], mpu_data.gyro_rad[1], mpu_data.gyro_rad[2],
+      |                                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  411 |                                                         mag.calibrated[0], mag.calibrated[1],mag.calibrated[2]);
+      |                                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../Core/Src/main.cpp:407:45: note: assuming directive output of 4 bytes
+../Core/Src/main.cpp:407:45: note: 'snprintf' output between 74 and 2864 bytes into a destination of size 64
+arm-none-eabi-g++ -o "3D-scanner.elf" @"objects.list"   -mcpu=cortex-m7 -T"C:\Users\lenovo\Desktop\3D_Scanner\3D_Scanner_cpp\DISCO\3D-scanner\STM32F746NGHX_FLASH.ld" --specs=nosys.specs -Wl,-Map="3D-scanner.map" -Wl,--gc-sections -static -u _printf_float -lm --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: 3D-scanner.elf
+ 
+arm-none-eabi-size  3D-scanner.elf 
+arm-none-eabi-objdump -h -S 3D-scanner.elf  > "3D-scanner.list"
+   text	   data	    bss	    dec	    hex	filename
+ 119436	    820	   6652	 126908	  1efbc	3D-scanner.elf
+Finished building: default.size.stdout
+ 
+Finished building: 3D-scanner.list
+ 
+21:42:10 **** Incremental Build of configuration Debug for project 3D-scanner ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/main.cpp" -mcpu=cortex-m7 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F746xx -c -I../Core/Inc -I../FATFS/Target -I../FATFS/App -I../USB_HOST/App -I../USB_HOST/Target -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FatFs/src -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -I.././ -I"C:/Users/lenovo/Desktop/3D_Scanner/3D_Scanner_cpp/DISCO/3D-scanner/Ext_Kalman_filter" -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.cpp: In function 'int main()':
+../Core/Src/main.cpp:327:9: warning: variable 'yaw' set but not used [-Wunused-but-set-variable]
+  327 |   float yaw = 0;
+      |         ^~~
+../Core/Src/main.cpp:407:45: warning: '%0.2f' directive output truncated writing between 3 and 313 bytes into a region of size 0 [-Wformat-truncation=]
+  407 |                 uint8_t usbBufLen = snprintf(usbBuf, 64,
+      |                                     ~~~~~~~~^~~~~~~~~~~~
+  408 |                                                          "%.2f ax, %.2f ay, %0.2f az, %.2f gx, %.2f gy, %0.2f gz, %.2f mx, %.2f my, %0.2f mz \n",
+      |                                                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  409 |                                                         mpu_data.acc_mps2[0], mpu_data.acc_mps2[1], mpu_data.acc_mps2[2],
+      |                                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  410 |                                                         mpu_data.gyro_rad[0], mpu_data.gyro_rad[1], mpu_data.gyro_rad[2],
+      |                                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  411 |                                                         mag.calibrated[0], mag.calibrated[1],mag.calibrated[2]);
+      |                                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../Core/Src/main.cpp:407:45: note: assuming directive output of 4 bytes
+../Core/Src/main.cpp:407:45: note: 'snprintf' output between 73 and 2863 bytes into a destination of size 64
+arm-none-eabi-g++ -o "3D-scanner.elf" @"objects.list"   -mcpu=cortex-m7 -T"C:\Users\lenovo\Desktop\3D_Scanner\3D_Scanner_cpp\DISCO\3D-scanner\STM32F746NGHX_FLASH.ld" --specs=nosys.specs -Wl,-Map="3D-scanner.map" -Wl,--gc-sections -static -u _printf_float -lm --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: 3D-scanner.elf
+ 
+arm-none-eabi-size  3D-scanner.elf 
+arm-none-eabi-objdump -h -S 3D-scanner.elf  > "3D-scanner.list"
+   text	   data	    bss	    dec	    hex	filename
+ 119436	    820	   6652	 126908	  1efbc	3D-scanner.elf
+Finished building: default.size.stdout
+ 
+Finished building: 3D-scanner.list
+ 
+21:51:28 **** Incremental Build of configuration Debug for project 3D-scanner ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/main.cpp" -mcpu=cortex-m7 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F746xx -c -I../Core/Inc -I../FATFS/Target -I../FATFS/App -I../USB_HOST/App -I../USB_HOST/Target -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FatFs/src -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -I.././ -I"C:/Users/lenovo/Desktop/3D_Scanner/3D_Scanner_cpp/DISCO/3D-scanner/Ext_Kalman_filter" -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.cpp: In function 'int main()':
+../Core/Src/main.cpp:404:25: warning: unused variable 'usbBufLen' [-Wunused-variable]
+  404 |                 uint8_t usbBufLen = snprintf(usbBuf, 64,
+      |                         ^~~~~~~~~
+arm-none-eabi-g++ -o "3D-scanner.elf" @"objects.list"   -mcpu=cortex-m7 -T"C:\Users\lenovo\Desktop\3D_Scanner\3D_Scanner_cpp\DISCO\3D-scanner\STM32F746NGHX_FLASH.ld" --specs=nosys.specs -Wl,-Map="3D-scanner.map" -Wl,--gc-sections -static -u _printf_float -lm --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: 3D-scanner.elf
+ 
+arm-none-eabi-size  3D-scanner.elf 
+arm-none-eabi-objdump -h -S 3D-scanner.elf  > "3D-scanner.list"
+   text	   data	    bss	    dec	    hex	filename
+ 119204	    820	   6652	 126676	  1eed4	3D-scanner.elf
+Finished building: default.size.stdout
+ 
+Finished building: 3D-scanner.list
+ 
+22:16:56 **** Incremental Build of configuration Debug for project 3D-scanner ****
+make -j16 all 
+arm-none-eabi-size  3D-scanner.elf 
+   text	   data	    bss	    dec	    hex	filename
+ 119204	    820	   6652	 126676	  1eed4	3D-scanner.elf
+Finished building: default.size.stdout
+ 
+22:20:36 **** Incremental Build of configuration Debug for project 3D-scanner ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/main.cpp" -mcpu=cortex-m7 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F746xx -c -I../Core/Inc -I../FATFS/Target -I../FATFS/App -I../USB_HOST/App -I../USB_HOST/Target -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FatFs/src -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -I.././ -I"C:/Users/lenovo/Desktop/3D_Scanner/3D_Scanner_cpp/DISCO/3D-scanner/Ext_Kalman_filter" -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.cpp: In function 'int main()':
+../Core/Src/main.cpp:405:25: warning: unused variable 'usbBufLen' [-Wunused-variable]
+  405 |                 uint8_t usbBufLen = snprintf(usbBuf, 64,
+      |                         ^~~~~~~~~
+arm-none-eabi-g++ -o "3D-scanner.elf" @"objects.list"   -mcpu=cortex-m7 -T"C:\Users\lenovo\Desktop\3D_Scanner\3D_Scanner_cpp\DISCO\3D-scanner\STM32F746NGHX_FLASH.ld" --specs=nosys.specs -Wl,-Map="3D-scanner.map" -Wl,--gc-sections -static -u _printf_float -lm --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: 3D-scanner.elf
+ 
+arm-none-eabi-size  3D-scanner.elf 
+arm-none-eabi-objdump -h -S 3D-scanner.elf  > "3D-scanner.list"
+   text	   data	    bss	    dec	    hex	filename
+ 119204	    820	   6652	 126676	  1eed4	3D-scanner.elf
+Finished building: default.size.stdout
+ 
+Finished building: 3D-scanner.list
+ 
+22:21:34 **** Incremental Build of configuration Debug for project 3D-scanner ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/main.cpp" -mcpu=cortex-m7 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F746xx -c -I../Core/Inc -I../FATFS/Target -I../FATFS/App -I../USB_HOST/App -I../USB_HOST/Target -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FatFs/src -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -I.././ -I"C:/Users/lenovo/Desktop/3D_Scanner/3D_Scanner_cpp/DISCO/3D-scanner/Ext_Kalman_filter" -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.cpp: In function 'int main()':
+../Core/Src/main.cpp:405:25: warning: unused variable 'usbBufLen' [-Wunused-variable]
+  405 |                 uint8_t usbBufLen = snprintf(usbBuf, 64,
+      |                         ^~~~~~~~~
+arm-none-eabi-g++ -o "3D-scanner.elf" @"objects.list"   -mcpu=cortex-m7 -T"C:\Users\lenovo\Desktop\3D_Scanner\3D_Scanner_cpp\DISCO\3D-scanner\STM32F746NGHX_FLASH.ld" --specs=nosys.specs -Wl,-Map="3D-scanner.map" -Wl,--gc-sections -static -u _printf_float -lm --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: 3D-scanner.elf
+ 
+arm-none-eabi-size  3D-scanner.elf 
+arm-none-eabi-objdump -h -S 3D-scanner.elf  > "3D-scanner.list"
+   text	   data	    bss	    dec	    hex	filename
+ 119196	    820	   6652	 126668	  1eecc	3D-scanner.elf
+Finished building: default.size.stdout
+ 
+Finished building: 3D-scanner.list
+ 
+22:22:06 **** Incremental Build of configuration Debug for project 3D-scanner ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/main.cpp" -mcpu=cortex-m7 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F746xx -c -I../Core/Inc -I../FATFS/Target -I../FATFS/App -I../USB_HOST/App -I../USB_HOST/Target -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FatFs/src -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -I.././ -I"C:/Users/lenovo/Desktop/3D_Scanner/3D_Scanner_cpp/DISCO/3D-scanner/Ext_Kalman_filter" -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-g++ -o "3D-scanner.elf" @"objects.list"   -mcpu=cortex-m7 -T"C:\Users\lenovo\Desktop\3D_Scanner\3D_Scanner_cpp\DISCO\3D-scanner\STM32F746NGHX_FLASH.ld" --specs=nosys.specs -Wl,-Map="3D-scanner.map" -Wl,--gc-sections -static -u _printf_float -lm --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: 3D-scanner.elf
+ 
+arm-none-eabi-size  3D-scanner.elf 
+arm-none-eabi-objdump -h -S 3D-scanner.elf  > "3D-scanner.list"
+   text	   data	    bss	    dec	    hex	filename
+ 119220	    820	   6652	 126692	  1eee4	3D-scanner.elf
+Finished building: default.size.stdout
+ 
+Finished building: 3D-scanner.list
+ 
+22:33:36 **** Incremental Build of configuration Debug for project 3D-scanner ****
+make -j16 all 
+arm-none-eabi-g++ "../HMC5883L/HMC5883L.cpp" -mcpu=cortex-m7 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F746xx -c -I../Core/Inc -I../FATFS/Target -I../FATFS/App -I../USB_HOST/App -I../USB_HOST/Target -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FatFs/src -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -I.././ -I"C:/Users/lenovo/Desktop/3D_Scanner/3D_Scanner_cpp/DISCO/3D-scanner/Ext_Kalman_filter" -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"HMC5883L/HMC5883L.d" -MT"HMC5883L/HMC5883L.o" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -o "HMC5883L/HMC5883L.o"
+../HMC5883L/HMC5883L.cpp: In member function 'float HMC5883L::get_heading(HMC_data*, float, float, float (*)[3], float*)':
+../HMC5883L/HMC5883L.cpp:198:15: warning: unused variable 'ct' [-Wunused-variable]
+  198 |         float ct = cosf(pitch); float cp = cosf(roll);
+      |               ^~
+../HMC5883L/HMC5883L.cpp:198:39: warning: unused variable 'cp' [-Wunused-variable]
+  198 |         float ct = cosf(pitch); float cp = cosf(roll);
+      |                                       ^~
+../HMC5883L/HMC5883L.cpp:199:15: warning: unused variable 'st' [-Wunused-variable]
+  199 |         float st = sinf(pitch); float sp = sinf(roll);
+      |               ^~
+../HMC5883L/HMC5883L.cpp:199:39: warning: unused variable 'sp' [-Wunused-variable]
+  199 |         float st = sinf(pitch); float sp = sinf(roll);
+      |                                       ^~
+arm-none-eabi-g++ -o "3D-scanner.elf" @"objects.list"   -mcpu=cortex-m7 -T"C:\Users\lenovo\Desktop\3D_Scanner\3D_Scanner_cpp\DISCO\3D-scanner\STM32F746NGHX_FLASH.ld" --specs=nosys.specs -Wl,-Map="3D-scanner.map" -Wl,--gc-sections -static -u _printf_float -lm --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: 3D-scanner.elf
+ 
+arm-none-eabi-size  3D-scanner.elf 
+arm-none-eabi-objdump -h -S 3D-scanner.elf  > "3D-scanner.list"
+   text	   data	    bss	    dec	    hex	filename
+ 119220	    820	   6652	 126692	  1eee4	3D-scanner.elf
+Finished building: default.size.stdout
+ 
+Finished building: 3D-scanner.list
+ 
+22:35:28 **** Incremental Build of configuration Debug for project 3D-scanner ****
+make -j16 all 
+arm-none-eabi-g++ "../HMC5883L/HMC5883L.cpp" -mcpu=cortex-m7 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F746xx -c -I../Core/Inc -I../FATFS/Target -I../FATFS/App -I../USB_HOST/App -I../USB_HOST/Target -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FatFs/src -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -I.././ -I"C:/Users/lenovo/Desktop/3D_Scanner/3D_Scanner_cpp/DISCO/3D-scanner/Ext_Kalman_filter" -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"HMC5883L/HMC5883L.d" -MT"HMC5883L/HMC5883L.o" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -o "HMC5883L/HMC5883L.o"
+arm-none-eabi-g++ -o "3D-scanner.elf" @"objects.list"   -mcpu=cortex-m7 -T"C:\Users\lenovo\Desktop\3D_Scanner\3D_Scanner_cpp\DISCO\3D-scanner\STM32F746NGHX_FLASH.ld" --specs=nosys.specs -Wl,-Map="3D-scanner.map" -Wl,--gc-sections -static -u _printf_float -lm --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: 3D-scanner.elf
+ 
+arm-none-eabi-size  3D-scanner.elf 
+arm-none-eabi-objdump -h -S 3D-scanner.elf  > "3D-scanner.list"
+   text	   data	    bss	    dec	    hex	filename
+ 119316	    820	   6652	 126788	  1ef44	3D-scanner.elf
+Finished building: default.size.stdout
+ 
+Finished building: 3D-scanner.list
+ 
+22:36:50 **** Incremental Build of configuration Debug for project 3D-scanner ****
+make -j16 all 
+arm-none-eabi-g++ "../HMC5883L/HMC5883L.cpp" -mcpu=cortex-m7 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F746xx -c -I../Core/Inc -I../FATFS/Target -I../FATFS/App -I../USB_HOST/App -I../USB_HOST/Target -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FatFs/src -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -I.././ -I"C:/Users/lenovo/Desktop/3D_Scanner/3D_Scanner_cpp/DISCO/3D-scanner/Ext_Kalman_filter" -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"HMC5883L/HMC5883L.d" -MT"HMC5883L/HMC5883L.o" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -o "HMC5883L/HMC5883L.o"
+arm-none-eabi-g++ -o "3D-scanner.elf" @"objects.list"   -mcpu=cortex-m7 -T"C:\Users\lenovo\Desktop\3D_Scanner\3D_Scanner_cpp\DISCO\3D-scanner\STM32F746NGHX_FLASH.ld" --specs=nosys.specs -Wl,-Map="3D-scanner.map" -Wl,--gc-sections -static -u _printf_float -lm --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: 3D-scanner.elf
+ 
+arm-none-eabi-size  3D-scanner.elf 
+arm-none-eabi-objdump -h -S 3D-scanner.elf  > "3D-scanner.list"
+   text	   data	    bss	    dec	    hex	filename
+ 119316	    820	   6652	 126788	  1ef44	3D-scanner.elf
+Finished building: default.size.stdout
+ 
+Finished building: 3D-scanner.list
+ 
+23:54:12 **** Incremental Build of configuration Debug for project 3D-scanner ****
+make -j16 all 
+arm-none-eabi-g++ "../HMC5883L/HMC5883L.cpp" -mcpu=cortex-m7 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F746xx -c -I../Core/Inc -I../FATFS/Target -I../FATFS/App -I../USB_HOST/App -I../USB_HOST/Target -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FatFs/src -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -I.././ -I"C:/Users/lenovo/Desktop/3D_Scanner/3D_Scanner_cpp/DISCO/3D-scanner/Ext_Kalman_filter" -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"HMC5883L/HMC5883L.d" -MT"HMC5883L/HMC5883L.o" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -o "HMC5883L/HMC5883L.o"
+arm-none-eabi-g++ "../Core/Src/main.cpp" -mcpu=cortex-m7 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F746xx -c -I../Core/Inc -I../FATFS/Target -I../FATFS/App -I../USB_HOST/App -I../USB_HOST/Target -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FatFs/src -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -I.././ -I"C:/Users/lenovo/Desktop/3D_Scanner/3D_Scanner_cpp/DISCO/3D-scanner/Ext_Kalman_filter" -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.cpp: In function 'int main()':
+../Core/Src/main.cpp:327:9: warning: variable 'yaw' set but not used [-Wunused-but-set-variable]
+  327 |   float yaw = 0;
+      |         ^~~
+arm-none-eabi-g++ -o "3D-scanner.elf" @"objects.list"   -mcpu=cortex-m7 -T"C:\Users\lenovo\Desktop\3D_Scanner\3D_Scanner_cpp\DISCO\3D-scanner\STM32F746NGHX_FLASH.ld" --specs=nosys.specs -Wl,-Map="3D-scanner.map" -Wl,--gc-sections -static -u _printf_float -lm --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: 3D-scanner.elf
+ 
+arm-none-eabi-size  3D-scanner.elf 
+arm-none-eabi-objdump -h -S 3D-scanner.elf  > "3D-scanner.list"
+   text	   data	    bss	    dec	    hex	filename
+ 119532	    820	   6652	 127004	  1f01c	3D-scanner.elf
+Finished building: default.size.stdout
+ 
+Finished building: 3D-scanner.list
+ 
+00:17:04 **** Incremental Build of configuration Debug for project 3D-scanner ****
+make -j16 all 
+arm-none-eabi-g++ "../HMC5883L/HMC5883L.cpp" -mcpu=cortex-m7 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F746xx -c -I../Core/Inc -I../FATFS/Target -I../FATFS/App -I../USB_HOST/App -I../USB_HOST/Target -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FatFs/src -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -I.././ -I"C:/Users/lenovo/Desktop/3D_Scanner/3D_Scanner_cpp/DISCO/3D-scanner/Ext_Kalman_filter" -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"HMC5883L/HMC5883L.d" -MT"HMC5883L/HMC5883L.o" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -o "HMC5883L/HMC5883L.o"
+arm-none-eabi-g++ "../Core/Src/main.cpp" -mcpu=cortex-m7 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F746xx -c -I../Core/Inc -I../FATFS/Target -I../FATFS/App -I../USB_HOST/App -I../USB_HOST/Target -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FatFs/src -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -I.././ -I"C:/Users/lenovo/Desktop/3D_Scanner/3D_Scanner_cpp/DISCO/3D-scanner/Ext_Kalman_filter" -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-g++ -o "3D-scanner.elf" @"objects.list"   -mcpu=cortex-m7 -T"C:\Users\lenovo\Desktop\3D_Scanner\3D_Scanner_cpp\DISCO\3D-scanner\STM32F746NGHX_FLASH.ld" --specs=nosys.specs -Wl,-Map="3D-scanner.map" -Wl,--gc-sections -static -u _printf_float -lm --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: 3D-scanner.elf
+ 
+arm-none-eabi-size  3D-scanner.elf 
+arm-none-eabi-objdump -h -S 3D-scanner.elf  > "3D-scanner.list"
+   text	   data	    bss	    dec	    hex	filename
+ 119284	    820	   6652	 126756	  1ef24	3D-scanner.elf
+Finished building: default.size.stdout
+ 
+Finished building: 3D-scanner.list
+ 
+00:19:44 **** Incremental Build of configuration Debug for project 3D-scanner ****
+make -j16 all 
+arm-none-eabi-g++ "../HMC5883L/HMC5883L.cpp" -mcpu=cortex-m7 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F746xx -c -I../Core/Inc -I../FATFS/Target -I../FATFS/App -I../USB_HOST/App -I../USB_HOST/Target -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FatFs/src -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -I.././ -I"C:/Users/lenovo/Desktop/3D_Scanner/3D_Scanner_cpp/DISCO/3D-scanner/Ext_Kalman_filter" -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"HMC5883L/HMC5883L.d" -MT"HMC5883L/HMC5883L.o" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -o "HMC5883L/HMC5883L.o"
+../HMC5883L/HMC5883L.cpp: In member function 'float HMC5883L::get_heading(HMC_data*, float, float, float (*)[3], float*)':
+../HMC5883L/HMC5883L.cpp:203:15: warning: unused variable 'hx' [-Wunused-variable]
+  203 |         float hx = data->calibrated[0] * cp + data->calibrated[1] * sp * st + data->calibrated[2] * ct *  sp; // tilt compensated magnetic x
+      |               ^~
+../HMC5883L/HMC5883L.cpp:204:15: warning: unused variable 'hy' [-Wunused-variable]
+  204 |         float hy = data->calibrated[1] * ct - data->calibrated[2] * st; // tilt compensated magnetic y
+      |               ^~
+arm-none-eabi-g++ -o "3D-scanner.elf" @"objects.list"   -mcpu=cortex-m7 -T"C:\Users\lenovo\Desktop\3D_Scanner\3D_Scanner_cpp\DISCO\3D-scanner\STM32F746NGHX_FLASH.ld" --specs=nosys.specs -Wl,-Map="3D-scanner.map" -Wl,--gc-sections -static -u _printf_float -lm --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: 3D-scanner.elf
+ 
+arm-none-eabi-size  3D-scanner.elf 
+arm-none-eabi-objdump -h -S 3D-scanner.elf  > "3D-scanner.list"
+   text	   data	    bss	    dec	    hex	filename
+ 119300	    820	   6652	 126772	  1ef34	3D-scanner.elf
+Finished building: default.size.stdout
+ 
+Finished building: 3D-scanner.list
+ 
+00:21:29 **** Incremental Build of configuration Debug for project 3D-scanner ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/main.cpp" -mcpu=cortex-m7 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F746xx -c -I../Core/Inc -I../FATFS/Target -I../FATFS/App -I../USB_HOST/App -I../USB_HOST/Target -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FatFs/src -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -I.././ -I"C:/Users/lenovo/Desktop/3D_Scanner/3D_Scanner_cpp/DISCO/3D-scanner/Ext_Kalman_filter" -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.cpp: In function 'int main()':
+../Core/Src/main.cpp:327:9: warning: variable 'yaw' set but not used [-Wunused-but-set-variable]
+  327 |   float yaw = 0;
+      |         ^~~
+arm-none-eabi-g++ -o "3D-scanner.elf" @"objects.list"   -mcpu=cortex-m7 -T"C:\Users\lenovo\Desktop\3D_Scanner\3D_Scanner_cpp\DISCO\3D-scanner\STM32F746NGHX_FLASH.ld" --specs=nosys.specs -Wl,-Map="3D-scanner.map" -Wl,--gc-sections -static -u _printf_float -lm --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: 3D-scanner.elf
+ 
+arm-none-eabi-size  3D-scanner.elf 
+arm-none-eabi-objdump -h -S 3D-scanner.elf  > "3D-scanner.list"
+   text	   data	    bss	    dec	    hex	filename
+ 119308	    820	   6652	 126780	  1ef3c	3D-scanner.elf
+Finished building: default.size.stdout
+ 
+Finished building: 3D-scanner.list
+ 
+00:27:42 **** Incremental Build of configuration Debug for project 3D-scanner ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/main.cpp" -mcpu=cortex-m7 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F746xx -c -I../Core/Inc -I../FATFS/Target -I../FATFS/App -I../USB_HOST/App -I../USB_HOST/Target -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FatFs/src -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -I.././ -I"C:/Users/lenovo/Desktop/3D_Scanner/3D_Scanner_cpp/DISCO/3D-scanner/Ext_Kalman_filter" -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.cpp: In function 'int main()':
+../Core/Src/main.cpp:327:9: warning: variable 'yaw' set but not used [-Wunused-but-set-variable]
+  327 |   float yaw = 0;
+      |         ^~~
+arm-none-eabi-g++ -o "3D-scanner.elf" @"objects.list"   -mcpu=cortex-m7 -T"C:\Users\lenovo\Desktop\3D_Scanner\3D_Scanner_cpp\DISCO\3D-scanner\STM32F746NGHX_FLASH.ld" --specs=nosys.specs -Wl,-Map="3D-scanner.map" -Wl,--gc-sections -static -u _printf_float -lm --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: 3D-scanner.elf
+ 
+arm-none-eabi-size  3D-scanner.elf 
+arm-none-eabi-objdump -h -S 3D-scanner.elf  > "3D-scanner.list"
+   text	   data	    bss	    dec	    hex	filename
+ 119308	    820	   6652	 126780	  1ef3c	3D-scanner.elf
+Finished building: default.size.stdout
+ 
+Finished building: 3D-scanner.list
+ 
+00:28:19 **** Incremental Build of configuration Debug for project 3D-scanner ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/main.cpp" -mcpu=cortex-m7 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F746xx -c -I../Core/Inc -I../FATFS/Target -I../FATFS/App -I../USB_HOST/App -I../USB_HOST/Target -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FatFs/src -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -I.././ -I"C:/Users/lenovo/Desktop/3D_Scanner/3D_Scanner_cpp/DISCO/3D-scanner/Ext_Kalman_filter" -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.cpp: In function 'int main()':
+../Core/Src/main.cpp:405:25: warning: unused variable 'usbBufLen' [-Wunused-variable]
+  405 |                 uint8_t usbBufLen = snprintf(usbBuf, 64,
+      |                         ^~~~~~~~~
+arm-none-eabi-g++ -o "3D-scanner.elf" @"objects.list"   -mcpu=cortex-m7 -T"C:\Users\lenovo\Desktop\3D_Scanner\3D_Scanner_cpp\DISCO\3D-scanner\STM32F746NGHX_FLASH.ld" --specs=nosys.specs -Wl,-Map="3D-scanner.map" -Wl,--gc-sections -static -u _printf_float -lm --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: 3D-scanner.elf
+ 
+arm-none-eabi-size  3D-scanner.elf 
+arm-none-eabi-objdump -h -S 3D-scanner.elf  > "3D-scanner.list"
+   text	   data	    bss	    dec	    hex	filename
+ 119276	    820	   6652	 126748	  1ef1c	3D-scanner.elf
+Finished building: default.size.stdout
+ 
+Finished building: 3D-scanner.list
+ 
+00:28:59 **** Incremental Build of configuration Debug for project 3D-scanner ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/main.cpp" -mcpu=cortex-m7 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F746xx -c -I../Core/Inc -I../FATFS/Target -I../FATFS/App -I../USB_HOST/App -I../USB_HOST/Target -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FatFs/src -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -I.././ -I"C:/Users/lenovo/Desktop/3D_Scanner/3D_Scanner_cpp/DISCO/3D-scanner/Ext_Kalman_filter" -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-g++ -o "3D-scanner.elf" @"objects.list"   -mcpu=cortex-m7 -T"C:\Users\lenovo\Desktop\3D_Scanner\3D_Scanner_cpp\DISCO\3D-scanner\STM32F746NGHX_FLASH.ld" --specs=nosys.specs -Wl,-Map="3D-scanner.map" -Wl,--gc-sections -static -u _printf_float -lm --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: 3D-scanner.elf
+ 
+arm-none-eabi-size  3D-scanner.elf 
+arm-none-eabi-objdump -h -S 3D-scanner.elf  > "3D-scanner.list"
+   text	   data	    bss	    dec	    hex	filename
+ 119300	    820	   6652	 126772	  1ef34	3D-scanner.elf
+Finished building: default.size.stdout
+ 
+Finished building: 3D-scanner.list
+ 
+00:30:17 **** Incremental Build of configuration Debug for project 3D-scanner ****
+make -j16 all 
+arm-none-eabi-g++ "../HMC5883L/HMC5883L.cpp" -mcpu=cortex-m7 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F746xx -c -I../Core/Inc -I../FATFS/Target -I../FATFS/App -I../USB_HOST/App -I../USB_HOST/Target -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FatFs/src -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -I.././ -I"C:/Users/lenovo/Desktop/3D_Scanner/3D_Scanner_cpp/DISCO/3D-scanner/Ext_Kalman_filter" -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"HMC5883L/HMC5883L.d" -MT"HMC5883L/HMC5883L.o" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -o "HMC5883L/HMC5883L.o"
+arm-none-eabi-g++ -o "3D-scanner.elf" @"objects.list"   -mcpu=cortex-m7 -T"C:\Users\lenovo\Desktop\3D_Scanner\3D_Scanner_cpp\DISCO\3D-scanner\STM32F746NGHX_FLASH.ld" --specs=nosys.specs -Wl,-Map="3D-scanner.map" -Wl,--gc-sections -static -u _printf_float -lm --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: 3D-scanner.elf
+ 
+arm-none-eabi-size  3D-scanner.elf 
+arm-none-eabi-objdump -h -S 3D-scanner.elf  > "3D-scanner.list"
+   text	   data	    bss	    dec	    hex	filename
+ 119284	    820	   6652	 126756	  1ef24	3D-scanner.elf
+Finished building: default.size.stdout
+ 
+Finished building: 3D-scanner.list
+ 
+00:31:49 **** Incremental Build of configuration Debug for project 3D-scanner ****
+make -j16 all 
+arm-none-eabi-g++ "../HMC5883L/HMC5883L.cpp" -mcpu=cortex-m7 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F746xx -c -I../Core/Inc -I../FATFS/Target -I../FATFS/App -I../USB_HOST/App -I../USB_HOST/Target -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FatFs/src -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -I.././ -I"C:/Users/lenovo/Desktop/3D_Scanner/3D_Scanner_cpp/DISCO/3D-scanner/Ext_Kalman_filter" -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"HMC5883L/HMC5883L.d" -MT"HMC5883L/HMC5883L.o" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -o "HMC5883L/HMC5883L.o"
+arm-none-eabi-g++ -o "3D-scanner.elf" @"objects.list"   -mcpu=cortex-m7 -T"C:\Users\lenovo\Desktop\3D_Scanner\3D_Scanner_cpp\DISCO\3D-scanner\STM32F746NGHX_FLASH.ld" --specs=nosys.specs -Wl,-Map="3D-scanner.map" -Wl,--gc-sections -static -u _printf_float -lm --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: 3D-scanner.elf
+ 
+arm-none-eabi-size  3D-scanner.elf 
+arm-none-eabi-objdump -h -S 3D-scanner.elf  > "3D-scanner.list"
+   text	   data	    bss	    dec	    hex	filename
+ 119284	    820	   6652	 126756	  1ef24	3D-scanner.elf
+Finished building: default.size.stdout
+ 
+Finished building: 3D-scanner.list
+ 
+00:33:16 **** Incremental Build of configuration Debug for project 3D-scanner ****
+make -j16 all 
+arm-none-eabi-g++ "../HMC5883L/HMC5883L.cpp" -mcpu=cortex-m7 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F746xx -c -I../Core/Inc -I../FATFS/Target -I../FATFS/App -I../USB_HOST/App -I../USB_HOST/Target -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FatFs/src -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -I.././ -I"C:/Users/lenovo/Desktop/3D_Scanner/3D_Scanner_cpp/DISCO/3D-scanner/Ext_Kalman_filter" -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"HMC5883L/HMC5883L.d" -MT"HMC5883L/HMC5883L.o" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -o "HMC5883L/HMC5883L.o"
+arm-none-eabi-g++ "../Core/Src/main.cpp" -mcpu=cortex-m7 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F746xx -c -I../Core/Inc -I../FATFS/Target -I../FATFS/App -I../USB_HOST/App -I../USB_HOST/Target -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FatFs/src -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -I.././ -I"C:/Users/lenovo/Desktop/3D_Scanner/3D_Scanner_cpp/DISCO/3D-scanner/Ext_Kalman_filter" -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.cpp: In function 'int main()':
+../Core/Src/main.cpp:405:25: warning: unused variable 'usbBufLen' [-Wunused-variable]
+  405 |                 uint8_t usbBufLen = snprintf(usbBuf, 64,
+      |                         ^~~~~~~~~
+arm-none-eabi-g++ -o "3D-scanner.elf" @"objects.list"   -mcpu=cortex-m7 -T"C:\Users\lenovo\Desktop\3D_Scanner\3D_Scanner_cpp\DISCO\3D-scanner\STM32F746NGHX_FLASH.ld" --specs=nosys.specs -Wl,-Map="3D-scanner.map" -Wl,--gc-sections -static -u _printf_float -lm --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: 3D-scanner.elf
+ 
+arm-none-eabi-size  3D-scanner.elf 
+arm-none-eabi-objdump -h -S 3D-scanner.elf  > "3D-scanner.list"
+   text	   data	    bss	    dec	    hex	filename
+ 119260	    820	   6652	 126732	  1ef0c	3D-scanner.elf
+Finished building: default.size.stdout
+ 
+Finished building: 3D-scanner.list
+ 
+00:33:51 **** Incremental Build of configuration Debug for project 3D-scanner ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/main.cpp" -mcpu=cortex-m7 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F746xx -c -I../Core/Inc -I../FATFS/Target -I../FATFS/App -I../USB_HOST/App -I../USB_HOST/Target -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FatFs/src -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -I.././ -I"C:/Users/lenovo/Desktop/3D_Scanner/3D_Scanner_cpp/DISCO/3D-scanner/Ext_Kalman_filter" -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-g++ -o "3D-scanner.elf" @"objects.list"   -mcpu=cortex-m7 -T"C:\Users\lenovo\Desktop\3D_Scanner\3D_Scanner_cpp\DISCO\3D-scanner\STM32F746NGHX_FLASH.ld" --specs=nosys.specs -Wl,-Map="3D-scanner.map" -Wl,--gc-sections -static -u _printf_float -lm --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: 3D-scanner.elf
+ 
+arm-none-eabi-size  3D-scanner.elf 
+arm-none-eabi-objdump -h -S 3D-scanner.elf  > "3D-scanner.list"
+   text	   data	    bss	    dec	    hex	filename
+ 119284	    820	   6652	 126756	  1ef24	3D-scanner.elf
+Finished building: default.size.stdout
+ 
+Finished building: 3D-scanner.list
+ 
+00:35:46 **** Incremental Build of configuration Debug for project 3D-scanner ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/main.cpp" -mcpu=cortex-m7 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F746xx -c -I../Core/Inc -I../FATFS/Target -I../FATFS/App -I../USB_HOST/App -I../USB_HOST/Target -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FatFs/src -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -I.././ -I"C:/Users/lenovo/Desktop/3D_Scanner/3D_Scanner_cpp/DISCO/3D-scanner/Ext_Kalman_filter" -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-g++ -o "3D-scanner.elf" @"objects.list"   -mcpu=cortex-m7 -T"C:\Users\lenovo\Desktop\3D_Scanner\3D_Scanner_cpp\DISCO\3D-scanner\STM32F746NGHX_FLASH.ld" --specs=nosys.specs -Wl,-Map="3D-scanner.map" -Wl,--gc-sections -static -u _printf_float -lm --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: 3D-scanner.elf
+ 
+arm-none-eabi-size  3D-scanner.elf 
+arm-none-eabi-objdump -h -S 3D-scanner.elf  > "3D-scanner.list"
+   text	   data	    bss	    dec	    hex	filename
+ 119284	    820	   6652	 126756	  1ef24	3D-scanner.elf
+Finished building: default.size.stdout
+ 
+Finished building: 3D-scanner.list
+ 
+00:37:22 **** Incremental Build of configuration Debug for project 3D-scanner ****
+make -j16 all 
+arm-none-eabi-g++ "../HMC5883L/HMC5883L.cpp" -mcpu=cortex-m7 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F746xx -c -I../Core/Inc -I../FATFS/Target -I../FATFS/App -I../USB_HOST/App -I../USB_HOST/Target -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FatFs/src -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -I.././ -I"C:/Users/lenovo/Desktop/3D_Scanner/3D_Scanner_cpp/DISCO/3D-scanner/Ext_Kalman_filter" -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"HMC5883L/HMC5883L.d" -MT"HMC5883L/HMC5883L.o" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -o "HMC5883L/HMC5883L.o"
+arm-none-eabi-g++ "../Core/Src/main.cpp" -mcpu=cortex-m7 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F746xx -c -I../Core/Inc -I../FATFS/Target -I../FATFS/App -I../USB_HOST/App -I../USB_HOST/Target -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FatFs/src -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -I.././ -I"C:/Users/lenovo/Desktop/3D_Scanner/3D_Scanner_cpp/DISCO/3D-scanner/Ext_Kalman_filter" -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../HMC5883L/HMC5883L.cpp: In member function 'float HMC5883L::get_heading(HMC_data*, float, float, float (*)[3], float*)':
+../HMC5883L/HMC5883L.cpp:203:15: warning: unused variable 'hx' [-Wunused-variable]
+  203 |         float hx = data->calibrated[0] * cp + data->calibrated[1] * sp * st + data->calibrated[2] * ct *  sp; // tilt compensated magnetic x
+      |               ^~
+../HMC5883L/HMC5883L.cpp:204:15: warning: unused variable 'hy' [-Wunused-variable]
+  204 |         float hy = data->calibrated[1] * ct - data->calibrated[2] * st; // tilt compensated magnetic y
+      |               ^~
+arm-none-eabi-g++ -o "3D-scanner.elf" @"objects.list"   -mcpu=cortex-m7 -T"C:\Users\lenovo\Desktop\3D_Scanner\3D_Scanner_cpp\DISCO\3D-scanner\STM32F746NGHX_FLASH.ld" --specs=nosys.specs -Wl,-Map="3D-scanner.map" -Wl,--gc-sections -static -u _printf_float -lm --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: 3D-scanner.elf
+ 
+arm-none-eabi-size  3D-scanner.elf 
+arm-none-eabi-objdump -h -S 3D-scanner.elf  > "3D-scanner.list"
+   text	   data	    bss	    dec	    hex	filename
+ 119300	    820	   6652	 126772	  1ef34	3D-scanner.elf
+Finished building: default.size.stdout
+ 
+Finished building: 3D-scanner.list
+ 
+00:38:31 **** Incremental Build of configuration Debug for project 3D-scanner ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/main.cpp" -mcpu=cortex-m7 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F746xx -c -I../Core/Inc -I../FATFS/Target -I../FATFS/App -I../USB_HOST/App -I../USB_HOST/Target -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FatFs/src -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -I.././ -I"C:/Users/lenovo/Desktop/3D_Scanner/3D_Scanner_cpp/DISCO/3D-scanner/Ext_Kalman_filter" -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-g++ -o "3D-scanner.elf" @"objects.list"   -mcpu=cortex-m7 -T"C:\Users\lenovo\Desktop\3D_Scanner\3D_Scanner_cpp\DISCO\3D-scanner\STM32F746NGHX_FLASH.ld" --specs=nosys.specs -Wl,-Map="3D-scanner.map" -Wl,--gc-sections -static -u _printf_float -lm --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: 3D-scanner.elf
+ 
+arm-none-eabi-size  3D-scanner.elf 
+arm-none-eabi-objdump -h -S 3D-scanner.elf  > "3D-scanner.list"
+   text	   data	    bss	    dec	    hex	filename
+ 119300	    820	   6652	 126772	  1ef34	3D-scanner.elf
+Finished building: default.size.stdout
+ 
+Finished building: 3D-scanner.list
+ 
+00:39:11 **** Incremental Build of configuration Debug for project 3D-scanner ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/main.cpp" -mcpu=cortex-m7 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F746xx -c -I../Core/Inc -I../FATFS/Target -I../FATFS/App -I../USB_HOST/App -I../USB_HOST/Target -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FatFs/src -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -I.././ -I"C:/Users/lenovo/Desktop/3D_Scanner/3D_Scanner_cpp/DISCO/3D-scanner/Ext_Kalman_filter" -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-g++ -o "3D-scanner.elf" @"objects.list"   -mcpu=cortex-m7 -T"C:\Users\lenovo\Desktop\3D_Scanner\3D_Scanner_cpp\DISCO\3D-scanner\STM32F746NGHX_FLASH.ld" --specs=nosys.specs -Wl,-Map="3D-scanner.map" -Wl,--gc-sections -static -u _printf_float -lm --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: 3D-scanner.elf
+ 
+arm-none-eabi-size  3D-scanner.elf 
+arm-none-eabi-objdump -h -S 3D-scanner.elf  > "3D-scanner.list"
+   text	   data	    bss	    dec	    hex	filename
+ 119300	    820	   6652	 126772	  1ef34	3D-scanner.elf
+Finished building: default.size.stdout
+ 
+Finished building: 3D-scanner.list
+ 
+00:46:17 **** Incremental Build of configuration Debug for project 3D-scanner ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/main.cpp" -mcpu=cortex-m7 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F746xx -c -I../Core/Inc -I../FATFS/Target -I../FATFS/App -I../USB_HOST/App -I../USB_HOST/Target -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FatFs/src -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -I.././ -I"C:/Users/lenovo/Desktop/3D_Scanner/3D_Scanner_cpp/DISCO/3D-scanner/Ext_Kalman_filter" -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-g++ -o "3D-scanner.elf" @"objects.list"   -mcpu=cortex-m7 -T"C:\Users\lenovo\Desktop\3D_Scanner\3D_Scanner_cpp\DISCO\3D-scanner\STM32F746NGHX_FLASH.ld" --specs=nosys.specs -Wl,-Map="3D-scanner.map" -Wl,--gc-sections -static -u _printf_float -lm --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: 3D-scanner.elf
+ 
+arm-none-eabi-size  3D-scanner.elf 
+arm-none-eabi-objdump -h -S 3D-scanner.elf  > "3D-scanner.list"
+   text	   data	    bss	    dec	    hex	filename
+ 119300	    820	   6652	 126772	  1ef34	3D-scanner.elf
+Finished building: default.size.stdout
+ 
+Finished building: 3D-scanner.list
+ 
+00:48:12 **** Incremental Build of configuration Debug for project 3D-scanner ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/main.cpp" -mcpu=cortex-m7 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F746xx -c -I../Core/Inc -I../FATFS/Target -I../FATFS/App -I../USB_HOST/App -I../USB_HOST/Target -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FatFs/src -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -I.././ -I"C:/Users/lenovo/Desktop/3D_Scanner/3D_Scanner_cpp/DISCO/3D-scanner/Ext_Kalman_filter" -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-g++ -o "3D-scanner.elf" @"objects.list"   -mcpu=cortex-m7 -T"C:\Users\lenovo\Desktop\3D_Scanner\3D_Scanner_cpp\DISCO\3D-scanner\STM32F746NGHX_FLASH.ld" --specs=nosys.specs -Wl,-Map="3D-scanner.map" -Wl,--gc-sections -static -u _printf_float -lm --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: 3D-scanner.elf
+ 
+arm-none-eabi-size  3D-scanner.elf 
+arm-none-eabi-objdump -h -S 3D-scanner.elf  > "3D-scanner.list"
+   text	   data	    bss	    dec	    hex	filename
+ 119300	    820	   6652	 126772	  1ef34	3D-scanner.elf
+Finished building: default.size.stdout
+ 
+Finished building: 3D-scanner.list
+ 
+00:54:32 **** Incremental Build of configuration Debug for project 3D-scanner ****
+make -j16 all 
+arm-none-eabi-g++ "../HMC5883L/HMC5883L.cpp" -mcpu=cortex-m7 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F746xx -c -I../Core/Inc -I../FATFS/Target -I../FATFS/App -I../USB_HOST/App -I../USB_HOST/Target -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FatFs/src -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -I.././ -I"C:/Users/lenovo/Desktop/3D_Scanner/3D_Scanner_cpp/DISCO/3D-scanner/Ext_Kalman_filter" -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"HMC5883L/HMC5883L.d" -MT"HMC5883L/HMC5883L.o" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -o "HMC5883L/HMC5883L.o"
+arm-none-eabi-g++ -o "3D-scanner.elf" @"objects.list"   -mcpu=cortex-m7 -T"C:\Users\lenovo\Desktop\3D_Scanner\3D_Scanner_cpp\DISCO\3D-scanner\STM32F746NGHX_FLASH.ld" --specs=nosys.specs -Wl,-Map="3D-scanner.map" -Wl,--gc-sections -static -u _printf_float -lm --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: 3D-scanner.elf
+ 
+arm-none-eabi-size  3D-scanner.elf 
+arm-none-eabi-objdump -h -S 3D-scanner.elf  > "3D-scanner.list"
+   text	   data	    bss	    dec	    hex	filename
+ 119284	    820	   6652	 126756	  1ef24	3D-scanner.elf
+Finished building: default.size.stdout
+ 
+Finished building: 3D-scanner.list
+ 
+17:26:31 **** Incremental Build of configuration Debug for project 3D-scanner ****
+make -j16 all 
+arm-none-eabi-g++ "../HMC5883L/HMC5883L.cpp" -mcpu=cortex-m7 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F746xx -c -I../Core/Inc -I../FATFS/Target -I../FATFS/App -I../USB_HOST/App -I../USB_HOST/Target -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FatFs/src -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -I.././ -I"C:/Users/lenovo/Desktop/3D_Scanner/3D_Scanner_cpp/DISCO/3D-scanner/Ext_Kalman_filter" -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"HMC5883L/HMC5883L.d" -MT"HMC5883L/HMC5883L.o" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -o "HMC5883L/HMC5883L.o"
+arm-none-eabi-g++ "../Core/Src/main.cpp" -mcpu=cortex-m7 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F746xx -c -I../Core/Inc -I../FATFS/Target -I../FATFS/App -I../USB_HOST/App -I../USB_HOST/Target -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FatFs/src -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -I.././ -I"C:/Users/lenovo/Desktop/3D_Scanner/3D_Scanner_cpp/DISCO/3D-scanner/Ext_Kalman_filter" -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-g++ -o "3D-scanner.elf" @"objects.list"   -mcpu=cortex-m7 -T"C:\Users\lenovo\Desktop\3D_Scanner\3D_Scanner_cpp\DISCO\3D-scanner\STM32F746NGHX_FLASH.ld" --specs=nosys.specs -Wl,-Map="3D-scanner.map" -Wl,--gc-sections -static -u _printf_float -lm --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: 3D-scanner.elf
+ 
+arm-none-eabi-size  3D-scanner.elf 
+arm-none-eabi-objdump -h -S 3D-scanner.elf  > "3D-scanner.list"
+   text	   data	    bss	    dec	    hex	filename
+ 119324	    820	   6652	 126796	  1ef4c	3D-scanner.elf
+Finished building: default.size.stdout
+ 
+Finished building: 3D-scanner.list
+ 
+17:35:30 **** Incremental Build of configuration Debug for project 3D-scanner ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/main.cpp" -mcpu=cortex-m7 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F746xx -c -I../Core/Inc -I../FATFS/Target -I../FATFS/App -I../USB_HOST/App -I../USB_HOST/Target -I../Drivers/STM32F7xx_HAL_Driver/Inc -I../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FatFs/src -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F7xx/Include -I../Drivers/CMSIS/Include -I.././ -I"C:/Users/lenovo/Desktop/3D_Scanner/3D_Scanner_cpp/DISCO/3D-scanner/Ext_Kalman_filter" -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-g++ -o "3D-scanner.elf" @"objects.list"   -mcpu=cortex-m7 -T"C:\Users\lenovo\Desktop\3D_Scanner\3D_Scanner_cpp\DISCO\3D-scanner\STM32F746NGHX_FLASH.ld" --specs=nosys.specs -Wl,-Map="3D-scanner.map" -Wl,--gc-sections -static -u _printf_float -lm --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: 3D-scanner.elf
+ 
+arm-none-eabi-size  3D-scanner.elf 
+arm-none-eabi-objdump -h -S 3D-scanner.elf  > "3D-scanner.list"
+   text	   data	    bss	    dec	    hex	filename
+ 119324	    820	   6652	 126796	  1ef4c	3D-scanner.elf
+Finished building: default.size.stdout
+ 
+Finished building: 3D-scanner.list
+ 

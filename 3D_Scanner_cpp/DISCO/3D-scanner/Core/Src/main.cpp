@@ -326,11 +326,12 @@ int main(void)
   float pitch = 0;
   float yaw = 0;
   float soft_cal[3][3] = {
-		{1.008,  -0.060, 0.010},
-		{-0.060,  0.890, -0.005},
-		{0.010, -0.005,  1.119}
-  };
-  float hard_cal[3] = {7.77,  -14.30,  6.88};
+  		{1.002, 0.043, -0.007},
+  		{0.043, 0.954, -0.127},
+  		{-0.007, -0.127, 1.065}
+    };
+
+  float hard_cal[3] = {7.08, 2.28, 2.87};
 
   float Pinit = 0.01f;
   float phi_bias = -0.03f;
@@ -387,25 +388,28 @@ int main(void)
 
 	 if ((HAL_GetTick() - timerUpdate) >= KALMAN_UPDATE_PERIOD_MS) {
 	 		EKF.update(data);
-	 		AngleEstimate angle = EKF.getAngle();
-	 		roll = angle.roll;
-	 		pitch = angle.pitch;
-	 		yaw = Mag.get_heading(&mag, roll, pitch, soft_cal, hard_cal);
 
 	 		timerUpdate += KALMAN_UPDATE_PERIOD_MS;
 	 }
 
 
 	 if ((HAL_GetTick() - timerLog) >= SAMPLE_TIME_LOG_MS) {
-//		AngleEstimate angle = EKF.getAngle();
+		AngleEstimate angle = EKF.getAngle();
+		roll = angle.roll;
+		pitch = angle.pitch;
+		yaw = Mag.get_heading(&mag, roll, pitch, soft_cal, hard_cal);
+
 //		uint8_t usbBufLen = snprintf(usbBuf, 64,
-//			         " %.2f roll, %.2f pitch, %0.2f temp , %0.2 magnetometer\r\n",
-//			         angle.roll, angle.pitch, mpu_data.temp_C, mpu_data.mag_uT[0]);
+//		 " %.2f roll, %.2f pitch, %0.2f temp , %0.2 magnetometer\r\n",
+//		 angle.roll, angle.pitch, mpu_data.temp_C, mpu_data.mag_uT[0]);
 
 		uint8_t usbBufLen = snprintf(usbBuf, 64,
-					         "%.2f mx, %.2f my, %0.2f mz \r\n",
+					         "%.2f roll, %.2f pitch, %0.2f yaw \r\n",
 					        roll, pitch, yaw);
 
+//		uint8_t usbBufLen = snprintf(usbBuf, 100,
+//							 "%.2f mx, %.2f my, %0.2f mz \n",
+//							mag.mag[0], mag.mag[1], mag.mag[2]);
 	    HAL_UART_Transmit(&huart1, (uint8_t *)usbBuf, usbBufLen, 100);
 
 	     timerLog += SAMPLE_TIME_LOG_MS;
