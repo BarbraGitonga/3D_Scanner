@@ -310,15 +310,16 @@ int main(void)
   /* USER CODE BEGIN 2 */
   HAL_Delay(2000);
 
-//   Initializing MPU6050
+  I2C_Scanner(&hi2c1, &huart1);
+
+  //   Initializing MPU6050
   HAL_StatusTypeDef init = mpu_sensor.initialize(&mpu_data, &hi2c1);
 
   if(init == HAL_OK){
 	  HAL_UART_Transmit(&huart1, (uint8_t *)"MPU6050 Initialized\n", 20, HAL_MAX_DELAY);
   }
-  // Initializing magnetometer
-  I2C_Scanner(&hi2c1, &huart1);
 
+  // Initializing magnetometer
   HMC5883L Mag;
   float declination = 0.33333333; // in degrees
   Mag.init(&hi2c1, &mag, declination);
@@ -360,6 +361,7 @@ int main(void)
 	     mpu_sensor.process_data(&mpu_data);
 	     Mag.data_processing(&mag);
 
+	     // Low pass filter
 		 mpu_data.gyro_rad[0] = (LPF_GYR_ALPHA * gyrPrev[0] + ( 1.0f - LPF_GYR_ALPHA) * mpu_data.gyro_rad[0]);
 		 mpu_data.gyro_rad[1] = (LPF_GYR_ALPHA * gyrPrev[1] + ( 1.0f - LPF_GYR_ALPHA) * mpu_data.gyro_rad[1]);
 		 mpu_data.gyro_rad[2] = (LPF_GYR_ALPHA * gyrPrev[2] + ( 1.0f - LPF_GYR_ALPHA) * mpu_data.gyro_rad[2]);

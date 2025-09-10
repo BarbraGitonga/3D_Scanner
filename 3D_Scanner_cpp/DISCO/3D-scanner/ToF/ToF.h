@@ -12,5 +12,6 @@ extern "C" {
 #define READ					0x52
 #define WRITE					0x53
 
+HAL_StatusTypeDef
 
 #endif // VL53L0X_H_

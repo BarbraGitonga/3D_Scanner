@@ -12,6 +12,10 @@
  * 
  */
 #include <HMC5883L/HMC5883L.h>
+
+#define RAD_TO_DEG 57.2957795f
+#define DEG_TO_RAD 0.0174533f
+
 MagCalibration magCalib;
 
 uint8_t rawBuffer[6]; // stores all raw 8 bit information from the registers
@@ -131,6 +135,21 @@ void HMC5883L::data_processing(HMC_data *data){
 
 }
 
+/**
+ * @brief Calibrates the magnetometer data using provided soft and hard iron calibration parameters.
+  The function first processes the raw magnetometer data to obtain the current readings.
+  It then applies hard iron calibration by subtracting the hard iron offsets from the raw readings.
+  Following this, it applies soft iron calibration using the provided soft iron calibration matrix.
+  The calibrated magnetometer readings are stored in the calibrated array of the HMC_data structure.
+  The function returns 1 to indicate successful calibration.
+  Note: Ensure that the soft_cal matrix and hard_cal array are properly defined and passed to this function for accurate calibration.
+  This function is essential for improving the accuracy of magnetometer readings by compensating for distortions caused by nearby magnetic materials.
+ * 
+ * @param data 
+ * @param soft_cal soft iron calibration matrix
+ * @param hard_cal hard iron calibration offsets
+ * @return int8_t 
+ */
 int8_t HMC5883L::calibrated_data(HMC_data *data, float (*soft_cal)[3], float *hard_cal){
 	float hard[3]; // callibration of hard iron
 
@@ -190,21 +209,42 @@ int8_t HMC5883L::calibrated_data(HMC_data *data, float (*soft_cal)[3], float *ha
 //	return HAL_OK;
 //}
 
+/**
+ * @brief Calculates the heading (yaw) from the calibrated magnetometer data, compensating for tilt using roll and pitch angles.
+  The function first retrieves the calibrated magnetometer readings by applying soft and hard iron calibration.
+  It then computes the tilt-compensated magnetic field components in the horizontal plane.
+  The heading is calculated using the arctangent of the Y and X components, adjusted for magnetic declination.
+  The result is wrapped to ensure it falls within the range of [0, 360) degrees.
+  This function is essential for applications requiring accurate compass headings, especially when the device is not level.
+  Note: Ensure that roll and pitch angles are provided in radians for correct calculations.
+  The function returns the computed heading in degrees.
+ * 
+ * @param data 
+ * @param roll roll angle in degrees
+ * @param pitch pitch angle in degrees
+ * @param soft_cal soft iron calibration matrix
+ * @param hard_cal hard iron calibration offsets
+ * @return float 
+ */
 float HMC5883L::get_heading(HMC_data *data, float roll, float pitch, float (*soft_cal)[3], float *hard_cal){
 	float heading;
 	// Get calibrated data:
 	calibrated_data(data, soft_cal, hard_cal);
+
+	// Converting pitch and roll to radians to use with cos and sin
+	float theta = pitch * DEG_TO_RAD;
+	float phi = roll * DEG_TO_RAD;
+
 	// roll: phi, pitch: theta
-	float ct = cosf(pitch); float cp = cosf(roll);
-	float st = sinf(pitch); float sp = sinf(roll);
+	float ct = cosf(theta); float cp = cosf(phi);
+	float st = sinf(theta); float sp = sinf(phi);
 	const double pi = 3.14159265358979323846;
 
-	// heading = arctan(hy /hx) but for tilt compensation values of hx and hy:
-	float hx = data->calibrated[0] * cp + data->calibrated[1] * sp * st + data->calibrated[2] * ct *  sp; // tilt compensated magnetic x
+	// heading = arctan(hx / hy) but for tilt compensation values of hx and hy:
+	float hx = data->calibrated[0] * cp + data->calibrated[1] * sp * st - data->calibrated[2] * ct *  sp; // tilt compensated magnetic x
 	float hy = data->calibrated[1] * ct - data->calibrated[2] * st; // tilt compensated magnetic y
 
-	heading = -1 * (atan2(hy,hx) * 180 / pi) + data->declination;
-//	heading = -1 * (atan2(data->calibrated[1], data->calibrated[0]) * 180 / pi) + data->declination;
+	heading = -1 * (atan2(hx,hy) * 180 / pi) + data->declination;
 
 	// Wrap to [0,360)
 	if (heading < 0.0f) heading += 360.0f;
