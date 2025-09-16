@@ -207,9 +207,12 @@ statInfo_t_VL53L0X distanceStr;
 uint16_t distance; 
 
 // VL53L0X sensor initialization
-bool VL53L0X_Init(I2C_HandleTypeDef *hi2c, char *usbBuf, size_t bufSize) {
+bool VL53L0X_Init(I2C_HandleTypeDef *hi2c, UART_HandleTypeDef *huart) {
   // Check if VL53L0X is ready on I2C
-  HAL_StatusTypeDef status = HAL_I2C_IsDeviceReady(hi2c, ADDRESS_DEFAULT << 1, 2, 100);
+  const size_t bufSize = 50;
+  char usbBuf[bufSize];
+
+  HAL_StatusTypeDef status = HAL_I2C_IsDeviceReady(hi2c, VLXI2CADDRESS, 2,  100);
   if (status != HAL_OK) {
     snprintf(usbBuf, bufSize, "VL53L0X NOT found\r\n");
     return false;
@@ -340,10 +343,8 @@ int main(void)
 
   I2C_Scanner(&hi2c1, &huart1);
 
-  char usbBuf[50];
-  uint8_t usbBufLen;
-  bool vl53l0x_status = VL53L0X_Init(&hi2c3, usbBuf, sizeof(usbBuf));
-  HAL_UART_Transmit(&huart1, (uint8_t *)usbBuf, strlen(usbBuf), 100);
+  VL53L0X_Init(&hi2c1, &huart1);
+  
 
   //   Initializing MPU6050
   HAL_StatusTypeDef init = mpu_sensor.initialize(&mpu_data, &hi2c1);

@@ -3,6 +3,12 @@
 
 #include <stdint.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+
+#define VLXI2CADDRESS 0x29 << 1
 
 //------------------------------------------------------------
 // For quick and dirty C++ compatibility
@@ -237,5 +243,9 @@ typedef struct {
   uint16_t msrc_dss_tcc_mclks, pre_range_mclks, final_range_mclks;
   uint32_t msrc_dss_tcc_us,    pre_range_us,    final_range_us;
 }SequenceStepTimeouts;
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
