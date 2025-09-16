@@ -29,6 +29,7 @@
 #include "Ext_Kalman_filter/Extkalmanfilter.h"
 #include "HMC5883L/HMC5883L.h"
 #include <cstdio>
+#include "vl53l0x/vl53l0x.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -201,6 +202,33 @@ void HAL_I2C_MemRxCpltCallback(I2C_HandleTypeDef *hi2c) {
     }
 }
 
+// Data holder for VL53L0X
+statInfo_t_VL53L0X distanceStr;
+uint16_t distance; 
+
+// VL53L0X sensor initialization
+bool VL53L0X_Init(I2C_HandleTypeDef *hi2c, char *usbBuf, size_t bufSize) {
+  // Check if VL53L0X is ready on I2C
+  HAL_StatusTypeDef status = HAL_I2C_IsDeviceReady(hi2c, ADDRESS_DEFAULT << 1, 2, 100);
+  if (status != HAL_OK) {
+    snprintf(usbBuf, bufSize, "VL53L0X NOT found\r\n");
+    return false;
+  }
+
+  // Initialize VL53L0X sensor
+  initVL53L0X(1, hi2c);
+
+  setSignalRateLimit(200);
+  setVcselPulsePeriod(VcselPeriodPreRange, 18);
+  setVcselPulsePeriod(VcselPeriodFinalRange, 14);
+  setMeasurementTimingBudget(300 * 1000UL);
+
+  snprintf(usbBuf, bufSize, "VL53L0X Initialized\r\n");
+  return true;
+}
+
+
+
 
 void I2C_Scanner(I2C_HandleTypeDef *hi2c, UART_HandleTypeDef *huart) {
     HAL_StatusTypeDef result;
@@ -312,6 +340,11 @@ int main(void)
 
   I2C_Scanner(&hi2c1, &huart1);
 
+  char usbBuf[50];
+  uint8_t usbBufLen;
+  bool vl53l0x_status = VL53L0X_Init(&hi2c3, usbBuf, sizeof(usbBuf));
+  HAL_UART_Transmit(&huart1, (uint8_t *)usbBuf, strlen(usbBuf), 100);
+
   //   Initializing MPU6050
   HAL_StatusTypeDef init = mpu_sensor.initialize(&mpu_data, &hi2c1);
 
@@ -382,6 +415,14 @@ int main(void)
 		 data_ready = 0;
 	  }
 
+    distance = readRangeSingleMillimeters(&distanceStr);
+
+    snprintf(usbBuf, sizeof(usbBuf),
+             "Distance: %4d mm, Status: %d\r\n",
+             distance, distanceStr.rangeStatus);
+
+    HAL_UART_Transmit(&huart1, (uint8_t *)usbBuf, strlen(usbBuf), 100);
+
 	 if ((HAL_GetTick() - timerPredict) >= KALMAN_PREDICT_PERIOD_MS) {
 	 		EKF.predict(data, 0.001f * KALMAN_PREDICT_PERIOD_MS);
 
@@ -401,17 +442,11 @@ int main(void)
 		pitch = angle.pitch;
 		yaw = Mag.get_heading(&mag, roll, pitch, soft_cal, hard_cal);
 
-//		uint8_t usbBufLen = snprintf(usbBuf, 64,
-//		 " %.2f roll, %.2f pitch, %0.2f temp , %0.2 magnetometer\r\n",
-//		 angle.roll, angle.pitch, mpu_data.temp_C, mpu_data.mag_uT[0]);
 
 		uint8_t usbBufLen = snprintf(usbBuf, 64,
-					         "%.2f roll, %.2f pitch, %0.2f yaw \r\n",
+					         "%.2f, %.2f, %0.2f \r\n",
 					        roll, pitch, yaw);
 
-//		uint8_t usbBufLen = snprintf(usbBuf, 100,
-//							 "%.2f mx, %.2f my, %0.2f mz \n",
-//							mag.mag[0], mag.mag[1], mag.mag[2]);
 	    HAL_UART_Transmit(&huart1, (uint8_t *)usbBuf, usbBufLen, 100);
 
 	     timerLog += SAMPLE_TIME_LOG_MS;
