@@ -344,7 +344,6 @@ int main(void)
   I2C_Scanner(&hi2c1, &huart1);
 
   VL53L0X_Init(&hi2c1, &huart1);
-  
 
   //   Initializing MPU6050
   HAL_StatusTypeDef init = mpu_sensor.initialize(&mpu_data, &hi2c1);
@@ -357,6 +356,8 @@ int main(void)
   HMC5883L Mag;
   float declination = 0.33333333; // in degrees
   Mag.init(&hi2c1, &mag, declination);
+
+
   float roll = 0;
   float pitch = 0;
   float yaw = 0;
@@ -396,25 +397,19 @@ int main(void)
 	     Mag.data_processing(&mag);
 
 	    // Low pass filter
-      for(int i = 0; i < 3; i++) {
-        mpu_data.gyro_rad[i] = (LPF_GYR_ALPHA * gyrPrev[i] + ( 1.0f - LPF_GYR_ALPHA) * mpu_data.gyro_rad[i]);
-        mpu_data.acc_mps2[i] = (LPF_ACC_ALPHA * accPrev[i] + ( 1.0f - LPF_ACC_ALPHA) * mpu_data.acc_mps2[i]);
-        gyrPrev[i] = mpu_data.gyro_rad[i];
-        accPrev[i] = mpu_data.acc_mps2[i];
-      } 
+		  for(int i = 0; i < 3; i++) {
+			mpu_data.gyro_rad[i] = (LPF_GYR_ALPHA * gyrPrev[i] + ( 1.0f - LPF_GYR_ALPHA) * mpu_data.gyro_rad[i]);
+			mpu_data.acc_mps2[i] = (LPF_ACC_ALPHA * accPrev[i] + ( 1.0f - LPF_ACC_ALPHA) * mpu_data.acc_mps2[i]);
+			gyrPrev[i] = mpu_data.gyro_rad[i];
+			accPrev[i] = mpu_data.acc_mps2[i];
+		  }
 
-      data.setFrom(mpu_data);
+		  data.setFrom(mpu_data);
 
-      data_ready = 0;
+		  data_ready = 0;
 	  }
 
-    distance = readRangeSingleMillimeters(&distanceStr);
 
-    snprintf(usbBuf, sizeof(usbBuf),
-             "Distance: %4d mm, Status: %d\r\n",
-             distance, distanceStr.rangeStatus);
-
-    HAL_UART_Transmit(&huart1, (uint8_t *)usbBuf, strlen(usbBuf), 100);
 
 	 if ((HAL_GetTick() - timerPredict) >= KALMAN_PREDICT_PERIOD_MS) {
 	 		EKF.predict(data, 0.001f * KALMAN_PREDICT_PERIOD_MS);
@@ -434,11 +429,12 @@ int main(void)
 		roll = angle.roll;
 		pitch = angle.pitch;
 		yaw = Mag.get_heading(&mag, roll, pitch, soft_cal, hard_cal);
+	    distance = readRangeSingleMillimeters(&distanceStr);
 
 
-		uint8_t usbBufLen = snprintf(usbBuf, 64,
-					         "%.2f, %.2f, %0.2f \r\n",
-					        roll, pitch, yaw);
+		uint8_t usbBufLen = snprintf(usbBuf, 100,
+					         "roll: %.2f, pitch: %.2f, yaw: %0.2f, distance: %4d \r\n",
+					        roll, pitch, yaw, distance);
 
 	    HAL_UART_Transmit(&huart1, (uint8_t *)usbBuf, usbBufLen, 100);
 
