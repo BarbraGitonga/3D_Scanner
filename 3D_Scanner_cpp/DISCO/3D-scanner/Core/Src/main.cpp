@@ -395,25 +395,17 @@ int main(void)
 	     mpu_sensor.process_data(&mpu_data);
 	     Mag.data_processing(&mag);
 
-	     // Low pass filter
-		 mpu_data.gyro_rad[0] = (LPF_GYR_ALPHA * gyrPrev[0] + ( 1.0f - LPF_GYR_ALPHA) * mpu_data.gyro_rad[0]);
-		 mpu_data.gyro_rad[1] = (LPF_GYR_ALPHA * gyrPrev[1] + ( 1.0f - LPF_GYR_ALPHA) * mpu_data.gyro_rad[1]);
-		 mpu_data.gyro_rad[2] = (LPF_GYR_ALPHA * gyrPrev[2] + ( 1.0f - LPF_GYR_ALPHA) * mpu_data.gyro_rad[2]);
+	    // Low pass filter
+      for(int i = 0; i < 3; i++) {
+        mpu_data.gyro_rad[i] = (LPF_GYR_ALPHA * gyrPrev[i] + ( 1.0f - LPF_GYR_ALPHA) * mpu_data.gyro_rad[i]);
+        mpu_data.acc_mps2[i] = (LPF_ACC_ALPHA * accPrev[i] + ( 1.0f - LPF_ACC_ALPHA) * mpu_data.acc_mps2[i]);
+        gyrPrev[i] = mpu_data.gyro_rad[i];
+        accPrev[i] = mpu_data.acc_mps2[i];
+      } 
 
-		 mpu_data.acc_mps2[0] = (LPF_ACC_ALPHA * accPrev[0] + ( 1.0f - LPF_ACC_ALPHA) * mpu_data.acc_mps2[0]);
-		 mpu_data.acc_mps2[1] = (LPF_ACC_ALPHA * accPrev[1] + ( 1.0f - LPF_ACC_ALPHA) * mpu_data.acc_mps2[1]);
-		 mpu_data.acc_mps2[2] = (LPF_ACC_ALPHA * accPrev[2] + ( 1.0f - LPF_ACC_ALPHA) * mpu_data.acc_mps2[2]);
+      data.setFrom(mpu_data);
 
-		 gyrPrev[0] = mpu_data.gyro_rad[0];
-		 gyrPrev[1] = mpu_data.gyro_rad[1];
-		 gyrPrev[2] = mpu_data.gyro_rad[2];
-		 accPrev[0] = mpu_data.acc_mps2[0];
-		 accPrev[1] = mpu_data.acc_mps2[1];
-		 accPrev[2] = mpu_data.acc_mps2[2];
-
-		 data.setFrom(mpu_data);
-
-		 data_ready = 0;
+      data_ready = 0;
 	  }
 
     distance = readRangeSingleMillimeters(&distanceStr);
@@ -460,6 +452,7 @@ int main(void)
 				  mpu_sensor.read_IMU_DMA(&mpu_data);
 
 			  }
+        
 		  if (dmaState == DMA_MAG_READY_TO_READ) {
 		  		  dmaState = DMA_MAG_READING;
 		  		  Mag.readDMA(&mag);
