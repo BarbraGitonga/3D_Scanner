@@ -29,6 +29,7 @@
 #include "Ext_Kalman_filter/Extkalmanfilter.h"
 #include "HMC5883L/HMC5883L.h"
 #include <cstdio>
+#include "vl53l0x/vl53l0x.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -201,6 +202,36 @@ void HAL_I2C_MemRxCpltCallback(I2C_HandleTypeDef *hi2c) {
     }
 }
 
+// Data holder for VL53L0X
+statInfo_t_VL53L0X distanceStr;
+uint16_t distance; 
+
+// VL53L0X sensor initialization
+bool VL53L0X_Init(I2C_HandleTypeDef *hi2c, UART_HandleTypeDef *huart) {
+  // Check if VL53L0X is ready on I2C
+  const size_t bufSize = 50;
+  char usbBuf[bufSize];
+
+  HAL_StatusTypeDef status = HAL_I2C_IsDeviceReady(hi2c, VLXI2CADDRESS, 2,  100);
+  if (status != HAL_OK) {
+    snprintf(usbBuf, bufSize, "VL53L0X NOT found\r\n");
+    return false;
+  }
+
+  // Initialize VL53L0X sensor
+  initVL53L0X(1, hi2c);
+
+  setSignalRateLimit(200);
+  setVcselPulsePeriod(VcselPeriodPreRange, 18);
+  setVcselPulsePeriod(VcselPeriodFinalRange, 14);
+  setMeasurementTimingBudget(300 * 1000UL);
+
+  snprintf(usbBuf, bufSize, "VL53L0X Initialized\r\n");
+  return true;
+}
+
+
+
 
 void I2C_Scanner(I2C_HandleTypeDef *hi2c, UART_HandleTypeDef *huart) {
     HAL_StatusTypeDef result;
@@ -312,6 +343,9 @@ int main(void)
 
   I2C_Scanner(&hi2c1, &huart1);
 
+  VL53L0X_Init(&hi2c1, &huart1);
+  
+
   //   Initializing MPU6050
   HAL_StatusTypeDef init = mpu_sensor.initialize(&mpu_data, &hi2c1);
 
@@ -361,26 +395,26 @@ int main(void)
 	     mpu_sensor.process_data(&mpu_data);
 	     Mag.data_processing(&mag);
 
-	     // Low pass filter
-		 mpu_data.gyro_rad[0] = (LPF_GYR_ALPHA * gyrPrev[0] + ( 1.0f - LPF_GYR_ALPHA) * mpu_data.gyro_rad[0]);
-		 mpu_data.gyro_rad[1] = (LPF_GYR_ALPHA * gyrPrev[1] + ( 1.0f - LPF_GYR_ALPHA) * mpu_data.gyro_rad[1]);
-		 mpu_data.gyro_rad[2] = (LPF_GYR_ALPHA * gyrPrev[2] + ( 1.0f - LPF_GYR_ALPHA) * mpu_data.gyro_rad[2]);
+	    // Low pass filter
+      for(int i = 0; i < 3; i++) {
+        mpu_data.gyro_rad[i] = (LPF_GYR_ALPHA * gyrPrev[i] + ( 1.0f - LPF_GYR_ALPHA) * mpu_data.gyro_rad[i]);
+        mpu_data.acc_mps2[i] = (LPF_ACC_ALPHA * accPrev[i] + ( 1.0f - LPF_ACC_ALPHA) * mpu_data.acc_mps2[i]);
+        gyrPrev[i] = mpu_data.gyro_rad[i];
+        accPrev[i] = mpu_data.acc_mps2[i];
+      } 
 
-		 mpu_data.acc_mps2[0] = (LPF_ACC_ALPHA * accPrev[0] + ( 1.0f - LPF_ACC_ALPHA) * mpu_data.acc_mps2[0]);
-		 mpu_data.acc_mps2[1] = (LPF_ACC_ALPHA * accPrev[1] + ( 1.0f - LPF_ACC_ALPHA) * mpu_data.acc_mps2[1]);
-		 mpu_data.acc_mps2[2] = (LPF_ACC_ALPHA * accPrev[2] + ( 1.0f - LPF_ACC_ALPHA) * mpu_data.acc_mps2[2]);
+      data.setFrom(mpu_data);
 
-		 gyrPrev[0] = mpu_data.gyro_rad[0];
-		 gyrPrev[1] = mpu_data.gyro_rad[1];
-		 gyrPrev[2] = mpu_data.gyro_rad[2];
-		 accPrev[0] = mpu_data.acc_mps2[0];
-		 accPrev[1] = mpu_data.acc_mps2[1];
-		 accPrev[2] = mpu_data.acc_mps2[2];
-
-		 data.setFrom(mpu_data);
-
-		 data_ready = 0;
+      data_ready = 0;
 	  }
+
+    distance = readRangeSingleMillimeters(&distanceStr);
+
+    snprintf(usbBuf, sizeof(usbBuf),
+             "Distance: %4d mm, Status: %d\r\n",
+             distance, distanceStr.rangeStatus);
+
+    HAL_UART_Transmit(&huart1, (uint8_t *)usbBuf, strlen(usbBuf), 100);
 
 	 if ((HAL_GetTick() - timerPredict) >= KALMAN_PREDICT_PERIOD_MS) {
 	 		EKF.predict(data, 0.001f * KALMAN_PREDICT_PERIOD_MS);
@@ -401,17 +435,11 @@ int main(void)
 		pitch = angle.pitch;
 		yaw = Mag.get_heading(&mag, roll, pitch, soft_cal, hard_cal);
 
-//		uint8_t usbBufLen = snprintf(usbBuf, 64,
-//		 " %.2f roll, %.2f pitch, %0.2f temp , %0.2 magnetometer\r\n",
-//		 angle.roll, angle.pitch, mpu_data.temp_C, mpu_data.mag_uT[0]);
 
 		uint8_t usbBufLen = snprintf(usbBuf, 64,
-					         "%.2f roll, %.2f pitch, %0.2f yaw \r\n",
+					         "%.2f, %.2f, %0.2f \r\n",
 					        roll, pitch, yaw);
 
-//		uint8_t usbBufLen = snprintf(usbBuf, 100,
-//							 "%.2f mx, %.2f my, %0.2f mz \n",
-//							mag.mag[0], mag.mag[1], mag.mag[2]);
 	    HAL_UART_Transmit(&huart1, (uint8_t *)usbBuf, usbBufLen, 100);
 
 	     timerLog += SAMPLE_TIME_LOG_MS;
@@ -424,6 +452,7 @@ int main(void)
 				  mpu_sensor.read_IMU_DMA(&mpu_data);
 
 			  }
+        
 		  if (dmaState == DMA_MAG_READY_TO_READ) {
 		  		  dmaState = DMA_MAG_READING;
 		  		  Mag.readDMA(&mag);
