@@ -54,7 +54,10 @@ HAL_StatusTypeDef HMC5883L::init(I2C_HandleTypeDef *hi2c, HMC_data *data, float 
 	if(errNum != 0 ) return HAL_ERROR;
 
 	// Mode: continuous measurement
-	config =0x00;
+	config =
+
+
+			0x00;
 	status = HAL_I2C_Mem_Write(data->i2c_handle, HMC_ADDR, MODE, I2C_MEMADD_SIZE_8BIT, &config, 1, HAL_MAX_DELAY);
 	errNum += (status != HAL_OK);
 	if(errNum != 0 ) return HAL_ERROR;
@@ -155,7 +158,7 @@ int8_t HMC5883L::calibrated_data(HMC_data *data, float (*soft_cal)[3], float *ha
 
 	data_processing(data);
 
-	// Applying hard iron callibration
+	// Applying hard iron calibration
 	for(uint8_t i = 0; i< 3; i++){
 		hard[i] = data->mag[i] - hard_cal[i];
 	}
