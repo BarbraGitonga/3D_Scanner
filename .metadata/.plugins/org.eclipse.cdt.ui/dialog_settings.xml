@@ -39,6 +39,7 @@
 		<item key="caseSensitive" value="false"/>
 		<item key="searchFlags" value="227191"/>
 		<list key="previousPatterns">
+			<item value="husart6"/>
 			<item value="__HAL_RCC_DMA1_CLK_ENABLE"/>
 			<item value="I2C1_EV_IRQHandler"/>
 			<item value="DMA1_Stream6_IRQHandler"/>
