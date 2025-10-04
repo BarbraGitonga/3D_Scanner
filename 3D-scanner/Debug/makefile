@@ -96,8 +96,8 @@ all: main-build
 main-build: 3D-scanner.elf secondary-outputs
 
 # Tool invocations
-3D-scanner.elf 3D-scanner.map: $(OBJS) $(USER_OBJS) C:\Users\lenovo\Desktop\3D_Scanner\3D_Scanner_cpp\DISCO\3D-scanner\STM32F746NGHX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-g++ -o "3D-scanner.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m7 -T"C:\Users\lenovo\Desktop\3D_Scanner\3D_Scanner_cpp\DISCO\3D-scanner\STM32F746NGHX_FLASH.ld" --specs=nosys.specs -Wl,-Map="3D-scanner.map" -Wl,--gc-sections -static -u _printf_float -lm --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+3D-scanner.elf 3D-scanner.map: $(OBJS) $(USER_OBJS) C:\Users\lenovo\Desktop\3D_Scanner\3D-scanner\STM32F746NGHX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-g++ -o "3D-scanner.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m7 -T"C:\Users\lenovo\Desktop\3D_Scanner\3D-scanner\STM32F746NGHX_FLASH.ld" --specs=nosys.specs -Wl,-Map="3D-scanner.map" -Wl,--gc-sections -static -u _printf_float -lm --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

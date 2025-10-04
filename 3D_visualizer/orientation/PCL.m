@@ -1,5 +1,5 @@
 % Data format: [roll pitch yaw distance]
-data = csvread("magsensor\PCL.csv");
+data = csvread("Data_collector\data.csv");
 
 roll  = data(:,1);
 pitch = data(:,2);
@@ -7,7 +7,7 @@ yaw   = data(:,3);
 dist  = data(:,4);
 
 % Filter distance range 0–300
-mask = (dist >= 0 & dist <= 300);
+mask = (dist >= 0 & dist <= 700);
 roll  = roll(mask);
 pitch = pitch(mask);
 yaw   = yaw(mask);

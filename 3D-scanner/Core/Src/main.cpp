@@ -433,10 +433,10 @@ int main(void)
 
 
 		uint8_t usbBufLen = snprintf(usbBuf, 100,
-					         "roll: %.2f, pitch: %.2f, yaw: %0.2f, distance: %4d \r\n",
+					         "%.2f, %.2f, %0.2f, %4d \r\n",
 					        roll, pitch, yaw, distance);
 
-	    HAL_UART_Transmit(&huart6, (uint8_t *)usbBuf, usbBufLen, 100);
+	   HAL_UART_Transmit(&huart6, (uint8_t *)usbBuf, usbBufLen, 100);
 
 	     timerLog += SAMPLE_TIME_LOG_MS;
 	 }
