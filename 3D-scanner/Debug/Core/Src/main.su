@@ -1,0 +1,38 @@
+.././Ext_Kalman_filter/Extkalmanfilter.h:28:7:void MPU6050Data::setFrom(MPU6050_data&)	16	static
+../Core/Src/main.cpp:183:6:void HAL_I2C_MemRxCpltCallback(I2C_HandleTypeDef*)	16	static
+../Core/Src/main.cpp:210:6:uint8_t VL53L0X_Init(I2C_HandleTypeDef*, UART_HandleTypeDef*)	72	static
+../Core/Src/main.cpp:236:6:void I2C_Scanner(I2C_HandleTypeDef*, UART_HandleTypeDef*)	80	static
+../Core/Src/main.cpp:263:6:void HAL_I2C_ErrorCallback(I2C_HandleTypeDef*)	128	static
+../Core/Src/main.cpp:285:5:int main()	368	static
+../Core/Src/main.cpp:474:6:void SystemClock_Config()	88	static
+../Core/Src/main.cpp:531:6:void PeriphCommonClock_Config()	144	static
+../Core/Src/main.cpp:559:13:void MX_ADC3_Init()	24	static
+../Core/Src/main.cpp:611:13:void MX_CRC_Init()	8	static
+../Core/Src/main.cpp:642:13:void MX_DCMI_Init()	8	static
+../Core/Src/main.cpp:679:13:void MX_DMA2D_Init()	8	static
+../Core/Src/main.cpp:716:13:void MX_ETH_Init()	8	static
+../Core/Src/main.cpp:765:13:void MX_I2C1_Init()	8	static
+../Core/Src/main.cpp:813:13:void MX_I2C3_Init()	8	static
+../Core/Src/main.cpp:861:13:void MX_LTDC_Init()	64	static
+../Core/Src/main.cpp:923:13:void MX_QUADSPI_Init()	8	static
+../Core/Src/main.cpp:958:13:void MX_RTC_Init()	72	static
+../Core/Src/main.cpp:1054:13:void MX_SAI2_Init()	8	static
+../Core/Src/main.cpp:1129:13:void MX_SDMMC1_SD_Init()	4	static
+../Core/Src/main.cpp:1157:13:void MX_SPDIFRX_Init()	8	static
+../Core/Src/main.cpp:1193:13:void MX_SPI2_Init()	8	static
+../Core/Src/main.cpp:1233:13:void MX_TIM1_Init()	40	static
+../Core/Src/main.cpp:1283:13:void MX_TIM2_Init()	64	static
+../Core/Src/main.cpp:1342:13:void MX_TIM3_Init()	64	static
+../Core/Src/main.cpp:1401:13:void MX_TIM5_Init()	64	static
+../Core/Src/main.cpp:1460:13:void MX_TIM8_Init()	40	static
+../Core/Src/main.cpp:1507:13:void MX_TIM12_Init()	40	static
+../Core/Src/main.cpp:1549:13:void MX_USART1_UART_Init()	8	static
+../Core/Src/main.cpp:1584:13:void MX_USART6_UART_Init()	8	static
+../Core/Src/main.cpp:1617:13:void MX_DMA_Init()	16	static
+../Core/Src/main.cpp:1634:13:void MX_FMC_Init()	40	static
+../Core/Src/main.cpp:1685:13:void MX_GPIO_Init()	72	static
+../Core/Src/main.cpp:1865:6:void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)	16	static
+../Core/Src/main.cpp:1882:6:void Error_Handler()	4	static,ignoring_inline_asm
+../Core/Src/main.cpp:1891:1:void __static_initialization_and_destruction_0(int, int)	16	static
+../Core/Src/main.cpp:1891:1:cpp)	8	static
+../Core/Src/main.cpp:1891:1:cpp)	8	static
