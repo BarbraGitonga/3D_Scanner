@@ -1,0 +1,8 @@
+C:\ST\STM32CubeIDE_1.15.1\STM32CubeIDE\plugins\com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.win32_1.0.100.202403111256\tools\bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/include/c++/12.3.1/cmath:144:3:constexpr float std::atan2(float, float)	16	static
+../HMC5883L/HMC5883L.cpp:23:1:HMC5883L::HMC5883L()	16	static
+../HMC5883L/HMC5883L.cpp:34:19:HAL_StatusTypeDef HMC5883L::init(I2C_HandleTypeDef*, HMC_data*, float)	48	static
+../HMC5883L/HMC5883L.cpp:80:19:HAL_StatusTypeDef HMC5883L::read(HMC_data*)	48	static
+../HMC5883L/HMC5883L.cpp:107:19:HAL_StatusTypeDef HMC5883L::readDMA(HMC_data*)	32	static
+../HMC5883L/HMC5883L.cpp:128:6:void HMC5883L::data_processing(HMC_data*)	24	static
+../HMC5883L/HMC5883L.cpp:156:8:int8_t HMC5883L::calibrated_data(HMC_data*, float (*)[3], float*)	40	static
+../HMC5883L/HMC5883L.cpp:232:7:float HMC5883L::get_heading(HMC_data*, float, float, float (*)[3], float*)	88	static
